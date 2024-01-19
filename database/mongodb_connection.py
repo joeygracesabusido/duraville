@@ -9,4 +9,21 @@ def create_mongo_client():
     client = MongoClient(var_url, maxPoolSize=None)
     conn = client['accounting_database']
 
-    return conn
+    return conn 
+
+
+class Connection():
+
+    @staticmethod
+    def db(): # this is for connection to Database
+        connection_string = "mysql+pymysql://{user}:{password}@{host}:{port}/{database}".format(
+            user="joeysabusido",
+            password=urllib.parse.quote("Genesis@11"),
+            host="192.46.225.247",
+            port=3306,
+            database="duravileDBl"
+        )
+
+
+        engine = create_engine(connection_string, echo=True)
+        return engine
