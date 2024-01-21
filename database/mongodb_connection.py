@@ -1,3 +1,5 @@
+import urllib.parse
+from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfilter,within_group
 from pymongo import MongoClient
 import pymongo
 
@@ -21,7 +23,7 @@ class Connection():
             password=urllib.parse.quote("Genesis@11"),
             host="192.46.225.247",
             port=3306,
-            database="duravileDBl"
+            database="duravilleDB"
         )
 
 

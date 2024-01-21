@@ -4,15 +4,23 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from typing import Union, List, Optional
 
+
+
+# basemodel import
+from pydantic import BaseModel
+from datetime import datetime, date
+from typing import Optional
+
 # tesing lang
 from datetime import datetime, timedelta
 
+from views.login import Login_views
 
-from  routes.database.mongodb_connection import create_mongo_client
+from  database.mongodb_connection import create_mongo_client
 mydb = create_mongo_client()
 
 
-from ..authentication.utils import OAuth2PasswordBearerWithCookie
+from authentication.utils import OAuth2PasswordBearerWithCookie
 
 from jose import jwt
 
@@ -20,8 +28,9 @@ JWT_SECRET = 'myjwtsecret'
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-login_router = APIRouter(include_in_schema=False)
-templates = Jinja2Templates(directory="apps/templates")
+# login_router = APIRouter(include_in_schema=False)
+login_router = APIRouter(include_in_schema=True)
+templates = Jinja2Templates(directory="templates")
 
 
 
@@ -38,32 +47,46 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 
+# this is for BaseMOdel
+
+class User(BaseModel):
+    """This is for User BaseModel"""
+    username: str 
+    hashed_password: str 
+    email_add: str
+    is_active: bool 
+
+
+
+
 
 
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-password1 = ""
 def authenticate_user(username, password):
+    # user = mydb.login.find({"username":username})
+    user = Login_views.getuser(username=username)
     
-    user = mydb.login.find({'$and':[{"username":username}]})
+    # print(user)
+    username = user.username
+    hashed_password = user.hashed_password
+
+    if user:
+        password_check = pwd_context.verify(password,hashed_password)
+        return password_check
+
+    elif user == None:
+        return{'Error'}
+    else :
+        # False
+        print("error")
+
+    # if user is not None:
+    #     password_check = pwd_context.verify(password,user.hashed_password)
+    #     return password_check
     
-
-    for i in user:
-       
-        username = i['username']
-        password1 = i['password']
-        
-   
-        if user:
-            
-            password_check = pwd_context.verify(password,password1)
-            
-            return password_check
-
-            
-        else :
-            False
+    # return None
 
 
 
@@ -80,7 +103,18 @@ def create_access_token(data: dict, expires_delta: timedelta):
 
 @login_router.get("/", response_class=HTMLResponse)
 async def api_login(request: Request):
-    return templates.TemplateResponse("login.html", {"request":request}) 
+    return templates.TemplateResponse("login/login.html", {"request":request}) 
+
+
+@login_router.post('/sign-up')
+def sign_up(items: User):
+    """This function is for inserting User"""
+   
+    #     }
+    Login_views.insertuser(username=items.username,hashed_password=get_password_hash(items.hashed_password),
+               email_add=items.email_add,is_active=items.is_active)
+    
+    return {"message":"User has been save"} 
 
 
 
@@ -91,22 +125,15 @@ def login(username1: Optional[str],password1:Optional[str],response:Response):
 
 
     user = authenticate_user(username,password)
-
-    if user == []:
-
-        return {"error": "No Username is register"}
-  
-    elif not user:
-        # raise HTTPException(status_code=400, detail="Incorrect username or password")
-        
-       
-        
-        raise HTTPException(
-            status_code=400,
-            detail= "Incorrect username or password",
-            # headers={"WWW-Authenticate": "Basic"},
-        )
-    
+    if not user:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+        # return {'Message': 'Incorrect username or password'}
+        pass
+    # access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    # access_token = create_access_token(
+    #     data={"sub": username},
+    #     expires_delta=access_token_expires,
+    # )
 
     access_token = create_access_token(
                 data = {"sub": username,"exp":datetime.utcnow() + timedelta(ACCESS_TOKEN_EXPIRE_MINUTES)}, 
@@ -114,11 +141,25 @@ def login(username1: Optional[str],password1:Optional[str],response:Response):
                                     )
 
     data = {"sub": username,"exp":datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)}
-    jwt_token = jwt.encode(data,JWT_SECRET,algorithm=ALGORITHM)
+    jwt_token = jwt.encode(data,SECRET_KEY,algorithm=ALGORITHM)
     response.set_cookie(key="access_token", value=f'Bearer {jwt_token}',httponly=True)
     # return response
     
     return {"access_token": jwt_token, "token_type": "bearer"}
+
+    # user = authenticate_user(username, password)
+    # if not user:
+    #     raise HTTPException(status_code=400, detail="Incorrect username or password")
+
+    # access_token = create_access_token(
+    #             data = {"sub": username}, 
+    #             expires_delta=timedelta(minutes=30)
+    #                                 )
+
+    # token = jwt.encode(access_token, JWT_SECRET,algorithm=ALGORITHM)
+    # response.set_cookie(key="access_token", value=f'Bearer {token}',httponly=True)
+    # return response
+
 
 
 @login_router.get("/dashboard/", response_class=HTMLResponse)

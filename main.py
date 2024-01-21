@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 
-from routes.admin import admin
+from routes.admin import login_router
 #from routes.forms import form_htlm
 #from routes.graph import  graphql_app
 
@@ -26,7 +26,7 @@ app.add_middleware(
     allow_headers = ["*"],
 )
 
-app.include_router(admin)
+app.include_router(login_router)
 #app.include_router(form_htlm)
 #app.include_router(graphql_app, prefix="/graphql")
 # app.include_router(graph)

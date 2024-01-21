@@ -11,11 +11,11 @@ parent_dir = os.path.join(current_dir, '..')
 sys.path.append(parent_dir)
 
 
-from database.databases import connectionDB
+from database.mongodb_connection import Connection
 
 from datetime import date, datetime
 
-engine = connectionDB.conn()
+engine = Connection.db()
 
 
 class User(SQLModel, table=True):
@@ -33,13 +33,14 @@ class User(SQLModel, table=True):
     __table_args__ = (Index("idx_user_unique", "username", unique=True),)
 
 
-class Department(SQLModel, table=True):
-    """This is for department table"""
-    __tablename__ = 'department'
-    id: Optional[int] = Field(default=None, primary_key=True)
-    department: str =Field(index=True, unique=True)
+# class Department(SQLModel, table=True):
+#     """This is for department table"""
+#     __tablename__ = 'department'
+#     id: Optional[int] = Field(default=None, primary_key=True)
+#     department: str =Field(index=True, unique=True)
 
-    __table_args__ = (Index("idx_department_unique", "department", unique=True),)
+#     __table_args__ = (Index("idx_department_unique", "department", unique=True),)
+
 
 
 def create_db_and_tables():
