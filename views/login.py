@@ -8,11 +8,11 @@ engine = Connection.db()
 
 class Login_views():
 
-    def insertuser(username,hashed_password,email_add,
-                is_active,role_id):
+    def insertuser(username,hashed_password,email_add,full_name,
+                is_active):
         """This function is for inserting user"""
         insertData = User(username=username,hashed_password=hashed_password,
-                        email_add=email_add,is_active=is_active)
+                        email_add=email_add,full_name=full_name,is_active=is_active)
         
 
         session = Session(engine)

@@ -54,6 +54,7 @@ class User(BaseModel):
     username: str 
     hashed_password: str 
     email_add: str
+    full_name: str
     is_active: bool 
 
 
@@ -106,13 +107,16 @@ async def api_login(request: Request):
     return templates.TemplateResponse("login/login.html", {"request":request}) 
 
 
+
+
+
 @login_router.post('/sign-up')
 def sign_up(items: User):
     """This function is for inserting User"""
    
     #     }
     Login_views.insertuser(username=items.username,hashed_password=get_password_hash(items.hashed_password),
-               email_add=items.email_add,is_active=items.is_active)
+               email_add=items.email_add,full_name=items.full_name, is_active=items.is_active)
     
     return {"message":"User has been save"} 
 
@@ -141,7 +145,7 @@ def login(username1: Optional[str],password1:Optional[str],response:Response):
                                     )
 
     data = {"sub": username,"exp":datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)}
-    jwt_token = jwt.encode(data,SECRET_KEY,algorithm=ALGORITHM)
+    jwt_token = jwt.encode(data,JWT_SECRET,algorithm=ALGORITHM)
     response.set_cookie(key="access_token", value=f'Bearer {jwt_token}',httponly=True)
     # return response
     
@@ -166,4 +170,7 @@ def login(username1: Optional[str],password1:Optional[str],response:Response):
 async def api_login(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+@login_router.get("/insert-cost/", response_class=HTMLResponse)
+async def insert_cost(request: Request):
+    return templates.TemplateResponse("cost/insert_cost.html", {"request":request}) 
     
