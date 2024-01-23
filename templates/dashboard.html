@@ -9,55 +9,130 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <style>
-        .container-fluid {
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto;
-        }
+     /* Custom CSS for the dashboard */
 
-        .row {
-            display: flex;
-            margin-right: -15px;
-            margin-left: -15px;
-        }
+.container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
 
-        .col-md-3, .col-md-9 {
-            position: relative;
-            width: 100%;
-            min-height: 1px;
-            padding-right: 15px;
-            padding-left: 15px;
-        }
+.row {
+    display: flex;
+    margin-right: -15px;
+    margin-left: -15px;
+}
 
-        @media (min-width: 400px) {
-            .col-md-3 {
-                flex: 0 0 13%;
-                max-width: 13%;
-            }
+.col-md-3, .col-md-9 {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
 
-            .col-md-9 {
-                flex: 0 0 50%;
-                max-width: 50%;
-            }
-        }
-        
-        /* Sidebar styling */
-        .sidebar {
-            background-color: #f8f9fa;
-            border-right: 1px solid #dee2e6;
-            padding-top: 20px;
-        }
+@media (min-width: 400px) {
+    .col-md-3 {
+        flex: 0 0 13%;
+        max-width: 13%;
+    }
 
-        .sidebar-icon {
-            font-size: 24px;
-            color: #007bff;
-        }
+    .col-md-9 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+/* Sidebar styling */
+.sidebar {
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    padding-top: 20px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #000;
+}
+
+.sidebar a:hover {
+    color: #007bff;
+}
+
+.sidebar .dropdown-menu {
+    margin-left: 10px;
+}
+
+.sidebar-icon {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+/* Sticky Navbar */
+.navbar {
+    z-index: 1000;
+}
+
+/* Active link in sidebar */
+.nav-link.active {
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Responsive toggle button for the sidebar */
+#sidebarToggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: #f8f9fa;
+        border-right: 1px solid #dee2e6;
+        padding-top: 20px;
+        display: none;
+    }
+
+    .sidebar.collapsed {
+        width: 70px;
+    }
+
+    .sidebar a {
+        text-align: center;
+        padding: 10px 0;
+        font-size: 14px;
+    }
+
+    .sidebar.collapsed a {
+        padding: 10px 5px;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    #sidebarToggle {
+        display: block;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        cursor: pointer;
+        z-index: 1100;
+    }
+}
+
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+<!-- <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">DRDC</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -73,7 +148,7 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+        <!-- <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
            
             <div class="position-sticky">
                 <ul class="nav flex-column">
@@ -111,20 +186,106 @@
                         <a class="nav-link" href="#">
                             Reports
                         </a>
-                    </li>
+                    </li> -->
                     <!-- Dropdown Menu Example -->
                     
+                <!-- </ul>
+            </div>
+        </nav>
+
+
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation" id="sidebarToggle">
+            <span class="navbar-toggler-icon"></span>
+        </button> -->
+
+        <!-- Main Content -->
+        <!-- <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            
+        </main> -->
+    <!-- </div>
+</div>  -->
+
+
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Your Dashboard</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/">Sign out</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bars"></i> Accounting
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" href="/insert-cost/">Insert Cost</a></li>
+                            <li><a class="dropdown-item" href="#">Item 2</a></li>
+                            <li><a class="dropdown-item" href="#">Item 3</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-cube"></i> Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-users"></i> Customers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-bar"></i> Reports
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
 
         <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- <h2>Dashboard</h2> -->
             <!-- Your content goes here -->
         </main>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- <script>
+    // Function to toggle the sidebar visibility
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebarMenu');
+        sidebar.classList.toggle('collapsed');
+    }
+
+    // Event listener for the sidebar toggle button
+    document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+
+    // Bootstrap initialization for dropdowns
+    var dropdownToggleList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+    var dropdownList = dropdownToggleList.map(function (dropdownToggle) {
+        return new bootstrap.Dropdown(dropdownToggle);
+    });
+</script> -->
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

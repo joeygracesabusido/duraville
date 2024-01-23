@@ -11,26 +11,43 @@
 
 <style>
     #container {
-              width: 50%; /* Set the width of the div element */
-              margin: auto; /* Center the div */
-              border-width: 1px;
-              /* border-style: solid; */
-             
-             
-      }
-  
-    #title{
-      display: flex;
-      justify-content: center; /* Horizontally center the content */
-      align-items: center; /* Vertically center the content */
-      height: 10vh; /* Assuming you want to center the h1 vertically on the page */
+        width: 50%;
+        margin: auto;
+        border-width: 1px;
     }
-  
-    .form-control{
-      background-color: smoke whitesmoke;
-      /* color: white; */
+
+    #title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 10vh;
     }
-  </style>
+
+    .form-control {
+        background-color: smoke whitesmoke;
+    }
+
+    /* Add new style for the sidebar to make it fixed and take up 25% of the viewport width */
+    .sidebar {
+        position: fixed;
+        width: 25%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: #f8f9fa;
+        border-right: 1px solid #dee2e6;
+        padding-top: 20px;
+    }
+
+    /* Adjust the main content to start after the sidebar */
+    .main-content {
+        margin-left: 25%; /* Set to the width of the sidebar */
+    }
+</style>
+
+
+
+
   <div id="container" class="container mt-4">
 
     <h1>UPDATE COST SGMC</h1>
