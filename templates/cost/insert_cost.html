@@ -3,131 +3,286 @@
 {% block content %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script> <!-- Include Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script> <!-- Include Bootstrap JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 
+<!-- Add Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 <style>
     #container {
-        width: 50%;
-        margin: auto;
-        border-width: 1px;
-    }
+    width: 100%;
+    margin: auto;
+    border-width: 1px;
+  }
 
-    #title {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 10vh;
-    }
+  #title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+  }
 
-    .form-control {
-        background-color: smoke whitesmoke;
-    }
+  .form-control {
+    background-color: smoke whitesmoke;
+  }
 
-    /* Add new style for the sidebar to make it fixed and take up 25% of the viewport width */
-    .sidebar {
-        position: fixed;
-        width: 25%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background-color: #f8f9fa;
-        border-right: 1px solid #dee2e6;
-        padding-top: 20px;
-    }
+  /* Add new style for the sidebar to make it fixed and take up 25% of the viewport width */
+  .sidebar {
+    position: fixed;
+    width: 15%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    padding-top: 20px;
+    z-index: 1; /* Ensure the sidebar is above other elements */
+  }
 
-    /* Adjust the main content to start after the sidebar */
-    .main-content {
-        margin-left: 25%; /* Set to the width of the sidebar */
-    }
+  /* Adjust the main content to start after the sidebar */
+  .main-content {
+    margin-left: 25%; /* Set to the width of the sidebar */
+  }
+
+  
 </style>
 
 
+<body>
+    <div>
+
+    </div>
+
+    <div id="container" class="container mt-4">
 
 
-  <div id="container" class="container mt-4">
+        <div id="container" class="container mt-4">
 
-    <h1>UPDATE COST SGMC</h1>
-  
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insert_cost_elements">
+            Add Cost Element
+        </button>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insert_branch">
+            Add Branch
+        </button>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insert_cost">
+            Insert Cost
+        </button>
 
 
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="transID"  hidden>
+        <!-- Modal--------------------------------------------------Insert Cost  Elements ---------------------------------------->
+        <div class="modal fade" id="insert_cost_elements" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Cost Elements</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-insert-cost-elements">
+
                         
-                    </div>
-                    <br>
-
-                    <div class="form-floating">
-                        <input type="date" class="form-control" id="trans_date_cost">
-                        <label for="floatingInputGrid" style="font-size: 19px;">Transaction Date</label>
-                    </div>
-                    <br>
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="equipment_id_cost" >
-                        <label for="floatingInputGrid" style="font-size: 19px;">Equipment ID</label>
-                    </div>
-                    <br>
-
-                    <div class="form-floating">
-                        <select class="form-select" id="cost_details" aria-label="Floating label select example" >
-
-                                
-                                <option value="Amortization & Depreciation">Amortization & Depreciation</option>
-                                <option value="Fuel">Fuel</option>
-                                <option value="Meals">Meals</option>
-                                <option value="Mechanical Supplies">Mechanical Supplies</option>
-                                <option value="Oil & Lubes">Oil & Lubes</option>
-                                <option value="Others">Others</option>
-                                <option value="Repairs & Maintenance">Repairs & Maintenance</option>
-                                <option value="Salaries & Wages">Salaries & Wages</option>
-                                <option value="Tires">Tires</option>
-                                <option value="Transpo">Transpo</option>
-                            </select>
-                        <label for="floatingInputGrid" style="font-size: 15px;" >Cost Details</label>
-                    </div>
-                    <br>
-
-                    
-
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="amount_cost" >
-                        <label for="floatingInputGrid" style="font-size: 19px;">Amount</label>
-                    </div>
-                    <br>
-
-                    <div class="form-floating">
-                        <textarea class="form-control"  placeholder="Leave a comment here" id="particular_cost">
                             
-                        </textarea>
-                        <label for="floatingTextarea">Particular</label>
-                    </div>
-
-                    <br>
-                    <div class="col-md">
-                        <div class="form-floating">
-                        <input type="number" class="form-control" id="equip_id_cost">
-                        
-                        </div>
-                    </div>
-
-                    <br>
-
-
-                    <button type="button" id="Btn_update_cost"   class="btn btn-success">Update</button>
-        
-
-     
-             
+                            
+                            <div class="col-md">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="type" >
+                                <label for="floatingInputGrid" style="font-size: 18px;">Type of Elements</label>
                 
+                               
+                              </div>
+                            </div>
 
-  </div>
-   
-    <!-- <script src="/static/sgmc/sgmc_update_cost.js"></script> -->
+                            <br>
+                
+                            <div class="col-md">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="cost_elements" >
+                                  <label for="floatingInputGrid" style="font-size: 18px;">Cost Elements</label>
+                  
+                                 
+                                </div>
+                              </div>
+                        
+                
+                          
+                
+                          <br>
+
+
+                         
+                          
+                
+                          
+                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal--------------------------------------------------Insert Branch ---------------------------------------->
+        <div class="modal fade" id="insert_branch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Branch</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-insert-branch">
+
+                        
+                            
+                            
+                            <div class="col-md">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="type" >
+                                <label for="floatingInputGrid" style="font-size: 18px;">Type of Elements</label>
+                
+                               
+                              </div>
+                            </div>
+
+                            <br>
+                
+                            <div class="col-md">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="cost_elements" >
+                                  <label for="floatingInputGrid" style="font-size: 18px;">Branch</label>
+                  
+                                 
+                                </div>
+                              </div>
+                        
+                
+                          
+                
+                          <br>
+
+
+                         
+                          
+                
+                          
+                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal  insert cost-->
+        <div class="modal fade" id="insert_cost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Cost</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row g-3">
+                            <div class="col-md">
+                              <div class="form-floating">
+                                <input type="date" class="form-control" id="transaction_date" >
+                                <label for="floatingInputGrid" style="font-size: 15px;">Transaction Date</label>
+                              </div>
+                            </div>
+                            
+                            <div class="col-md">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="account_name" >
+                                <label for="floatingInputGrid" style="font-size: 15px;">AP Number</label>
+                
+                               
+                              </div>
+                            </div>
+                
+                            <div class="col-md">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="account_name" >
+                                  <label for="floatingInputGrid" style="font-size: 15px;">AP Number</label>
+                  
+                                 
+                                </div>
+                              </div>
+                          </div>
+                
+                          
+                
+                          <br>
+
+
+                          <div class="row g-3">
+                            <div class="col-md">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="transaction_date" >
+                                <label for="floatingInputGrid" style="font-size: 15px;">Transaction Date</label>
+                              </div>
+                            </div>
+                            
+                            <div class="col-md">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="account_name" >
+                                <label for="floatingInputGrid" style="font-size: 15px;">AP Number</label>
+                
+                               
+                              </div>
+                            </div>
+                
+                            <div class="col-md">
+                                <div class="form-floating">
+                                  <input type="text" class="form-control" id="account_name" >
+                                  <label for="floatingInputGrid" style="font-size: 15px;">AP Number</label>
+                  
+                                 
+                                </div>
+                              </div>
+                          </div>
+                
+                          
+                
+                          <br>
+                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
             
 
 
+          </div>
+    
+               
+    
+         
+                 
+                    
+    
+      </div>
+
+</body>
+
+<!-- Add Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  
+   
+  
 
 {% endblock %}

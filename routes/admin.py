@@ -173,4 +173,8 @@ async def api_login(request: Request):
 @login_router.get("/insert-cost/", response_class=HTMLResponse)
 async def insert_cost(request: Request):
     return templates.TemplateResponse("cost/insert_cost.html", {"request":request}) 
+
+@login_router.get("/insert-cost-elements/", response_class=HTMLResponse)
+async def insert_cost(request: Request):
+    return templates.TemplateResponse("cost/insert_cost_element.html", {"request":request}) 
     
