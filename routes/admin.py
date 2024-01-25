@@ -62,8 +62,9 @@ class User(BaseModel):
 
 class BranchCode(BaseModel):
     """This is for Branch BaseModel"""
-
-    BranchCode: str
+    
+    branch_code: Optional[str]
+    user: str 
 
 
 def get_password_hash(password):
@@ -104,6 +105,66 @@ def create_access_token(data: dict, expires_delta: timedelta):
 
     
     return to_encode
+
+
+@login_router.get("/current-user/")
+async def get_current_user(request:Request):
+
+    try :
+        token = request.cookies.get('access_token')
+        # print(token)
+        if token is None:
+            raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail= "Not Authorized",
+            # headers={"WWW-Authenticate": "Basic"},
+            )
+        else:
+            scheme, _, param = token.partition(" ")
+            payload = jwt.decode(param, JWT_SECRET, algorithms=ALGORITHM)
+        
+            username = payload.get("sub")    
+            
+            expiration_time = datetime.fromtimestamp(payload.get("exp"))
+
+            user = Login_views.getuser(username=username)
+
+            if user == [] :
+                 raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail= "Not Authorized",
+               
+                )
+            else:
+                
+                return username
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail= "Not Authorized Please login",
+            # headers={"WWW-Authenticate": "Basic"},
+        )
+            
+
+            
+            # if datetime.utcnow() > expiration_time:
+            #     raise HTTPException(
+            #         status_code=status.HTTP_401_UNAUTHORIZED,
+            #         detail="Token has expired. Please login again.",
+            #     )
+
+            # # response_data = {"username": username}
+            # return username
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail= "Session has expired",
+            # headers={"WWW-Authenticate": "Basic"},
+        )
+
+
 
 
 @login_router.get("/", response_class=HTMLResponse)
@@ -182,18 +243,45 @@ async def insert_cost(request: Request):
 async def insert_cost(request: Request):
     return templates.TemplateResponse("cost/insert_cost_element.html", {"request":request}) 
 
+
 @login_router.post("/api-insert-branch-cost/")
-async def insert_branch_cost(items:BranchCode):
+async def insert_branch_cost(items: BranchCode,username: str = Depends(get_current_user)):
     """This function is for inserting equipment to GRC table"""
+    
+    username = 'jerome'
     try:
-        Cost.insert_branch(branch_code=items.BranchCode)
-
-        return('Data has been Save')
-
+        
+        Cost.insert_branch(branch_code=items.branch_code, user=username)
+        return {"message": "Data has been saved"}
     except Exception as e:
-        error_message = str(e)  # Use the actual error message from the exception
-       
-        return {"error": error_message}
+        error_message = str(e)
+        raise HTTPException(status_code=500, detail=error_message)
+    # except DuplicateBranchError as e:
+    #     raise HTTPException(status_code=400, detail="Duplicate Branch")
+    # except UnauthorizedError as e:
+    #     raise HTTPException(status_code=401, detail="Unauthorized credential. Please login")
+
+@login_router.get("/api-get-branch/")
+def get_branchs(term: Optional[str] = None):
+    # this is to autocomplete Routes
+    # Ensure you're correctly handling query parameters, 'term' in this case
+
+    branch = Cost.get_branch()
+
+    branch_data = [
+        
+            {
+                "id": x.id,
+                "branch_code": x.branch_code,
+                "user": x.user
+                
+            }
+            for x in branch
+        ]
+    
+    
+    return branch_data
+
 
 @login_router.get("/api-search-autocomplete-branch/")
 def autocomplete_branch_code(term: Optional[str] = None):

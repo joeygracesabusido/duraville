@@ -37,3 +37,16 @@ class Login_views():
                 return data
             except NoResultFound:
                 return None
+            
+    def getusers():
+        """This function is querying user """
+        with Session(engine) as session:
+            try:
+                statement = select(User)
+                            
+                results = session.exec(statement) 
+
+                data = results.all()
+                return data
+            except NoResultFound:
+                return None

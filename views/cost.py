@@ -10,10 +10,10 @@ engine = Connection.db()
 class Cost():
 
     @staticmethod
-    def insert_branch(branch_code): # this  function is to insert branch for costing
+    def insert_branch(branch_code,user): # this  function is to insert branch for costing
        
         """This function is for inserting user"""
-        insertData = CostBranchCode(branch_code=branch_code)
+        insertData = CostBranchCode(branch_code=branch_code,user=user)
         
 
         session = Session(engine)

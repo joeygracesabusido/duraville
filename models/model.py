@@ -38,6 +38,9 @@ class CostAccountName(SQLModel, table=True):
     __tablename__ = 'cost_account_name'
     id: Optional[int] = Field(default=None, primary_key=True)
     account_name: str = Field(index=True, unique=True)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_credited: datetime = Field(default_factory=datetime.utcnow)
+    user: str =Field(max_length=100, default=None)
     __table_args__ = (Index("idx_cost_account_name_unique", "account_name", unique=True),)
 
 class CostBranchCode(SQLModel, table=True):
@@ -45,6 +48,9 @@ class CostBranchCode(SQLModel, table=True):
     __tablename__ = 'cost_branch_code'
     id: Optional[int] = Field(default=None, primary_key=True)
     branch_code: str = Field(index=True, unique=True)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_credited: datetime = Field(default_factory=datetime.utcnow)
+    user: str =Field(max_length=100, default=None)
     __table_args__ = (Index("idx_branch_code_unique", "branch_code", unique=True),)
 
 class ChartOfAccount(SQLModel, table=True):
@@ -54,6 +60,9 @@ class ChartOfAccount(SQLModel, table=True):
     account_code: str = Field(index=True, unique=True)
     account_title: str= Field(max_length=100)
     account_class: str = Field(max_length=50)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_credited: datetime = Field(default_factory=datetime.utcnow)
+    user: str =Field(max_length=100, default=None)
     __table_args__ = (Index("idx_chart_of_account", "account_code", unique=True),)
     __table_args__ = (Index("idx_chart_of_account", "account_title", unique=True),)
 
