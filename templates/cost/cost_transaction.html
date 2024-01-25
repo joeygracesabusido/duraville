@@ -13,7 +13,7 @@
 
 <style>
     #container {
-    width: 100%;
+    width: 80%;
     margin: auto;
     border-width: 1px;
   }
@@ -29,7 +29,12 @@
     background-color: smoke whitesmoke;
   }
 
+
+
+
   /* Add new style for the sidebar to make it fixed and take up 25% of the viewport width */
+
+  
   .sidebar {
     position: fixed;
     width: 15%;
@@ -62,15 +67,24 @@
         <div id="container" class="container mt-4">
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insert_cost_elements">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" 
+            data-bs-target="#insert_cost_elements" style="width: 190px;">
             Add Cost Element
         </button>
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insert_branch">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+             data-bs-target="#insert_branch" style="width: 190px;">
             Add Branch
         </button>
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insert_cost">
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+             data-bs-target="#cost_account_name" style="width: 190px;">
+             Cost Account Name
+        </button>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" 
+              data-bs-target="#insert_cost" style="width: 190px;">
             Insert Cost
         </button>
 

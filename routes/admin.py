@@ -12,6 +12,9 @@ from datetime import datetime, date
 from typing import Optional
 
 # tesing lang
+
+from views.cost import Cost
+
 from datetime import datetime, timedelta
 
 from views.login import Login_views
@@ -57,9 +60,10 @@ class User(BaseModel):
     full_name: str
     is_active: bool 
 
+class BranchCode(BaseModel):
+    """This is for Branch BaseModel"""
 
-
-
+    BranchCode: str
 
 
 def get_password_hash(password):
@@ -172,9 +176,42 @@ async def api_login(request: Request):
 
 @login_router.get("/insert-cost/", response_class=HTMLResponse)
 async def insert_cost(request: Request):
-    return templates.TemplateResponse("cost/insert_cost.html", {"request":request}) 
+    return templates.TemplateResponse("cost/cost_transaction.html", {"request":request}) 
 
 @login_router.get("/insert-cost-elements/", response_class=HTMLResponse)
 async def insert_cost(request: Request):
     return templates.TemplateResponse("cost/insert_cost_element.html", {"request":request}) 
+
+@login_router.post("/api-insert-branch-cost/")
+async def insert_branch_cost(items:BranchCode):
+    """This function is for inserting equipment to GRC table"""
+    try:
+        Cost.insert_branch(branch_code=items.BranchCode)
+
+        return('Data has been Save')
+
+    except Exception as e:
+        error_message = str(e)  # Use the actual error message from the exception
+       
+        return {"error": error_message}
+
+@login_router.get("/api-search-autocomplete-branch/")
+def autocomplete_branch_code(term: Optional[str] = None):
+    # this is to autocomplete Routes
+    # Ensure you're correctly handling query parameters, 'term' in this case
+
+    branch = Cost.get_branch()
+    for i in branch:
+        ab = i.branch_code
+        print(ab)
+
+    if term:
+       # Case-insensitive search for branch codes
+        filtered_branch = [item for item in branch if term.lower() in item.branch_code.lower()]
+        print(filtered_branch)
+    else:
+        filtered_branch = []
+
+    suggestions = [{"value": item.branch_code,"branch_code": item.branch_code,"id": item.id} for item in filtered_branch]
+    return suggestions
     

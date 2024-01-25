@@ -33,6 +33,34 @@ class User(SQLModel, table=True):
     __table_args__ = (Index("idx_user_unique", "username", unique=True),)
 
 
+class CostAccountName(SQLModel, table=True):
+    """This is for table of cost account name"""
+    __tablename__ = 'cost_account_name'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    account_name: str = Field(index=True, unique=True)
+    __table_args__ = (Index("idx_cost_account_name_unique", "account_name", unique=True),)
+
+class CostBranchCode(SQLModel, table=True):
+    """This is for table of Branch"""
+    __tablename__ = 'cost_branch_code'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    branch_code: str = Field(index=True, unique=True)
+    __table_args__ = (Index("idx_branch_code_unique", "branch_code", unique=True),)
+
+class ChartOfAccount(SQLModel, table=True):
+    """This is for table of chart of account"""
+    __tablename__ = 'chart_of_account'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    account_code: str = Field(index=True, unique=True)
+    account_title: str= Field(max_length=100)
+    account_class: str = Field(max_length=50)
+    __table_args__ = (Index("idx_chart_of_account", "account_code", unique=True),)
+    __table_args__ = (Index("idx_chart_of_account", "account_title", unique=True),)
+
+
+
+
+
 # class Department(SQLModel, table=True):
 #     """This is for department table"""
 #     __tablename__ = 'department'
