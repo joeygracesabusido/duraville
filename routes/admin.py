@@ -61,10 +61,10 @@ class User(BaseModel):
     is_active: bool 
 
 class BranchCode(BaseModel):
-    """This is for Branch BaseModel"""
-    
-    branch_code: Optional[str]
-    user: str 
+    branch_code: str
+
+    class Config:
+        orm_mode = True
 
 
 def get_password_hash(password):
@@ -245,10 +245,11 @@ async def insert_cost(request: Request):
 
 
 @login_router.post("/api-insert-branch-cost/")
-async def insert_branch_cost(items: BranchCode,username: str = Depends(get_current_user)):
+async def insert_branch_cost(items:BranchCode,username: str = Depends(get_current_user)):
     """This function is for inserting equipment to GRC table"""
-    
-    username = 'jerome'
+    # print(username)
+    # username = username.strip("'").lower()
+
     try:
         
         Cost.insert_branch(branch_code=items.branch_code, user=username)
@@ -284,22 +285,49 @@ def get_branchs(term: Optional[str] = None):
 
 
 @login_router.get("/api-search-autocomplete-branch/")
-def autocomplete_branch_code(term: Optional[str] = None):
+def autocomplete_branch_code(term: Optional[str] = None,username: str = Depends(get_current_user)):
     # this is to autocomplete Routes
     # Ensure you're correctly handling query parameters, 'term' in this case
-
+    # print(username)
     branch = Cost.get_branch()
-    for i in branch:
-        ab = i.branch_code
-        print(ab)
+    
+   
+
+    search_term = term.strip("'").lower()
+
+    
+    data =[ {
+               "id": x. id,
+                "branch_code": x.branch_code,
+    
+            }
+            for x in branch 
+    ]
 
     if term:
-       # Case-insensitive search for branch codes
-        filtered_branch = [item for item in branch if term.lower() in item.branch_code.lower()]
-        print(filtered_branch)
-    else:
-        filtered_branch = []
 
-    suggestions = [{"value": item.branch_code,"branch_code": item.branch_code,"id": item.id} for item in filtered_branch]
+        filtered_data = [item for item in data if search_term.lower() in item['branch_code'].lower()]
+
+    else:
+
+        filtered_data = []
+    
+    
+    suggestions = [{"value": item['branch_code'],"id": item['id']} for item in filtered_data]
+
     return suggestions
+   
+    # for x in filtered_branches:
+      
+    
+
+    # Check if term is present in any branch_code
+    # matching_branches = [
+    #     {
+    #         "id": x["id"],
+    #         "branch_code": x["branch_code"],
+    #     }
+    #     for x in filtered_branches
+    #     if term.lower() in x["branch_code"].lower()
+    # ]
     
