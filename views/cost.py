@@ -1,7 +1,7 @@
 from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfilter,within_group,Relationship,Index
 from sqlalchemy.orm.exc import NoResultFound
 
-from models.model import CostBranchCode
+from models.model import CostBranchCode,cost
 from database.mongodb_connection import Connection
 
 engine = Connection.db()
@@ -30,6 +30,21 @@ class Cost():
         with Session(engine) as session:
             try:
                 statement = select(CostBranchCode)
+                            
+                results = session.exec(statement) 
+
+                data = results.all()
+                
+                return data
+            except NoResultFound:
+                return None
+            
+
+    @staticmethod
+    def get_all_cost(): # this function is for getting all the cost expense from cost table
+        with Session(engine) as session:
+            try:
+                statement = select(cost)
                             
                 results = session.exec(statement) 
 

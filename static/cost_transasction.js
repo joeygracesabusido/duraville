@@ -99,4 +99,6 @@ $("#btn_insert_cost").on("click", function() {
     initializeAutocomplete();  // Initialize autocomplete when the modal is shown
   });
 
+ 
+
 

@@ -1,4 +1,4 @@
-
+from pydantic import condecimal
 from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfilter,within_group,Relationship,Index
 from typing import Optional
 
@@ -58,13 +58,34 @@ class ChartOfAccount(SQLModel, table=True):
     __tablename__ = 'chart_of_account'
     id: Optional[int] = Field(default=None, primary_key=True)
     account_code: str = Field(index=True, unique=True)
-    account_title: str= Field(max_length=100)
+    account_title: str = Field(max_length=100)
     account_class: str = Field(max_length=50)
     date_updated: Optional[datetime] = Field(default=None)
     date_credited: datetime = Field(default_factory=datetime.utcnow)
     user: str =Field(max_length=100, default=None)
     __table_args__ = (Index("idx_chart_of_account", "account_code", unique=True),)
     __table_args__ = (Index("idx_chart_of_account", "account_title", unique=True),)
+
+
+class cost(SQLModel, table=True):
+    """This is for table of cost"""
+    __tablename__ = 'cost'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    voucher_date: datetime
+    voucher_no: str = Field(max_length=100)
+    company: str = Field(max_length=150)
+    book: str = Field(max_length=150)
+    supplier: str = Field(max_length=250)
+    vat_reg: str = Field(max_length=100)
+    tin_no: str = Field(max_length=70)
+    net_of_vat: condecimal(max_digits=20, decimal_places=2) = Field(default=0)
+    amount_due: condecimal(max_digits=20, decimal_places=2) = Field(default=0)
+    expense_account: str = Field(max_length=200)
+    description: str = Field(max_length=1500)
+    user: str =Field(default=None)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_credited: datetime = Field(default_factory=datetime.utcnow)
+    
 
 
 

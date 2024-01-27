@@ -237,7 +237,33 @@ async def api_login(request: Request):
 
 @login_router.get("/insert-cost/", response_class=HTMLResponse)
 async def insert_cost(request: Request):
-    return templates.TemplateResponse("cost/cost_transaction.html", {"request":request}) 
+
+    results = Cost.get_all_cost()
+
+    cost_data = [
+             
+            {
+                "voucher_date": x.voucher_date,
+                "voucher_no": x.voucher_no,
+                "company": x.company,
+                "book": x.book,
+                "supplier": x.supplier,
+                "vat_reg": x.vat_reg,
+                "tin_no": x.tin_no,
+                "net_of_vat": x.net_of_vat,
+                "amount_due": x.amount_due,
+                "expense_account": x.expense_account,
+                "description": x.description,
+                "user": x.user
+
+
+            }
+             for x in results
+            
+        ]
+    
+   
+    return templates.TemplateResponse("cost/cost_transaction.html", {"request":request,"cost_data":cost_data}) 
 
 @login_router.get("/insert-cost-elements/", response_class=HTMLResponse)
 async def insert_cost(request: Request):
@@ -282,6 +308,37 @@ def get_branchs(term: Optional[str] = None):
     
     
     return branch_data
+
+@login_router.get("/api-get-cost/")
+def get_branchs(term: Optional[str] = None):
+    # this is to autocomplete Routes
+    # Ensure you're correctly handling query parameters, 'term' in this case
+
+    results = Cost.get_all_cost()
+
+    cost_data = [
+             
+            {
+                "voucher_date": x.voucher_date,
+                "voucher_no": x.voucher_no,
+                "company": x.company,
+                "book": x.book,
+                "supplier": x.supplier,
+                "vat_reg": x.vat_reg,
+                "tin_no": x.tin_no,
+                "net_of_vat": x.net_of_vat,
+                "amount_due": x.amount_due,
+                "expense_account": x.expense_account,
+                "description": x.description,
+                "user": x.user
+
+
+            }
+             for x in results
+            
+        ]
+    
+    return cost_data
 
 
 @login_router.get("/api-search-autocomplete-branch/")
