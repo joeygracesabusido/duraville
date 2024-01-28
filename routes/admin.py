@@ -250,7 +250,7 @@ async def insert_cost(request: Request):
                 "supplier": x.supplier,
                 "vat_reg": x.vat_reg,
                 "tin_no": x.tin_no,
-                "net_of_vat": x.net_of_vat,
+                "net_of_vat": "{:,.2f}".format(x.net_of_vat),
                 "amount_due": x.amount_due,
                 "expense_account": x.expense_account,
                 "description": x.description,

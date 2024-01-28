@@ -81,7 +81,7 @@ function initializeAutocomplete() {
         minLength: 2,  // Minimum length of the input before triggering autocomplete
         select: function(event, ui) {
             $("#branch_insert_cost_input").val(ui.item.value);
-            if (ui.item.value === 'ELECTRICTY'){
+            if (ui.item.value === 'ELECTRICITY'){
                 // $("#insert_cost").modal("hide");
                 $("#electricity_water_form").modal("show");
             }
@@ -95,10 +95,14 @@ function initializeAutocomplete() {
 
    // Open modal and initialize autocomplete when the button is clicked
 $("#btn_insert_cost").on("click", function() {
-    $("#modal-insert-cost").modal("show");  // Adjust modal ID as needed
+    $("#modal_insert_cost").modal("show");  // Adjust modal ID as needed
     initializeAutocomplete();  // Initialize autocomplete when the modal is shown
   });
 
+
+  $(document).ready(function () {
+    $('#my_table_cost').DataTable();
+});
  
 
 

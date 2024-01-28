@@ -111,10 +111,14 @@
                 <thead class="border-bottom font-weight-bold">
                 
                         <td>Date</td>
+                        <td>AP No.</td>
+                        <td>Company</td>
                         <td>Book</td>
                         <td>Net of Vat</td>
                         <td>Expense Acount</td>
                         <td>Description</td>
+                        <td>Action</td>
+                        <td>Update W&E</td>
                         
                         
                     </tr>
@@ -125,6 +129,8 @@
                         <tr>
                             
                             <td>{{list.voucher_date}}</td>
+                            <td>{{list.voucher_no}}</td>
+                            <td>{{list.company}}</td>
                             <td>{{list.book}}</td>
                             <td>{{list.net_of_vat}}</td>
                             <td>{{list.expense_account}}</td>
@@ -132,11 +138,17 @@
                             
                            
                             
-                            <!-- <td>
-                                <a href="/update-chart-of-account/{{list.id}}"
+                            <td>
+                                <a href="#"
                                 <button type="button" class="btn btn-primary">
                                 <i class="fas fa-database"></i> Edit</button></a>
-                            </td> -->
+                            </td>
+
+                            <td>
+                              <a href="#"
+                              <button type="button" class="btn btn-success">
+                              <i class="fas fa-database"></i>EL&WA</button></a>
+                          </td>
 
                             
 
@@ -264,7 +276,7 @@
   <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Add Cost Elements</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Add WATER & ELECTRICITY</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal_electricity_water_form">
@@ -333,7 +345,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Add Cost</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-insert-cost">
+                    <div class="modal_insert_cost">
 
                         <div class="row g-3">
                             <div class="col-md">
@@ -430,9 +442,7 @@
 
 
 <script>
-   $(document).ready(function () {
-    $('#my_table_cost').DataTable();
-});
+  
 
 </script>
 
