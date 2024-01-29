@@ -103,6 +103,13 @@ $("#btn_insert_cost").on("click", function() {
   $(document).ready(function () {
     $('#my_table_cost').DataTable();
 });
- 
+
+
+  // Open modal and initialize autocomplete when the button is clicked
+$("#edit_water_electricity").on("click", function() {
+    $("#electricity_water_form").modal("show");  // Updated modal ID
+  });
+  
+
 
 
