@@ -64,7 +64,7 @@ class BranchCode(BaseModel):
     branch_code: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 def get_password_hash(password):
@@ -232,11 +232,11 @@ def login(username1: Optional[str],password1:Optional[str],response:Response):
 
 
 @login_router.get("/dashboard/", response_class=HTMLResponse)
-async def api_login(request: Request):
+async def api_login(request: Request,username: str = Depends(get_current_user)):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
 @login_router.get("/insert-cost/", response_class=HTMLResponse)
-async def insert_cost(request: Request):
+async def getAllCost_cost(request: Request,username: str = Depends(get_current_user)):
 
     results = Cost.get_all_cost()
 
@@ -387,4 +387,36 @@ def autocomplete_branch_code(term: Optional[str] = None,username: str = Depends(
     #     for x in filtered_branches
     #     if term.lower() in x["branch_code"].lower()
     # ]
+
+
+
+@login_router.get("/update-rental-grc/{id}", response_class=HTMLResponse)
+async def grc_template(id:Optional[int],request: Request, username: str = Depends(get_current_user)):
+    rentalData = 'Nothing'
+
+    # results = GrcViews.getRental_id(item_id=id)
+
+    # rentalData = [
+        
+    #         {
+    #            "id": results.id,
+    #             "transDate": results.transDate,
+    #             "demr": results.demr,
+    #             "equipment_id": results.equipment_id,
+    #             "timeIn": results.timeIn,
+    #             "timeOut": results.timeOut,
+    #             "totalHours": results.totalHours,
+    #             "rentalRate": results.rentalRate,
+    #             "amount": results.amount,
+    #             "shift": results.shift,
+    #             "driver_operator": results.driver_operator,
+    #             "user": results.user,
+
+               
+    #         }
+           
+    #     ]
+    
+   
+    return templates.TemplateResponse("employee/grc_updateRental.html", {"request":request,"rentalData":rentalData})
     
