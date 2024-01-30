@@ -29,7 +29,7 @@ from jose import jwt
 
 JWT_SECRET = 'myjwtsecret'
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 # login_router = APIRouter(include_in_schema=False)
 login_router = APIRouter(include_in_schema=True)
@@ -65,6 +65,17 @@ class BranchCode(BaseModel):
 
     class Config:
         from_attributes = True
+
+class UpdateWaterBaseModel(BaseModel):
+    sin: str
+    kwt_cubic_meter: float
+    amount: float
+    
+
+    class Config:
+        from_attributes = True
+
+    
 
 
 def get_password_hash(password):
@@ -157,12 +168,12 @@ async def get_current_user(request:Request):
             # # response_data = {"username": username}
             # return username
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail= "Session has expired",
-            # headers={"WWW-Authenticate": "Basic"},
-        )
+    # except Exception as e:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_401_UNAUTHORIZED,
+    #         detail= "Session has expired",
+    #         # headers={"WWW-Authenticate": "Basic"},
+    #     )
 
 
 
@@ -243,6 +254,7 @@ async def getAllCost_cost(request: Request,username: str = Depends(get_current_u
     cost_data = [
              
             {
+                "id": x.id,
                 "voucher_date": x.voucher_date,
                 "voucher_no": x.voucher_no,
                 "company": x.company,
@@ -254,6 +266,9 @@ async def getAllCost_cost(request: Request,username: str = Depends(get_current_u
                 "amount_due": x.amount_due,
                 "expense_account": x.expense_account,
                 "description": x.description,
+                "sin": x.sin,
+                "kwt_cubic_meter": x.kwt_cubic_meter,
+                "amount": x.amount,
                 "user": x.user
 
 
@@ -318,7 +333,8 @@ def get_branchs(term: Optional[str] = None):
 
     cost_data = [
              
-            {
+            {   
+                "id": x.id,
                 "voucher_date": x.voucher_date,
                 "voucher_no": x.voucher_no,
                 "company": x.company,
@@ -390,7 +406,7 @@ def autocomplete_branch_code(term: Optional[str] = None,username: str = Depends(
 
 
 
-@login_router.get("/api-update-water-electric-cost/{id}", response_class=HTMLResponse)
+@login_router.get("/api-update-water-electric-cost/{id}")
 async def grc_template(id:Optional[int],request: Request, username: str = Depends(get_current_user)):
     rentalData = 'Nothing'
 
@@ -412,4 +428,25 @@ async def grc_template(id:Optional[int],request: Request, username: str = Depend
     
    
     return templates.TemplateResponse("cost/update_water_elect.html", {"request":request,"costData":costData})
+
+@login_router.put("/update-water-electric-cost/{id}")
+async def updateGRCRental(id,items:UpdateWaterBaseModel,username: str = Depends(get_current_user)):
+
+    """This function is to update Water"""
+    # user =  mydb.access_setting.find({"username":username})
+    # for i in user:
+        # if i['site'] == 'admin' or i['site'] == 'sgmc' and i['site_transaction_write']:
+    today = datetime.now()
+    try:
+        Cost.updatecost(sin=items.sin,kwt_cubic_meter=items.kwt_cubic_meter,amount=items.amount,
+                        date_updated=today,user=username,item_id=id)
+
+    except Exception as e:
+        error_message = str(e)  # Use the actual error message from the exception
+    
+        return {"error": error_message}
+
+
+    return  {'Messeges':'Data has been Updated'}
+   
     

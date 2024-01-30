@@ -83,7 +83,7 @@ function initializeAutocomplete() {
             $("#branch_insert_cost_input").val(ui.item.value);
             if (ui.item.value === 'ELECTRICITY'){
                 // $("#insert_cost").modal("hide");
-                $("#electricity_water_form").modal("show");
+                // $("#electricity_water_form").modal("show");
             }
 
             
@@ -106,9 +106,9 @@ $("#btn_insert_cost").on("click", function() {
 
 
   // Open modal and initialize autocomplete when the button is clicked
-$("#edit_water_electricity").on("click", function() {
-    $("#electricity_water_form").modal("show");  // Updated modal ID
-  });
+// $("#edit_water_electricity").on("click", function() {
+//     $("#electricity_water_form").modal("show");  // Updated modal ID
+//   });
   
 
 

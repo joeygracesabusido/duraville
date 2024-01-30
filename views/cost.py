@@ -67,6 +67,28 @@ class Cost():
                 return data
             except NoResultFound:
                 return None
+            
+    @staticmethod   
+    def updatecost(sin,kwt_cubic_meter,amount,date_updated,user,item_id):
+        """This function is for updating Rizal Equipment"""
+
+        with Session(engine) as session:
+            statement = select(cost).where(cost.id == item_id)
+            results = session.exec(statement)
+
+            result = results.one()
+
+            
+            result.sin = sin
+            result.kwt_cubic_meter = kwt_cubic_meter
+            result.amount = amount
+            result.user = user
+            result.date_updated = date_updated
+
+            session.add(result)
+            session.commit()
+            session.refresh(result)
+            session.close()
 
 
 

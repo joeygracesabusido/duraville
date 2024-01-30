@@ -117,6 +117,9 @@
                         <td>Net of Vat</td>
                         <td>Expense Acount</td>
                         <td>Description</td>
+                        <td>SIN/Account No</td>
+                        <td>KWT/CUBIC</td>
+                        <td>Amount</td>
                         <td>Action</td>
                         <td>Update W&E</td>
                         
@@ -135,19 +138,26 @@
                             <td>{{list.net_of_vat}}</td>
                             <td>{{list.expense_account}}</td>
                             <td>{{list.description}}</td>
+                            <td>{{list.sin}}</td>
+                            <td>{{list.kwt_cubic_meter}}</td>
+                            <td>{{list.amount}}</td>
                             
                            
                             
                             <td>
                                 <a href="#"
                                 <button type="button" class="btn btn-primary">
-                                <i class="fas fa-database"></i> Edit</button></a>
+                                <i class="fas fa-database"></i>Edit</button></a>
                             </td>
 
                             <td>
-                              <a href="/api-update-water-electric-cost/{list.id/}"
-                              <button type="button" id="edit_water_electricity" class="btn btn-success">
-                              <i class="fas fa-database"></i>EL&WA</button></a>
+                              <a href="/api-update-water-electric-cost/{{list.id}}"
+                              <button type="button" class="btn btn-warning">
+                              <i class="fas fa-database"></i>Update</button></a> 
+
+                              <!-- <a href="/api-update-water-electric-cost/{list.id/}"
+                              <button type="button"  class="btn btn-success">
+                              <i class="fas fa-database"></i>EL&WA</button></a> -->
                           </td>
 
                             
