@@ -390,33 +390,26 @@ def autocomplete_branch_code(term: Optional[str] = None,username: str = Depends(
 
 
 
-@login_router.get("/update-rental-grc/{id}", response_class=HTMLResponse)
+@login_router.get("/api-update-water-electric-cost/{id}", response_class=HTMLResponse)
 async def grc_template(id:Optional[int],request: Request, username: str = Depends(get_current_user)):
     rentalData = 'Nothing'
 
-    # results = GrcViews.getRental_id(item_id=id)
+    results = Cost.get_all_cost_id(item_id=id)
 
-    # rentalData = [
+    costData = [
         
-    #         {
-    #            "id": results.id,
-    #             "transDate": results.transDate,
-    #             "demr": results.demr,
-    #             "equipment_id": results.equipment_id,
-    #             "timeIn": results.timeIn,
-    #             "timeOut": results.timeOut,
-    #             "totalHours": results.totalHours,
-    #             "rentalRate": results.rentalRate,
-    #             "amount": results.amount,
-    #             "shift": results.shift,
-    #             "driver_operator": results.driver_operator,
-    #             "user": results.user,
+            {
+               "id": results.id,
+                "sin": results.sin,
+                "kwt_cubic_meter": results.kwt_cubic_meter,
+                "amount": results.amount,
+                "user": results.user,
 
                
-    #         }
+            }
            
-    #     ]
+        ]
     
    
-    return templates.TemplateResponse("employee/grc_updateRental.html", {"request":request,"rentalData":rentalData})
+    return templates.TemplateResponse("cost/update_water_elect.html", {"request":request,"costData":costData})
     

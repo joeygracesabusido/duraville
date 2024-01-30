@@ -53,6 +53,20 @@ class Cost():
                 return data
             except NoResultFound:
                 return None
+            
+    @staticmethod
+    def get_all_cost_id(item_id): # this function is for getting all the cost expense from cost table
+        with Session(engine) as session:
+            try:
+                statement = select(cost).where(cost.id == item_id)
+                            
+                results = session.exec(statement) 
+
+                data = results.one()
+                
+                return data
+            except NoResultFound:
+                return None
 
 
 
