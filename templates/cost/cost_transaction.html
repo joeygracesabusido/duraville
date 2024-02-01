@@ -13,8 +13,19 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
 
 
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+  
+
+
+
+
 <!-- Add Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+
 
 <style>
     #container {
@@ -69,10 +80,10 @@
     <div id="container" class="container mt-4">
 
 
-        <div id="container" class="container mt-4">
+        
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" 
+        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" 
             data-bs-target="#insert_cost_elements" style="width: 190px;">
             Add Cost Element
         </button>
@@ -93,7 +104,7 @@
             Insert Cost
         </button>
 
-        <br>
+        <br> -->
         <!-- <div class="col-md">
           <div class="form-floating">
             <input type="text" class="form-control" id="branch_insert_cost_input2" >
@@ -106,71 +117,76 @@
 
         <div>
 
-          <div class="container mt-3">
-            <table id="my_table_cost" class="table table-bordered"  style="text-align: center;">
-                <thead class="border-bottom font-weight-bold">
-                
-                        <td>Date</td>
-                        <td>AP No.</td>
-                        <td>Company</td>
-                        <td>Book</td>
-                        <td>Net of Vat</td>
-                        <td>Expense Acount</td>
-                        <td>Description</td>
-                        <td>SIN/Account No</td>
-                        <td>KWT/CUBIC</td>
-                        <td>Amount</td>
-                        <td>Action</td>
-                        <td>Update W&E</td>
-                        
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for list in cost_data%}
-        
-                        <tr>
-                            
-                            <td>{{list.voucher_date}}</td>
-                            <td>{{list.voucher_no}}</td>
-                            <td>{{list.company}}</td>
-                            <td>{{list.book}}</td>
-                            <td>{{list.net_of_vat}}</td>
-                            <td>{{list.expense_account}}</td>
-                            <td>{{list.description}}</td>
-                            <td>{{list.sin}}</td>
-                            <td>{{list.kwt_cubic_meter}}</td>
-                            <td>{{list.amount}}</td>
-                            
-                           
-                            
-                            <td>
-                                <a href="#"
-                                <button type="button" class="btn btn-primary">
-                                <i class="fas fa-database"></i>Edit</button></a>
+          <div class="container">
+            <div class="container mt-3">
+              <table id="my_table_cost" class="table table-bordered"  style="text-align: center;">
+                  <thead class="border-bottom font-weight-bold">
+                  
+                          <td>Date</td>
+                          <td>AP No.</td>
+                          <td>Company</td>
+                          <td>Book</td>
+                          <td>Net of Vat</td>
+                          <td>Expense Acount</td>
+                          <td>Description</td>
+                          <td>SIN/Account No</td>
+                          <td>KWT/CUBIC</td>
+                          <td>Amount</td>
+                          <td>Action</td>
+                          <td>Update W&E</td>
+                          
+                          
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for list in cost_data%}
+          
+                          <tr>
+                              
+                              <td>{{list.voucher_date}}</td>
+                              <td>{{list.voucher_no}}</td>
+                              <td>{{list.company}}</td>
+                              <td>{{list.book}}</td>
+                              <td>{{list.net_of_vat}}</td>
+                              <td>{{list.expense_account}}</td>
+                              <td>{{list.description}}</td>
+                              <td>{{list.sin}}</td>
+                              <td>{{list.kwt_cubic_meter}}</td>
+                              <td>{{list.amount}}</td>
+                              
+                             
+                              
+                              <td>
+                                  <a href="#"
+                                  <button type="button" class="btn btn-primary">
+                                  <i class="fas fa-database"></i>Edit</button></a>
+                              </td>
+  
+                              <td>
+                                <a href="/api-update-water-electric-cost/{{list.id}}"
+                                <button type="button" class="btn btn-warning">
+                                <i class="fas fa-database"></i>Update</button></a> 
+  
+                                <!-- <a href="/api-update-water-electric-cost/{list.id/}"
+                                <button type="button"  class="btn btn-success">
+                                <i class="fas fa-database"></i>EL&WA</button></a> -->
                             </td>
+  
+                              
+  
+                              
+                          </tr>
+                         
+                      {% endfor %}
+                  </tbody>
+              </table>
+  
+          </div>
+  
 
-                            <td>
-                              <a href="/api-update-water-electric-cost/{{list.id}}"
-                              <button type="button" class="btn btn-warning">
-                              <i class="fas fa-database"></i>Update</button></a> 
+          </div>
 
-                              <!-- <a href="/api-update-water-electric-cost/{list.id/}"
-                              <button type="button"  class="btn btn-success">
-                              <i class="fas fa-database"></i>EL&WA</button></a> -->
-                          </td>
-
-                            
-
-                            
-                        </tr>
-                       
-                    {% endfor %}
-                </tbody>
-            </table>
-
-        </div>
-
+         
 
         
    
@@ -445,22 +461,146 @@
 <script src="/static/cost_transasction.js"></script>
 
 <!-- Add Bootstrap JS and Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-
-
-<script>
-  
-
-</script>
+<!-- <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script> -->
 
 
-<script>
+<!-- DataTables CSS and JS -->
+
+
+
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-html5-2.2.3/b-print-2.2.3/datatables.min.js"></script>
+
+
+<!-- <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.11.5/api/sum().js"></script> -->
+
+
+<script type="text/JavaScript">
  
 
-</script>
+              // $(document).ready(function () {
+
+
+              // $("#my_table_cost").DataTable({
+                
+
+
+                   
+
+              //     // configuration
+              //     paging: true,
+              //     pageLength: 10,
+              //     lengthChange: true,
+              //     autowidth: true,
+              //     searching: true,
+              //     bInfo: true,
+              //     bsort: true,
+                  
+
+              //     dom: 'LBfrtip',
+              //     buttons: [
+              //         { // COPY
+              //             extend : 'copy',
+              //             text: 'Copy',
+              //             className: 'btn btn-secondary',
+              //             title: 'DRDC Cost Report', // 
+              //             exportOptions: {
+              //                 columns: [0,1,2,3,4,5,6,7,8,9]
+              //             },
+              //         },
+              //         { // EXCEL
+              //             extend : 'excel',
+              //             text: 'Export Excel',
+              //             className: 'btn btn-success',
+              //             title: 'DRDC Cost Report', // 
+              //             exportOptions: {
+              //                 columns: [0,1,2,3,4,5,6,7,8,9]
+              //             },
+              //         },
+              //         { // Print
+              //             extend : 'print',
+              //             text: 'PDF',
+              //             className: 'btn btn-danger',
+              //             title: 'DRDC Cost Report', // 
+              //             exportOptions: {
+              //                 columns: [0,1,2,3,4,5,6,7,8,9]
+              //             },
+              //         },
+
+                  
+              //     ]
+
+              // })
+
+
+              // });
+
+              $(document).ready(function () {
+    $("#my_table_cost").DataTable({
+        // ... other options ...
+        
+
+        dom: 'LBfrtip',
+        buttons: [
+            {
+                extend: 'copy',
+                text: 'Copy',
+                className: 'btn btn-secondary',
+                title: 'DRDC Cost Report', // 
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                    modifier: {
+                        selected: null, // Include selected rows if needed
+                        footer: true // Include the footer (total) row
+                    }
+                },
+            },
+            {
+                extend: 'excel',
+                text: 'Export Excel',
+                className: 'btn btn-success',
+                title: 'DRDC Cost Report', // 
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                    modifier: {
+                        selected: null, // Include selected rows if needed
+                        footer: true // Include the footer (total) row
+                    }
+                },
+            },
+            {
+                extend: 'print',
+                text: 'PDF',
+                className: 'btn btn-danger',
+                title: 'DRDC Cost Report', // 
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                    modifier: {
+                        selected: null, // Include selected rows if needed
+                        footer: true // Include the footer (total) row
+                    }
+                },
+            },
+        ],
+
+        
+    });
+});
+
+              </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
 
 
 
