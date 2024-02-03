@@ -46,11 +46,46 @@
   }
 
 
+/* Add new style for the sidebar to make it fixed and take up 25% of the viewport width */
+.sidebar {
+    position: fixed;
+    width: 15%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    padding-top: 20px;
+    z-index: 1;
+}
 
+.main-content {
+    margin-left: 25%;
+}
 
-  /* Add new style for the sidebar to make it fixed and take up 25% of the viewport width */
+@media (max-width: 767px) {
+    .sidebar {
+        width: 100%;
+        margin-left: 0;
+        position: static;
+        border-right: none;
+        padding-top: 0;
+        background-color: red; 
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    #my_table_cost {
+        font-size: 12px;
+    }
+}
+
 
   
+
+/*   
   .sidebar {
     position: fixed;
     width: 15%;
@@ -60,13 +95,13 @@
     background-color: #f8f9fa;
     border-right: 1px solid #dee2e6;
     padding-top: 20px;
-    z-index: 1; /* Ensure the sidebar is above other elements */
+    z-index: 1; 
   }
 
-  /* Adjust the main content to start after the sidebar */
+ 
   .main-content {
-    margin-left: 25%; /* Set to the width of the sidebar */
-  }
+    margin-left: 25%; 
+  } */
 
   
 </style>
