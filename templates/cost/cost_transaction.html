@@ -83,6 +83,20 @@
 }
 
 
+.custom-excel-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+
   
 
 /*   
@@ -154,6 +168,11 @@
 
           <div class="container">
             <div class="container mt-3">
+
+              <input type="date" class="form-control" id="min" hidden >
+              <br>
+              <input type="date" class="form-control" id="max" hidden>
+              <br>
               <table id="my_table_cost" class="table table-bordered"  style="text-align: center;">
                   <thead class="border-bottom font-weight-bold">
                   
@@ -497,29 +516,185 @@
 
 <!-- Add Bootstrap JS and Popper.js -->
 
+
+
+
 <!-- <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script> -->
+
+
 
 
 <!-- DataTables CSS and JS -->
 
 
 
+<!-- for excel of datatable -->
+<!-- <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script> -->
 
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
-
-
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-html5-2.2.3/b-print-2.2.3/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/jszip-2.5.0/dt-1.12.1/b-2.2.3/b-html5-2.2.3/b-print-2.2.3/datatables.min.js"></script> -->
+
+
+
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+
+
+
+
+
+
+
+
 
 
 <!-- <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.11.5/api/sum().js"></script> -->
 
 
 <script type="text/JavaScript">
+
+        // let table = new DataTable('#my_table_cost');
+
+
+          // var minEl = $('#min');
+          // var maxEl = $('#max');
+          
+          // Custom range filtering function
+          // DataTable.ext.search.push(function (settings, data, dataIndex) {
+          //     var min = parseInt(minEl.val(), 10);
+          //     var max = parseInt(maxEl.val(), 10);
+          //     // var age = parseDate(data[0]) || 0; // use data for the age column
+          //     var currentDatetime = moment(data[0], 'YYYY-MM-DDTHH:mm:ss');
+          //     var age = currentDatetime.isValid() ? currentDatetime : 0;
+          
+          //     if (
+          //         (isNaN(min) && isNaN(max)) ||
+          //         (isNaN(min) && age <= max) ||
+          //         (min <= age && isNaN(max)) ||
+          //         (min <= age && age <= max)
+          //     ) {
+          //         return true;
+          //     }
+          
+          //     return false;
+          // });
+
+           // Custom range filtering function for datetime
+    // $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+    //     var minDate = moment(minEl.val(), 'YYYY-MM-DDTHH:mm:ss');
+    //     var maxDate = moment(maxEl.val(), 'YYYY-MM-DDTHH:mm:ss');
+    //     var currentDatetime = moment(data[0], 'YYYY-MM-DDTHH:mm:ss'); // Assuming the datetime column is at index 0
+
+    //     if (
+    //         (minDate.isValid() && maxDate.isValid()) &&
+    //         (currentDatetime.isSameOrAfter(minDate) && currentDatetime.isSameOrBefore(maxDate))
+    //     ) {
+    //         return true;
+    //     }
+
+    //     return false;
+    // });
+          
+          // var table = $('#my_table_cost').DataTable();
+          
+          // // Changes to the inputs will trigger a redraw to update the table
+          // minEl.on('input', function () {
+          //     table.draw();
+          // });
+          // maxEl.on('input', function () {
+          //     table.draw();
+          // });
+
+
+//           $(document).ready(function() {
+//     // Add a custom filtering function for date range
+//     $.fn.dataTable.ext.search.push(
+//         function(settings, data, dataIndex) {
+//             var startDate = $('#startDate').val(); // Get the start date from your input field
+//             var endDate = $('#endDate').val();     // Get the end date from your input field
+//             var currentDate = data[/* Index of your date column */]; // Adjust the index based on your data structure
+
+//             // Perform the date range comparison
+//             if ((startDate === '' && endDate === '') || 
+//                 (startDate === '' && currentDate <= endDate) || 
+//                 (startDate <= currentDate && endDate === '') || 
+//                 (startDate <= currentDate && currentDate <= endDate)) {
+//                 return true;
+//             }
+
+//             return false;
+//         }
+//     );
+
+//     // Initialize DataTables
+//     var table = $('#my_table_cost').DataTable({
+//         dom: 'Bfrtip',
+//         buttons: [{
+//             extend: 'excelHtml5',
+//             text: 'Export to Excel',
+//             className: 'custom-excel-button',
+//             title: 'DRDC COST REPORT',
+//             exportOptions: {
+//                 columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+//             },
+//             customize: function(xlsx) {
+//                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
+//                 $('row c[r^="C"]', sheet).attr('s', '2');
+//             }
+//         }]
+//     });
+
+//     // Add an event listener for the date range inputs
+//     $('#startDate, #endDate').change(function() {
+//         table.draw();
+//     });
+// });
+
+                
+
+
+
+        $(document).ready( function() {
+            $('#my_table_cost').DataTable( {
+                dom: 'Bfrtip',
+                buttons: [ 
+                  {
+                    extend: 'excelHtml5',
+                    text: 'Export to Excel',
+                    className: 'custom-excel-button',
+                    title: 'DRDC COST REPORT',
+                    exportOptions: {
+                              columns: [0,1,2,3,4,5,6,7,8,9]
+                        },
+                    customize: function( xlsx ) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+        
+                        $('row c[r^="C"]', sheet).attr( 's', '2' );
+
+
+
+                    }
+
+                    
+                } 
+
+              
+
+              ]
+            } );
+        } );
  
 
               // $(document).ready(function () {
@@ -579,57 +754,57 @@
 
               // });
 
-              $(document).ready(function () {
-    $("#my_table_cost").DataTable({
-        // ... other options ...
+                        // $(document).ready(function () {
+                        // $("#my_table_cost").DataTable({
+                  
         
 
-        dom: 'LBfrtip',
-        buttons: [
-            {
-                extend: 'copy',
-                text: 'Copy',
-                className: 'btn btn-secondary',
-                title: 'DRDC Cost Report', // 
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-                    modifier: {
-                        selected: null, // Include selected rows if needed
-                        footer: true // Include the footer (total) row
-                    }
-                },
-            },
-            {
-                extend: 'excel',
-                text: 'Export Excel',
-                className: 'btn btn-success',
-                title: 'DRDC Cost Report', // 
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-                    modifier: {
-                        selected: null, // Include selected rows if needed
-                        footer: true // Include the footer (total) row
-                    }
-                },
-            },
-            {
-                extend: 'print',
-                text: 'PDF',
-                className: 'btn btn-danger',
-                title: 'DRDC Cost Report', // 
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-                    modifier: {
-                        selected: null, // Include selected rows if needed
-                        footer: true // Include the footer (total) row
-                    }
-                },
-            },
-        ],
+                        //         dom: 'LBfrtip',
+                        //         buttons: [
+                        //             {
+                        //                 extend: 'copy',
+                        //                 text: 'Copy',
+                        //                 className: 'btn btn-secondary',
+                        //                 title: 'DRDC Cost Report', /
+                        //                 exportOptions: {
+                        //                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                        //                     modifier: {
+                        //                         selected: null,
+                        //                         footer: true 
+                        //                     }
+                        //                 },
+                        //             },
+                        //             {
+                        //                 extend: 'excel',
+                        //                 text: 'Export Excel',
+                        //                 className: 'btn btn-success',
+                        //                 title: 'DRDC Cost Report', // 
+                        //                 exportOptions: {
+                        //                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                        //                     modifier: {
+                        //                         selected: null, 
+                        //                         footer: true 
+                        //                     }
+                        //                 },
+                        //             },
+                        //             {
+                        //                 extend: 'print',
+                        //                 text: 'PDF',
+                        //                 className: 'btn btn-danger',
+                        //                 title: 'DRDC Cost Report', 
+                        //                 exportOptions: {
+                        //                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                        //                     modifier: {
+                        //                         selected: null, 
+                        //                         footer: true 
+                        //                     }
+                        //                 },
+                        //             },
+                        //         ],
 
-        
-    });
-});
+                                
+                        //     });
+                        // });
 
               </script>
 
