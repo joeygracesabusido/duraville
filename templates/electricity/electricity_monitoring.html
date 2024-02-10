@@ -12,79 +12,22 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 <style>
-
-body {
+  body {
     margin: 0;
-    }
+    padding: 0;
+    /* font-family: Arial, sans-serif; */
+  }
 
-    .yellow-background {
-        background-color: gray;
-        padding: 20px 0;
-        text-align: center;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    }
+ 
 
-    .container {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 70%;
-    }
-
-.container1 {
-
-    width: 70%;
-    margin: auto;
-    border-width: 2px;
-    margin-bottom: 15px;
+  .yellow-background {
+    background-color: gray;
+    padding: 20px 0;
     text-align: center;
-}
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
 
-.form-control{
-        flex: 1; 
-       
-      background-color: smoke whitesmoke;
-      border: 2px solid lightskyblue;
-      border-radius: 7px;
-      padding: 10px;
-      width: 450px;
-      /* color: white; */
-    }
-
-  
-.form-control-spel{
-        flex: 1; 
-       
-      background-color: smoke whitesmoke;
-      border: 2px solid lightskyblue;
-      border-radius: 7px;
-      padding: 10px;
-      width: 650px;
-      /* color: white; */
-    }
-
-/* label {
-    display: inline-block;
-    width: 35%; 
-    text-align: right;
-    margin-right: 15px;
-    font-size: 30px;
-}
-
-input {
-    flex: 1; 
-        margin: 0 10px; 
-        border-radius: 5px; 
-        border: 2px solid lightskyblue;
-        padding: 10px;
-        background-color: whitesmoke;
-        width: 35%;
-} */
-
-
-/* Add new style for the sidebar to make it fixed and take up 25% of the viewport width */
-.sidebar {
+  .sidebar {
     position: fixed;
     width: 15%;
     height: 100%;
@@ -94,281 +37,492 @@ input {
     border-right: 1px solid #dee2e6;
     padding-top: 20px;
     z-index: 1;
-}
+  }
 
-.main-content {
-    margin-left: 25%;
-}
+  .main-content {
+    margin-left: 15%;
+    padding: 20px;
+  }
 
-@media (max-width: 767px) {
+  @media (max-width: 767px) {
     .sidebar {
-        width: 70%;
-        margin-left: 0;
-        position: static;
-        border-right: none;
-        padding-top: 0;
-        background-color: red; 
+      width: 100%;
+      position: static;
+      border-right: none;
+      padding-top: 0;
+      background-color: red;
     }
 
     .main-content {
-        margin-left: 0;
+      margin-left: 0;
     }
+  }
 
-    #my_table_cost {
-        font-size: 12px;
-    }
-}
+  .container1 {
+    width: 70%;
+    margin: auto;
+    border-width: 2px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
 
-    
+  .form-control {
+    flex: 1;
+    background-color: smoke whitesmoke;
+    border: 2px solid lightskyblue;
+    border-radius: 7px;
+    padding: 10px;
+    width: 100%; /* Adjusted width to fill the container */
+  }
+
+  .form-control-spel {
+    flex: 1;
+    background-color: smoke whitesmoke;
+    border: 2px solid lightskyblue;
+    border-radius: 7px;
+    padding: 10px;
+    width: 100%; /* Adjusted width to fill the container */
+  }
+
+  .card {
+    margin-bottom: 20px;
+    background-color: whitesmoke;
+    border: 2px solid lightskyblue;
+    border-radius: 7px;
+    padding: 10px;
+
+  }
+
 </style>
-
 <body>
 
-    <div class="container" >
-
-        <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="date" class="form-control" id="trans_date">
-                <label for="floatingInputGrid">AP DATE</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="date" class="form-control" id="cut_off_date">
-                <label for="floatingInputGrid">Cut off date from</label>
-              </div>
-            </div>
-        </div>
-        <br>
-
-        <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="date" class="form-control" id="cut_off_date_to">
-                <label for="floatingInputGrid">Cut off Date to</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="date" class="form-control" id="billing_date">
-                <label for="floatingInputGrid">BIlling Date</label>
-              </div>
-            </div>
-        </div>
-        <br>
-
-        <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="date" class="form-control" id="due_date">
-                <label for="floatingInputGrid">Due Date</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="can_number">
-                <label for="floatingInputGrid">CAN Number</label>
-              </div>
-            </div>
-        </div>
-        <br>
-        <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="sin_number">
-                <label for="floatingInputGrid">SIN Number</label>
-              </div>
-            </div>
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="ap_number">
-                <label for="floatingInputGrid">AP Number</label>
-              </div>
-            </div>
-        </div>
-        <br>
-        <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="rfp_number">
-                <label for="floatingInputGrid">RFP Number</label>
-              </div>
-            </div>
-
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="kwh_no">
-                <label for="floatingInputGrid">KWH NUMBER</label>
-              </div>
-            </div>
-        </div>
-
-        <br>
-        <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="number" class="form-control" id="net_of_vat">
-                <label for="floatingInputGrid">NET OF VAT</label>
-              </div>
-            </div>
-            
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="number" class="form-control" id="non_vat_amount">
-                <label for="floatingInputGrid">NON VAT</label>
-              </div>
-            </div>
-        </div>
-        <br>
-        <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="number" class="form-control" id="total_amount">
-                <label for="floatingInputGrid">TOTAL AMOUNT</label>
-              </div>
-            </div>
-            
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="number" class="form-control" id="with_holdingtax">
-                <label for="floatingInputGrid">EXPANDED WITH HOLDING TAX</label>
-              </div>
-            </div>
-        </div>
-        <br>
-        <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="number" class="form-control" id="vat_amount" >
-                <label for="floatingInputGrid">VAT</label>
-              </div>
-            </div>
-            
-            <div class="col-md">
-              <div class="form-floating">
-                
-                <input type="text" class="form-control" id="gross_amount">
-                <label for="floatingInputGrid">GROSS AMOUNT</label>
-              </div>
-            </div>
-        </div>
-
-        <br>
-        <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="payable_amount">
-                <label for="floatingInputGrid">PAYABLE AMOUNT</label>
-              </div>
-            </div>
-            
-            
-        </div>
-        <br>
-       
-        <div class="row g-2">
-           
-            
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="number" class="form-control" id="with_holdingtax" hidden>
-               
-              </div>
-            </div>
-        </div>
-
-        
-
-        <div class="yellow-background d-flex justify-content-start align-items-center">
-            <button type="button" class="btn btn-warning" style="width: 190px;">Save</button>
-        </div>
-
-        <br>
-
-        
 
 
-        
-    
 
-
-      
-        <!-- <div class="container1">
-            <label for="employee_id">Date:</label>
-            <input
-                type="date"
-                name="date_electricity"
-                id="date_electricity"
-               
-            >
-        </div>
-        
-        <div class="container1">
-            
-            <input
-                type="date"
-                name="fname"
-                id="fname"
-                
-            >
-        </div>
-
-        <div class="container1">
-            <label for="fname">Cut off Date To:</label>
-            <input
-                type="date"
-                name="fname"
-                id="fname"
-                
-            >
-        </div>
-
-        <div class="container1">
-            <label for="fname">Billing Date:</label>
-            <input
-                type="date"
-                name="billing_date"
-                id="billing_date"
-                
-            >
-        </div>
-
-        <div class="container1">
-            <label for="fname">Due Date:</label>
-            <input
-                type="date"
-                name="due_date"
-                id="due_date"
-                
-            >
-        </div>
-
-
-        <div class="container1">
-            <label for="fname">Due Date:</label>
-            <input
-                type="date"
-                name="due_date"
-                id="due_date"
-                
-            >
-        </div>
-     -->
-
-      <div class="row g-2">
-        <div class="col-md">
-          <div class="form-floating">
-            <input type="text" class="form-control-spel" id="spell_number">
-            <!-- <label for="floatingInputGrid">AMOUNT IN WORDS</label> -->
+  <div class="main-content">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <!-- <h5 class="card-title">Special title treatment</h5>
+            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a> -->
           </div>
         </div>
-        
-        
+      </div>
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <!-- <h5 class="card-title">Special title treatment</h5>
+            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a> -->
+          </div>
         </div>
-
+      </div>
     </div>
 
+  </div>
+
+  <br>
+
+
+       <!-- Modal--------------------------------------------------Modal for Adding Electric Consumption---------------------------------------->
+    <div class="modal fade" id="electric_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Electricity</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-insert-electricity">
+
+
+                  <div class="container" >
+
+                    <div class="row g-2">
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="date" class="form-control" id="trans_date">
+                            <label for="floatingInputGrid">AP DATE</label>
+                          </div>
+                        </div>
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="date" class="form-control" id="cut_off_date">
+                            <label for="floatingInputGrid">Cut off date from</label>
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+            
+                    <div class="row g-2">
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="date" class="form-control" id="cut_off_date_to">
+                            <label for="floatingInputGrid">Cut off Date to</label>
+                          </div>
+                        </div>
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="date" class="form-control" id="billing_date">
+                            <label for="floatingInputGrid">BIlling Date</label>
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+            
+                    <div class="row g-2">
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="date" class="form-control" id="due_date">
+                            <label for="floatingInputGrid">Due Date</label>
+                          </div>
+                        </div>
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="can_number">
+                            <label for="floatingInputGrid">CAN Number</label>
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row g-2">
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="sin_number">
+                            <label for="floatingInputGrid">SIN Number</label>
+                          </div>
+                        </div>
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="ap_number">
+                            <label for="floatingInputGrid">AP Number</label>
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row g-2">
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="rfp_number">
+                            <label for="floatingInputGrid">RFP Number</label>
+                          </div>
+                        </div>
+            
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="kwh_no">
+                            <label for="floatingInputGrid">KWH NUMBER</label>
+                          </div>
+                        </div>
+                    </div>
+            
+                    <br>
+                    <div class="row g-2">
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="number" class="form-control" id="net_of_vat">
+                            <label for="floatingInputGrid">NET OF VAT</label>
+                          </div>
+                        </div>
+                        
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="number" class="form-control" id="non_vat_amount">
+                            <label for="floatingInputGrid">NON VAT</label>
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row g-2">
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="number" class="form-control" id="total_amount">
+                            <label for="floatingInputGrid">TOTAL AMOUNT</label>
+                          </div>
+                        </div>
+                        
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="number" class="form-control" id="with_holdingtax">
+                            <label for="floatingInputGrid">EXPANDED WITH HOLDING TAX</label>
+                          </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row g-2">
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="number" class="form-control" id="vat_amount" >
+                            <label for="floatingInputGrid">VAT</label>
+                          </div>
+                        </div>
+                        
+                        <div class="col-md">
+                          <div class="form-floating">
+                            
+                            <input type="text" class="form-control" id="gross_amount">
+                            <label for="floatingInputGrid">GROSS AMOUNT</label>
+                          </div>
+                        </div>
+                    </div>
+            
+                    <br>
+                    <div class="row g-2">
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="text" class="form-control" id="payable_amount">
+                            <label for="floatingInputGrid">PAYABLE AMOUNT</label>
+                          </div>
+                        </div>
+                        
+                        
+                    </div>
+                    <br>
+                   
+                    <div class="row g-2">
+                       
+                        
+                        <div class="col-md">
+                          <div class="form-floating">
+                            <input type="number" class="form-control" id="with_holdingtax" hidden>
+                           
+                          </div>
+                        </div>
+                    </div>
+            
+                    <br>
+                    
+                  <div class="row g-2">
+                    <div class="col-md">
+                      <div class="form-floating">
+                        <input type="text" class="form-control-spel" id="spell_number">
+                        <!-- <label for="floatingInputGrid">AMOUNT IN WORDS</label> -->
+                      </div>
+                    </div>
+                    
+                    
+                    </div>
+            
+                </div>
+            
+
+                       
+            
+                      <br>
+
+
+                     
+                      
+            
+                      
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+  <!-- Modal--------------------------------------------------Modal for Adding Electric Consumption---------------------------------------->
+  <div class="modal fade" id="meralco_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Meralco Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-meralco-info">
+
+
+              <div class="container" >
+
+                        <div class="row g-2">
+                            <div class="col-md">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="company">
+                                <label for="floatingInputGrid">Company</label>
+                              </div>
+                            </div>
+                            <div class="col-md">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="can_no.">
+                                <label for="floatingInputGrid">Customer Accunt Number</label>
+                              </div>
+                            </div>
+                        </div>
+                        <br>
+                
+                        <div class="row g-2">
+                            <div class="col-md">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="sin_no">
+                                <label for="floatingInputGrid">SIN</label>
+                              </div>
+                            </div>
+
+                            <div class="col-md">
+                              <div class="form-floating">
+                                <input type="text" class="form-control" id="can_number">
+                                <label for="floatingInputGrid">BOOK</label>
+                              </div>
+                            </div>
+                            
+                        </div>
+                        <br>
+
+                        <div class="row g-2">
+                          <div class="col-md">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="end_user">
+                              <label for="floatingInputGrid">END USER</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md">
+                            <div class="form-floating">
+                                <select class="form-select" id="subject_to_ewt" aria-label="Floating label select example">
+
+                                    <option selected>----select menu----</option>
+                                    <option value="True">True</option>
+                                    <option value="False">False</option>
+                                   
+                                </select>
+                                <label for="floatingInputGrid" style="font-size: 15px;">SUBJECT TO EWT</label>
+
+                            
+                            </div>
+                        </div>
+      
+                          
+                          
+                      </div>
+                
+              
+                
+        
+              </div>
+        
+
+                   
+        
+                  <br>
+
+
+                 
+                  
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ----------------------------This is for buttons---------------------------- -->
+  <div class="main-content">
+    <div class="card">
+      <div class="card-header">
+        ELECTRICITY DATA
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btn_insert_electric_data"
+             >
+          Add Electricty Consumption
+        </button>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btn_meralco_info"
+             style="width: 190px;">
+          Add Meralco Details
+        </button>
+
+      </div>
+      <div class="card-body">
+        <div class="container">
+          <div class="container mt-3">
+
+           
+            <table id="my_table_cost" class="table table-bordered"  style="text-align: center;">
+                <thead class="border-bottom font-weight-bold">
+                
+                        <td>Date</td>
+                        <td>AP No.</td>
+                        <td>Company</td>
+                        <td>Book</td>
+                        <td>Net of Vat</td>
+                        <td>Expense Acount</td>
+                        <td>Description</td>
+                        <td>SIN/Account No</td>
+                        <td>KWT/CUBIC</td>
+                        <td>Amount</td>
+                        <td>Action</td>
+                        <td>Update W&E</td>
+                        
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        
+                        <tr>
+                            
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            
+                            
+                           
+                            
+                            <td>
+                                <a href="#"
+                                <button type="button" class="btn btn-primary">
+                                <i class="fas fa-database"></i>Edit</button></a>
+                            </td>
+
+                            <td>
+                             
+                          </td>
+
+                            
+
+                            
+                        </tr>
+                       
+                    
+                </tbody>
+            </table>
+
+        </div>
+
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  
+
+  
+
+  <br>
+
+
+    
     
 
 </body>

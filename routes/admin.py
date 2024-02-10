@@ -453,5 +453,9 @@ async def updateGRCRental(id,items:UpdateWaterBaseModel,username: str = Depends(
 @login_router.get("/electricity-dashboard/", response_class=HTMLResponse)
 async def insert_cost(request: Request):
     return templates.TemplateResponse("electricity/electricity_monitoring.html", {"request":request})
+
+@login_router.get("/testing-dashboard/", response_class=HTMLResponse)
+async def insert_cost(request: Request):
+    return templates.TemplateResponse("electricity/testing.html", {"request":request})
    
     

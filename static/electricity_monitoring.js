@@ -139,5 +139,18 @@ $(document).ready(function() {
 );
 
 
+// Open modal and initialize autocomplete when the button is clicked
+$("#btn_insert_electric_data").on("click", function() {
+  $("#electric_modal").modal("show");  // Adjust modal ID as needed
+ 
+});
+
+//  Open Modal for Meralco Info
+$("#btn_meralco_info").on("click", function() {
+  $("#meralco_info").modal("show");  // Adjust modal ID as needed
+ 
+});
+
+
 
 
