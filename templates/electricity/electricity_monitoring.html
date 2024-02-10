@@ -26,8 +26,8 @@ body {
 
     .container {
         position: absolute;
-        top: 50%;
-        left: 55%;
+        top: 80%;
+        left: 62%;
         transform: translate(-50%, -50%);
     }
 
@@ -47,6 +47,19 @@ body {
       border: 2px solid lightskyblue;
       border-radius: 7px;
       padding: 10px;
+      width: 450px;
+      /* color: white; */
+    }
+
+  
+.form-control-spel{
+        flex: 1; 
+       
+      background-color: smoke whitesmoke;
+      border: 2px solid lightskyblue;
+      border-radius: 7px;
+      padding: 10px;
+      width: 650px;
       /* color: white; */
     }
 
@@ -154,7 +167,7 @@ input {
             <div class="col-md">
               <div class="form-floating">
                 <input type="text" class="form-control" id="can_number">
-                <label for="floatingInputGrid">Can Number</label>
+                <label for="floatingInputGrid">CAN Number</label>
               </div>
             </div>
         </div>
@@ -226,10 +239,35 @@ input {
         <div class="row g-2">
             <div class="col-md">
               <div class="form-floating">
+                <input type="number" class="form-control" id="vat_amount" >
+                <label for="floatingInputGrid">VAT</label>
+              </div>
+            </div>
+            
+            <div class="col-md">
+              <div class="form-floating">
+                
+                <input type="text" class="form-control" id="gross_amount">
+                <label for="floatingInputGrid">GROSS AMOUNT</label>
+              </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
                 <input type="text" class="form-control" id="payable_amount">
                 <label for="floatingInputGrid">PAYABLE AMOUNT</label>
               </div>
             </div>
+            
+            
+        </div>
+        <br>
+       
+        <div class="row g-2">
+           
             
             <div class="col-md">
               <div class="form-floating">
@@ -239,30 +277,18 @@ input {
             </div>
         </div>
 
-
-        <br>
+        
 
         <div class="yellow-background d-flex justify-content-start align-items-center">
             <button type="button" class="btn btn-warning" style="width: 190px;">Save</button>
         </div>
 
+        <br>
+
+        
 
 
-        <div class="row g-2">
-            <div class="col-md">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="spell_number">
-                <label for="floatingInputGrid">AMOUNT IN WORDS</label>
-              </div>
-            </div>
-            
-            
-        </div>
-
-
-        <div class="col-md">
-            <p id="spell_number_result"></p>
-          </div>
+        
     
 
 
@@ -328,93 +354,27 @@ input {
             >
         </div>
      -->
+
+      <div class="row g-2">
+        <div class="col-md">
+          <div class="form-floating">
+            <input type="text" class="form-control-spel" id="spell_number">
+            <!-- <label for="floatingInputGrid">AMOUNT IN WORDS</label> -->
+          </div>
+        </div>
+        
+        
+        </div>
+
     </div>
+
+    
 
 </body>
 
 
 <script>
-    var th = ['','Thousand','Million','Billion','Trillion'];
-    var dg = ['Zero','One','Two','Three','Four',
-              'Five','Six','Seven','Eight','Nine'];
-    var tn = ['Ten','Eleven','Twelve','Thirteen', 'Fourteen','Fifteen','Sixteen',
-              'Seventeen','Sighteen','Nineteen'];
-    var tw = ['Twenty','Thirty','Forty','Fifty',
-              'Sixty','Seventy','Eighty','Ninety'];
-  
-    function toWords(s) {
-      s = s.toString();
-      s = s.replace(/[\, ]/g,'');
-  
-      if (s != parseFloat(s)) return 'not a number';
-  
-      var x = s.indexOf('.');
-      if (x == -1) x = s.length;
-  
-      if (x > 15) return 'too big';
-  
-      var n = s.split('');
-      var str = '';
-      var sk = 0;
-  
-      for (var i = 0; i < x; i++) {
-        if ((x - i) % 3 == 2) {
-          if (n[i] == '1') {
-            str += tn[Number(n[i+1])] + ' ';
-            i++;
-            sk = 1;
-          } else if (n[i] != 0) {
-            str += tw[n[i] - 2] + ' ';
-            sk = 1;
-          }
-        } else if (n[i] != 0) {
-          str += dg[n[i]] + ' ';
-          if ((x - i) % 3 == 0) str += 'hundred ';
-          sk = 1;
-        }
-  
-        if ((x - i) % 3 == 1) {
-          if (sk) str += th[(x - i - 1) / 3] + ' ';
-          sk = 0;
-        }
-      }
-  
-      if (x != s.length) {
-        var y = s.length;
-        str += 'and ';
-  
-        for (var i = x + 1; i < y; i++) {
-          str += dg[n[i]] + ' ';
-        }
-      }
-  
-      return str.replace(/\s+/g,' ');
-    }
-  
-    function decimalToFraction(decimalPart) {
-        if (decimalPart === 0) return '';
-
-        const epsilon = 1e-15;
-        const numerator = Math.round(decimalPart * 100 + epsilon);
-        const denominator = 100;
-
-        return `${numerator}/${denominator}`;
-        }
-
-
-        document.getElementById("payable_amount").addEventListener("input", function () {
-        const inputNumber = parseFloat(this.value) || 0;
-        const integerPart = Math.floor(inputNumber);
-        const decimalPart = inputNumber - integerPart;
-
-        const spelledIntegerPart = toWords(integerPart);
-        const spelledDecimalPart = decimalToFraction(decimalPart);
-
-        const spelledNumber = spelledIntegerPart + (decimalPart ? ` and ${spelledDecimalPart}` : '');
-
-        document.getElementById("spell_number").value = spelledNumber;
-        });
-
+    
 
   
     
@@ -431,8 +391,7 @@ input {
 
 
 
-
-
+<script src="/static/electricity_monitoring.js"></script>
 
 
 
