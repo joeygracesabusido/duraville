@@ -1,27 +1,5 @@
 
-from fastapi import APIRouter, Body, HTTPException, Depends, Request, Response, status
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
-from typing import Union, List, Optional
-
-
-
-# basemodel import
-from pydantic import BaseModel
-from datetime import datetime, date
-from typing import Optional
-
-# tesing lang
-
-from views.cost import Cost
-
-from datetime import datetime, timedelta
-
-from views.login import Login_views
-
-from  database.mongodb_connection import create_mongo_client
-mydb = create_mongo_client()
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 
 from authentication.utils import OAuth2PasswordBearerWithCookie
 

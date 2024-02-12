@@ -3,6 +3,8 @@ from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfil
 from typing import Optional
 
 
+
+
 import sys
 import os
 
@@ -16,6 +18,28 @@ from database.mongodb_connection import Connection
 from datetime import date, datetime
 
 engine = Connection.db()
+
+
+class CompanyDetails(SQLModel, table=True):
+    __tablename__ = 'company'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    company_name: str = Field(max_length=250)
+    address: str
+    tin: str
+
+
+class Books(SQLModel, table=True):
+    __tablename__ = 'books'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    company_id: Optional[int] = Field(default=None, foreign_key="company.id") 
+    project: str = Field(index=True, unique=True)
+    user: str =Field(default=None)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_credited: datetime = Field(default_factory=datetime.utcnow)
+
+
+    __table_args__ = (Index("idx_project", "project", unique=True),)
+   
 
 
 class User(SQLModel, table=True):
@@ -88,6 +112,27 @@ class cost(SQLModel, table=True):
     user: str =Field(default=None)
     date_updated: Optional[datetime] = Field(default=None)
     date_credited: datetime = Field(default_factory=datetime.utcnow)
+
+
+class ElectricityDertails(SQLModel, table = True):
+    """This is for table of electricity Details"""
+    __tablename__ = 'electricity_details'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    company_id: Optional[int] = Field(default=None, foreign_key="company.id") 
+    customer_account_no: str = Field(index=True, unique=True)
+    service_id_no: str = Field(index=True, unique=True)
+    book_id: Optional[int] = Field(default=None, foreign_key="books.id")
+    end_user: str
+    subject_to_ewt: bool
+    user: str =Field(default=None)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_credited: datetime = Field(default_factory=datetime.utcnow)
+
+
+    __table_args__ = (Index("idx_customer_account_no", "customer_account_no", unique=True),)
+    __table_args__ = (Index("idx_service_id_no", "service_id_no", unique=True),)
+    
+
     
 
 
