@@ -1,6 +1,7 @@
 from pydantic import condecimal
 from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfilter,within_group,Relationship,Index
 from typing import Optional
+from decimal import Decimal
 
 
 
@@ -91,24 +92,36 @@ class ChartOfAccount(SQLModel, table=True):
     __table_args__ = (Index("idx_chart_of_account", "account_title", unique=True),)
 
 
-class cost(SQLModel, table=True):
+class Cost(SQLModel, table=True):
     """This is for table of cost"""
     __tablename__ = 'cost'
     id: Optional[int] = Field(default=None, primary_key=True)
-    voucher_date: datetime
-    voucher_no: str = Field(max_length=100)
+    voucher_date: Optional[date]
+    voucher_no: str = Field(max_length=100, index=True)
     company: str = Field(max_length=150)
     book: str = Field(max_length=150)
     supplier: str = Field(max_length=250)
     vat_reg: str = Field(max_length=100)
     tin_no: str = Field(max_length=70)
-    net_of_vat: condecimal(max_digits=20, decimal_places=2) = Field(default=0)
-    amount_due: condecimal(max_digits=20, decimal_places=2) = Field(default=0)
+    net_of_vat: Decimal = Field(default=0, max_digits=20, decimal_places=2)
+    vat_exempt: Decimal = Field(default=0, max_digits=20, decimal_places=2)
+    net_ofvat_with_vat_exempt: Decimal = Field(default=0, max_digits=20, decimal_places=2)
+    amount_due: Decimal = Field(default=0, max_digits=20, decimal_places=2)
+    with_holding_tax: Decimal = Field(default=0, max_digits=20, decimal_places=2)
+    total_amount_due: Decimal = Field(default=0, max_digits=20, decimal_places=2)
     expense_account: str = Field(max_length=200)
     description: str = Field(max_length=4000)
+    inclusive_date: str = Field(default=None)
     sin: str =Field(default=None)
-    kwt_cubic_meter: str = Field(default=None)
-    amount: condecimal(max_digits=20, decimal_places=2) = Field(default=0)
+    can: str =Field(default=None)
+    khw_no: Decimal = Field(default=0, max_digits=9, decimal_places=2)
+    price: Decimal = Field(default=0, max_digits=9, decimal_places=2)
+    cubic_meter: Decimal = Field(default=0, max_digits=9, decimal_places=2)
+    pic: str = Field(default=None)
+    person_incharge_end_user: str = Field(default=None)
+    no_of_person: Decimal = Field(default=0, max_digits=9, decimal_places=2)
+    activity_made: str = Field(default=None)
+    plate_no: str = Field(default=None)
     user: str =Field(default=None)
     date_updated: Optional[datetime] = Field(default=None)
     date_credited: datetime = Field(default_factory=datetime.utcnow)

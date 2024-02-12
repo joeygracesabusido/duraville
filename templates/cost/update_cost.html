@@ -1,0 +1,200 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<style>
+    #container {
+              width: 50%; /* Set the width of the div element */
+              margin: auto; /* Center the div */
+              border-width: 1px;
+              /* border-style: solid; */
+             
+             
+      }
+  
+    #title{
+      display: flex;
+      justify-content: center; /* Horizontally center the content */
+      align-items: center; /* Vertically center the content */
+      height: 10vh; /* Assuming you want to center the h1 vertically on the page */
+    }
+  
+    .form-control{
+      background-color: smoke whitesmoke;
+      /* color: white; */
+    }
+
+
+    .sidebar {
+    position: fixed;
+    width: 15%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    padding-top: 20px;
+    z-index: 1;
+  }
+
+  .main-content {
+    margin-left: 15%;
+    padding: 20px;
+  }
+
+  @media (max-width: 767px) {
+    .sidebar {
+      width: 100%;
+      position: static;
+      border-right: none;
+      padding-top: 0;
+      background-color: red;
+    }
+  }
+
+  </style>
+  <div id="container" class="container mt-4">
+
+    <h1>UPDATE COST</h1>
+    {% for list in costData %}
+
+
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="transID" value="{{list.id}}" hidden>
+                        
+                    </div>
+                    <br>
+
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="sin_update" value="{{list.voucher_no}}">
+                      <label for="floatingInputGrid" style="font-size: 19px;">VOUCHER No..</label>
+                  </div>
+                  <br>
+
+            
+
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="sin" value="{{list.sin}}">
+                        <label for="floatingInputGrid" style="font-size: 19px;">SERVICE ID NO.</label>
+                    </div>
+                    <br>
+
+
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="can" value="{{list.can}}">
+                      <label for="floatingInputGrid" style="font-size: 19px;">CUSTOMER ACCOUNT NO.</label>
+                    </div>
+                    <br>
+
+                   
+                    
+
+                    <div class="form-floating">
+                        <input type="number" class="form-control" id="khw_no" value="{{list.khw_no}}">
+                        <label for="floatingInputGrid" style="font-size: 19px;">KWT No.</label>
+                    </div>
+                    <br>
+
+                   
+
+                    <br>
+                    <div class="col-md">
+                        <div class="form-floating">
+                        <input type="number" class="form-control" id="price"  value="{{list.price}}">
+                        <label for="floatingInputGrid" style="font-size: 19px;">PRICE</label>
+                        
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="col-md">
+                      <div class="form-floating">
+                      <input type="number" class="form-control" id="cubic_meter"  value="{{list.cubic_meter}}">
+                      <label for="floatingInputGrid" style="font-size: 19px;">CUBIC METER</label>
+                      
+                      </div>
+                  </div>
+
+                  <br>
+
+                  <div class="col-md">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="pic"  value="{{list.pic}}">
+                    <label for="floatingInputGrid" style="font-size: 19px;">PIC</label>
+                    
+                    </div>
+                </div>
+
+
+                  <div class="col-md">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="person_incharge_end_user"  value="{{list.person_incharge_end_user}}">
+                    <label for="floatingInputGrid" style="font-size: 19px;">END USER</label>
+                    
+                    </div>
+                  </div>
+
+                  <br>
+
+
+                  <div class="col-md">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="no_of_person"  value="{{list.no_of_person}}">
+                    <label for="floatingInputGrid" style="font-size: 19px;">Name of Person</label>
+                    
+                    </div>
+                  </div>
+
+                  <br>
+
+
+                  <div class="col-md">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="activity_made"  value="{{list.activity_made}}">
+                    <label for="floatingInputGrid" style="font-size: 19px;">Activity Made</label>
+                    
+                    </div>
+                  </div>
+
+                  <br>
+
+
+                  <div class="col-md">
+                    <div class="form-floating">
+                    <input type="text" class="form-control" id="plate_no"  value="{{list.plate_no}}">
+                    <label for="floatingInputGrid" style="font-size: 19px;">Palte No.</label>
+                    
+                    </div>
+                  </div>
+
+                  <br>
+
+
+
+                    <button type="button" id="Btn_update_cost"   class="btn btn-success">Update</button>
+        
+
+     {% endfor %} 
+
+             
+                
+
+  </div>
+   
+    <!-- <script src="/static/sgmc/sgmc_update_cost.js"></script> -->
+
+<!-- Add Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+            
+
+<script src="/static/update_cost.js"></script>
+
+{% endblock %}

@@ -183,9 +183,7 @@
                           <td>Net of Vat</td>
                           <td>Expense Acount</td>
                           <td>Description</td>
-                          <td>SIN/Account No</td>
-                          <td>KWT/CUBIC</td>
-                          <td>Amount</td>
+                          
                           <td>Action</td>
                           <td>Update W&E</td>
                           
@@ -201,12 +199,10 @@
                               <td>{{list.voucher_no}}</td>
                               <td>{{list.company}}</td>
                               <td>{{list.book}}</td>
-                              <td>{{list.net_of_vat}}</td>
+                              <td>{{list.net_ofvat_with_vat_exempt}}</td>
                               <td>{{list.expense_account}}</td>
                               <td>{{list.description}}</td>
-                              <td>{{list.sin}}</td>
-                              <td>{{list.kwt_cubic_meter}}</td>
-                              <td>{{list.amount}}</td>
+                              
                               
                              
                               
@@ -217,7 +213,7 @@
                               </td>
   
                               <td>
-                                <a href="/api-update-water-electric-cost/{{list.id}}"
+                                <a href="/api-update-cost/{{list.id}}"
                                 <button type="button" class="btn btn-warning">
                                 <i class="fas fa-database"></i>Update</button></a> 
   

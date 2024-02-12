@@ -1,5 +1,13 @@
+from fastapi import APIRouter, Body, HTTPException, Depends, Request, Response, status
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from typing import Union, List, Optional
+from datetime import datetime, date , timedelta
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+from pydantic import BaseModel
+
+from views.login import Login_views
+from views.cost import CostViews                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 
 from authentication.utils import OAuth2PasswordBearerWithCookie
 
@@ -44,10 +52,18 @@ class BranchCode(BaseModel):
     class Config:
         from_attributes = True
 
-class UpdateWaterBaseModel(BaseModel):
+class UpdateCostBaseModel(BaseModel):
     sin: str
-    kwt_cubic_meter: float
-    amount: float
+    can: str
+    khw_no: float
+    price: float
+    cubic_meter: float
+    cubic_meter: float
+    pic: str = str
+    person_incharge_end_user: str 
+    no_of_person: float
+    activity_made: str 
+    plate_no: str
     
 
     class Config:
@@ -227,7 +243,7 @@ async def api_login(request: Request,username: str = Depends(get_current_user)):
 @login_router.get("/insert-cost/", response_class=HTMLResponse)
 async def getAllCost_cost(request: Request,username: str = Depends(get_current_user)):
 
-    results = Cost.get_all_cost()
+    results = CostViews.get_all_cost()
 
     cost_data = [
              
@@ -240,13 +256,13 @@ async def getAllCost_cost(request: Request,username: str = Depends(get_current_u
                 "supplier": x.supplier,
                 "vat_reg": x.vat_reg,
                 "tin_no": x.tin_no,
-                "net_of_vat": "{:,.2f}".format(x.net_of_vat),
+                "net_ofvat_with_vat_exempt": "{:,.2f}".format(x.net_ofvat_with_vat_exempt),
                 "amount_due": x.amount_due,
                 "expense_account": x.expense_account,
                 "description": x.description,
                 "sin": x.sin,
-                "kwt_cubic_meter": x.kwt_cubic_meter,
-                "amount": x.amount,
+                "cubic_meter": x.cubic_meter,
+                "price": x.price,
                 "user": x.user
 
 
@@ -271,7 +287,7 @@ async def insert_branch_cost(items:BranchCode,username: str = Depends(get_curren
 
     try:
         
-        Cost.insert_branch(branch_code=items.branch_code, user=username)
+        CostViews.insert_branch(branch_code=items.branch_code, user=username)
         return {"message": "Data has been saved"}
     except Exception as e:
         error_message = str(e)
@@ -286,7 +302,7 @@ def get_branchs(term: Optional[str] = None):
     # this is to autocomplete Routes
     # Ensure you're correctly handling query parameters, 'term' in this case
 
-    branch = Cost.get_branch()
+    branch = CostViews.get_branch()
 
     branch_data = [
         
@@ -307,7 +323,7 @@ def get_branchs(term: Optional[str] = None):
     # this is to autocomplete Routes
     # Ensure you're correctly handling query parameters, 'term' in this case
 
-    results = Cost.get_all_cost()
+    results = CostViews.get_all_cost()
 
     cost_data = [
              
@@ -324,6 +340,17 @@ def get_branchs(term: Optional[str] = None):
                 "amount_due": x.amount_due,
                 "expense_account": x.expense_account,
                 "description": x.description,
+                "inclusive_date": x.inclusive_date,
+                "sin": x.sin,
+                "can": x.can,
+                "khw_no": x.khw_no,
+                "price": x.price,
+                "cubic_meter": x.cubic_meter,
+                "pic": x.pic,
+                "person_incharge_end_user": x.person_incharge_end_user,
+                "no_of_person": x.no_of_person,
+                "activity_made": x.activity_made,
+                "plate_no": x.plate_no,
                 "user": x.user
 
 
@@ -340,7 +367,7 @@ def autocomplete_branch_code(term: Optional[str] = None,username: str = Depends(
     # this is to autocomplete Routes
     # Ensure you're correctly handling query parameters, 'term' in this case
     # print(username)
-    branch = Cost.get_branch()
+    branch = CostViews.get_branch()
     
    
 
@@ -384,20 +411,28 @@ def autocomplete_branch_code(term: Optional[str] = None,username: str = Depends(
 
 
 
-@login_router.get("/api-update-water-electric-cost/{id}")
+@login_router.get("/api-update-cost/{id}")
 async def grc_template(id:Optional[int],request: Request, username: str = Depends(get_current_user)):
     rentalData = 'Nothing'
 
-    results = Cost.get_all_cost_id(item_id=id)
+    results = CostViews.get_all_cost_id(item_id=id)
 
     costData = [
         
             {
                "id": results.id,
+               "voucher_no": results.voucher_no,
+                "inclusive_date": results.inclusive_date,
                 "sin": results.sin,
-                "kwt_cubic_meter": results.kwt_cubic_meter,
-                "amount": results.amount,
-                "user": results.user,
+                "can": results.can,
+                "khw_no": results.khw_no,
+                "price": results.price,
+                "cubic_meter": results.cubic_meter,
+                "pic": results.pic,
+                "person_incharge_end_user": results.person_incharge_end_user,
+                "no_of_person": results.no_of_person,
+                "activity_made": results.activity_made,
+                "plate_no": results.plate_no,
 
                
             }
@@ -405,10 +440,10 @@ async def grc_template(id:Optional[int],request: Request, username: str = Depend
         ]
     
    
-    return templates.TemplateResponse("cost/update_water_elect.html", {"request":request,"costData":costData})
+    return templates.TemplateResponse("cost/update_cost.html", {"request":request,"costData":costData})
 
-@login_router.put("/update-water-electric-cost/{id}")
-async def updateGRCRental(id,items:UpdateWaterBaseModel,username: str = Depends(get_current_user)):
+@login_router.put("/update-cost/{id}")
+async def updateGRCRental(id,items:UpdateCostBaseModel,username: str = Depends(get_current_user)):
 
     """This function is to update Water"""
     # user =  mydb.access_setting.find({"username":username})
@@ -416,8 +451,11 @@ async def updateGRCRental(id,items:UpdateWaterBaseModel,username: str = Depends(
         # if i['site'] == 'admin' or i['site'] == 'sgmc' and i['site_transaction_write']:
     today = datetime.now()
     try:
-        Cost.updatecost(sin=items.sin,kwt_cubic_meter=items.kwt_cubic_meter,amount=items.amount,
-                        date_updated=today,user=username,item_id=id)
+        CostViews.updatecost(sin=items.sin,can=items.can,
+                             khw_no=items.khw_no,price=items.price,
+                             cubic_meter=items.cubic_meter,pic=items.pic,person_incharge_end_user=items.person_incharge_end_user,
+                             no_of_person=items.no_of_person,plate_no=items.plate_no,activity_made=items.activity_made,
+                             date_updated=today,user=username,item_id=id)
 
     except Exception as e:
         error_message = str(e)  # Use the actual error message from the exception
