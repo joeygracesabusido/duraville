@@ -97,6 +97,16 @@
 }
 
 
+.form-control {
+    flex: 1;
+    background-color: smoke whitesmoke;
+    border: 2px solid lightskyblue;
+    border-radius: 7px;
+    padding: 10px;
+    width: 100%; /* Adjusted width to fill the container */
+  }
+
+
   
 
 /*   
@@ -133,7 +143,7 @@
 
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" 
-            data-bs-target="#insert_cost_elements" style="width: 190px;">
+            data-bs-target="#insert_cost_elements"  style="width: 190px;">
             Add Cost Element
         </button>
 
@@ -259,43 +269,22 @@
                     <div class="modal-insert-cost-elements">
 
                         
-                            
-                            
-                            <div class="col-md">
-                              <div class="form-floating">
-                                <input type="text" class="form-control" id="type" >
-                                <label for="floatingInputGrid" style="font-size: 18px;">Type of Elements</label>
-                
-                               
-                              </div>
-                            </div>
-
-                            <br>
-                
-                            <div class="col-md">
-                                <div class="form-floating">
-                                  <input type="text" class="form-control" id="cost_elements" >
-                                  <label for="floatingInputGrid" style="font-size: 18px;">Cost Elements</label>
-                  
-                                 
-                                </div>
-                              </div>
-                        
-                
-                          
-                
-                          <br>
-
-
+                    
+                             
+                      <div class="col-md">
+                        <div class="form-floating">
+                          <input type="text" class="form-control" id="cost_elements_insert" >
+                          <label for="floatingInputGrid" style="font-size: 18px;">COST ELEMENTS</label>
+          
                          
-                          
-                
-                          
+                        </div>
+                      </div>
+    
                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save</button>
+                        <button type="button" id="Btn_insert_costElement" class="btn btn-primary">Save</button>
                     </div>
                 </div>
             </div>
@@ -508,7 +497,7 @@
       </div>
 
 </body>
-<script src="/static/cost_transasction.js"></script>
+
 
 <!-- Add Bootstrap JS and Popper.js -->
 
@@ -805,9 +794,14 @@
               </script>
 
 
+<script>
+  
+</script>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-
+<script src="/static/cost_trans.js"></script>
 
 
 

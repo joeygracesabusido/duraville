@@ -40,9 +40,9 @@ const insert_branch = async () => {
 var Btn_branch_save = document.querySelector('#Bnt_save_branch');
 Btn_branch_save.addEventListener("click", insert_branch);
 
-// // this function is for autocomplete of branch
-$(document).ready(function() {
-    $("#branch_insert_cost_input2").autocomplete({
+// this function is for autocomplete of branch
+jQuery(document).ready(function() {
+    jQuery("#branch_insert_cost_input2").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "/api-search-autocomplete-branch/",
@@ -100,6 +100,7 @@ $("#btn_insert_cost").on("click", function() {
   });
 
 
+
 //   $(document).ready(function () {
 //     $('#my_table_cost').DataTable();
 // });
@@ -111,10 +112,72 @@ $("#btn_insert_cost").on("click", function() {
 //   });
 
 
+// this  function is to insert cost elements
+
+// Arrow function to log a message
+
+
+// const logMessage = () => {
+//     console.log("I'm alive!");
+// };
+
+// // Attach the event listener to the "Save" button
+// const Btn_save_cost = document.querySelector('#Btn_insert_costElement2');
+// Btn_save_cost.addEventListener("click", logMessage);
 
 
 
-  
+const insert_cost_EL = async () => {
+
+    
+    const data = {
+        cost: document.getElementById("cost_elements_insert").value
+    };
+
+    console.log(data)
+    
+    try {
+        const response = await fetch(`/api-insert-cost-elements/`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log(responseData);
+            // Data saved successfully
+            window.alert("Your data has been saved!!!!");
+            // Optionally, you can redirect to another page
+            window.location.assign("/dashboard/");
+        } else if (response.status === 401) {
+            // Unauthorized, session has expired
+            window.alert("Session has expired");
+        } else if (response.status === 400) {
+            // Bad Request, duplicate branch
+            const responseData = await response.json();
+            window.alert(`Error: ${responseData.detail}`);
+        } else {
+            // Handle other errors
+            window.alert("An unexpected error occurred");
+        }
+    } catch (error) {
+        // Handle unexpected errors
+        window.alert("An unexpected error occurred");
+        console.log(error);
+    }
+};
+
+// Attach the event listener to the button
+const Btn_save_cost2 = document.querySelector('#Btn_insert_costElement');
+Btn_save_cost2.addEventListener("click", insert_cost_EL);
+
+
+
+
+
+
+
 
 
 

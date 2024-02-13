@@ -1,6 +1,4 @@
 
-
-
 // this function is for updating Cost Water
 
 
@@ -17,7 +15,7 @@ const update_cost_water_electric = async () => {
         no_of_person: document.getElementById("no_of_person").value,
         activity_made: document.getElementById("activity_made").value,
         plate_no: document.getElementById("plate_no").value,
-       
+        cost_elements: document.getElementById("cost_elements").value,
        
     };
     console.log(data)
@@ -58,3 +56,31 @@ const update_cost_water_electric = async () => {
 
 var Btn_update_cost = document.querySelector('#Btn_update_cost');
 Btn_update_cost.addEventListener("click", update_cost_water_electric);
+
+
+// this is for autocomple for Cost Elements
+
+
+$(document).ready(function() {
+    $("#cost_elements").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "/api-search-autocomplete-cost-elements/",
+                data: { term: request.term },
+                dataType: "json",
+                success: function(data) {
+                    response(data);
+                },
+                error: function(err) {
+                    console.log("Error fetching autocomplete data:", err);
+                }
+            });
+        },
+        minLength: 2,  // Minimum length of the input before triggering autocomplete
+        select: function(event, ui) {
+            $("#cost_elements").val(ui.item.value);
+            
+            return false;
+        }
+    });
+});

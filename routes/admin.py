@@ -15,7 +15,7 @@ from jose import jwt
 
 JWT_SECRET = 'myjwtsecret'
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
 # login_router = APIRouter(include_in_schema=False)
 login_router = APIRouter(include_in_schema=True)
@@ -52,6 +52,13 @@ class BranchCode(BaseModel):
     class Config:
         from_attributes = True
 
+class CostElementsBaseModel(BaseModel):
+    cost: str
+
+    class Config:
+        from_attributes = True
+
+
 class UpdateCostBaseModel(BaseModel):
     sin: str
     can: str
@@ -64,6 +71,7 @@ class UpdateCostBaseModel(BaseModel):
     no_of_person: float
     activity_made: str 
     plate_no: str
+    cost_elements: Optional[str]
     
 
     class Config:
@@ -433,6 +441,7 @@ async def grc_template(id:Optional[int],request: Request, username: str = Depend
                 "no_of_person": results.no_of_person,
                 "activity_made": results.activity_made,
                 "plate_no": results.plate_no,
+                "cost_elements": results.cost_elements,
 
                
             }
@@ -455,7 +464,7 @@ async def updateGRCRental(id,items:UpdateCostBaseModel,username: str = Depends(g
                              khw_no=items.khw_no,price=items.price,
                              cubic_meter=items.cubic_meter,pic=items.pic,person_incharge_end_user=items.person_incharge_end_user,
                              no_of_person=items.no_of_person,plate_no=items.plate_no,activity_made=items.activity_made,
-                             date_updated=today,user=username,item_id=id)
+                             cost_elements=items.cost_elements,date_updated=today,user=username,item_id=id)
 
     except Exception as e:
         error_message = str(e)  # Use the actual error message from the exception
@@ -473,5 +482,52 @@ async def insert_cost(request: Request):
 @login_router.get("/testing-dashboard/", response_class=HTMLResponse)
 async def insert_cost(request: Request):
     return templates.TemplateResponse("electricity/testing.html", {"request":request})
+
+
+
+#============================== this is for inserting cost elements==============================
+@login_router.post("/api-insert-cost-elements/")
+async def api_insert_cost_elements(items:CostElementsBaseModel,username: str = Depends(get_current_user)):
+    
+    print('im alive')
+    try:
+        
+        CostViews.insert_cost_elements(costElements=items.cost)
+        return {"message": "Data has been saved"}
+    except Exception as e:
+        error_message = str(e)
+        raise HTTPException(status_code=500, detail=error_message)
+  
+@login_router.get("/api-search-autocomplete-cost-elements/")
+def autocomplete_branch_code(term: Optional[str] = None,username: str = Depends(get_current_user)):
+   
+    cost_elements = CostViews.get_cost_elements()
+    
+   
+
+    search_term = term.strip("'").lower()
+
+    
+    data =[ {
+               "id": x. id,
+                "cost": x.cost,
+    
+            }
+            for x in cost_elements 
+    ]
+
+    if term:
+
+        filtered_data = [item for item in data if search_term.lower() in item['cost'].lower()]
+
+    else:
+
+        filtered_data = []
+    
+    
+    suggestions = [{"value": item['cost']} for item in filtered_data]
+
+    return suggestions
+
    
     

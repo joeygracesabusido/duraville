@@ -1,7 +1,7 @@
 from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfilter,within_group,Relationship,Index
 from sqlalchemy.orm.exc import NoResultFound
 
-from models.model import CostBranchCode,Cost
+from models.model import CostBranchCode,Cost, CostElements
 from database.mongodb_connection import Connection
 
 engine = Connection.db()
@@ -70,7 +70,7 @@ class CostViews():
             
     @staticmethod   
     def updatecost(sin,can,khw_no,price,cubic_meter,pic,person_incharge_end_user,
-                   no_of_person,plate_no,activity_made,date_updated,user,item_id):
+                   no_of_person,plate_no,activity_made,cost_elements,date_updated,user,item_id):
         """This function is for updating Rizal Equipment"""
 
         with Session(engine) as session:
@@ -90,6 +90,7 @@ class CostViews():
             result.no_of_person = no_of_person
             result.activity_made = activity_made
             result.plate_no = plate_no
+            result.cost_elements = cost_elements
             result.user = user
             result.date_updated = date_updated
 
@@ -98,6 +99,34 @@ class CostViews():
             session.refresh(result)
             session.close()
 
+#============================================This is for Cost Elements Transactions======================
+    @staticmethod
+    def insert_cost_elements(costElements): # this is to insert cost elements
 
+        insertData = CostElements(cost=costElements)
+        
+
+        session = Session(engine)
+
+        session.add(insertData)
+        
+        session.commit()
+
+        session.close()
+
+
+    @staticmethod
+    def get_cost_elements(): # this function is for getting all the cost elements 
+        with Session(engine) as session:
+            try:
+                statement = select(CostElements).order_by(CostElements.cost)
+                            
+                results = session.exec(statement) 
+
+                data = results.all()
+                
+                return data
+            except NoResultFound:
+                return None
 
 

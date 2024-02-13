@@ -57,6 +57,16 @@ class User(SQLModel, table=True):
 
     __table_args__ = (Index("idx_user_unique", "username", unique=True),)
 
+class CostElements(SQLModel, table=True):
+    """This is for creating cost element table"""
+    __tablename__ = 'cost_elements'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    cost: str = Field(index=True, unique=True)
+
+    __table_args__ = (Index("idx_cost", "cost", unique=True),)
+
+    
+
 
 class CostAccountName(SQLModel, table=True):
     """This is for table of cost account name"""
@@ -122,6 +132,8 @@ class Cost(SQLModel, table=True):
     no_of_person: Decimal = Field(default=0, max_digits=9, decimal_places=2)
     activity_made: str = Field(default=None)
     plate_no: str = Field(default=None)
+    cost_elements: str = Field(max_length=255, default=None)
+
     user: str =Field(default=None)
     date_updated: Optional[datetime] = Field(default=None)
     date_credited: datetime = Field(default_factory=datetime.utcnow)
