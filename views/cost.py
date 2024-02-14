@@ -68,9 +68,29 @@ class CostViews():
             except NoResultFound:
                 return None
             
+
+    @staticmethod
+    def get_all_cost_graph(): # this function is for getting all the cost expense from cost table
+
+        searchData = 'ELECTRICITY'
+        with Session(engine) as session:
+            try:
+                # statement = select(Cost).order_by(Cost.person_incharge_end_user)
+
+                statement = select(Cost.id,Cost.person_incharge_end_user,func.sum(Cost.khw_no).label('khw_no'),
+                    ).group_by(Cost.id,Cost.person_incharge_end_user).where(Cost.cost_elements.ilike(f'%{searchData}%')).order_by(Cost.person_incharge_end_user)
+                            
+                results = session.exec(statement) 
+
+                data = results.all()
+                
+                return data
+            except NoResultFound:
+                return None
+            
     @staticmethod   
     def updatecost(sin,can,khw_no,price,cubic_meter,pic,person_incharge_end_user,
-                   no_of_person,plate_no,activity_made,cost_elements,date_updated,user,item_id):
+                   no_of_person,plate_no,activity_made,cost_elements,date_updated,liters,type_of_vehicle,user,item_id):
         """This function is for updating Rizal Equipment"""
 
         with Session(engine) as session:
@@ -91,6 +111,8 @@ class CostViews():
             result.activity_made = activity_made
             result.plate_no = plate_no
             result.cost_elements = cost_elements
+            result.liters = liters
+            result.type_of_vehicle = type_of_vehicle
             result.user = user
             result.date_updated = date_updated
 

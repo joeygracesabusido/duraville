@@ -133,6 +133,8 @@ class Cost(SQLModel, table=True):
     activity_made: str = Field(default=None)
     plate_no: str = Field(default=None)
     cost_elements: str = Field(max_length=255, default=None)
+    liters: Decimal = Field(default=0, max_digits=9, decimal_places=2)
+    type_of_vehicle: str = Field(max_length=255, default=None)
 
     user: str =Field(default=None)
     date_updated: Optional[datetime] = Field(default=None)

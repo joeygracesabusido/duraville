@@ -95,7 +95,7 @@ function initializeAutocomplete() {
 
    // Open modal and initialize autocomplete when the button is clicked
 $("#btn_insert_cost").on("click", function() {
-    $("#modal_insert_cost").modal("show");  // Adjust modal ID as needed
+    $("#modal-electricity-graph").modal("show");  // Adjust modal ID as needed
     initializeAutocomplete();  // Initialize autocomplete when the modal is shown
   });
 
@@ -174,7 +174,62 @@ Btn_save_cost2.addEventListener("click", insert_cost_EL);
 
 
 
+$(document).ready(function() {
+   
+    $.ajax({
+        url: '/api-get-electricty-graph',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // Process the received data and create the bar graph
+            createElectricityGraph(data);
+        },
+        error: function(error) {
+            console.error('Error fetching data:', error);
+        }
+    });
 
+   
+    // Function to create the bar graph
+    function createElectricityGraph(data) {
+        var labels = data.map(item => item.person_incharge_end_user);
+        var values = data.map(item => item.khw_no);
+        console.log()
+        var ctx = document.getElementById('electricityChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Electricity Graph',
+                    data: values,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+
+    // Function to show the modal and create the graph
+    function showElectricityModal() {
+        $("#elec-graph").modal("show");
+        createElectricityGraph(data);
+    }
+
+
+    $("button[data-target='#electric_graph']").on("click", showElectricityModal);
+
+
+});
 
 
 

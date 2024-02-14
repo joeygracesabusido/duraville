@@ -16,6 +16,8 @@ const update_cost_water_electric = async () => {
         activity_made: document.getElementById("activity_made").value,
         plate_no: document.getElementById("plate_no").value,
         cost_elements: document.getElementById("cost_elements").value,
+        liters: document.getElementById("liters").value,
+        type_of_vehicle: document.getElementById("type_of_vehicle").value,
        
     };
     console.log(data)

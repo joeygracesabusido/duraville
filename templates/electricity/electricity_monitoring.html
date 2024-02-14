@@ -104,6 +104,11 @@
       <div class="col-sm-6">
         <div class="card">
           <div class="card-body">
+
+            <div>
+              <canvas id="myChart"></canvas>
+            </div>
+
             <!-- <h5 class="card-title">Special title treatment</h5>
             <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
             <a href="#" class="btn btn-primary">Go somewhere</a> -->
@@ -529,11 +534,60 @@
 
 
 <script>
+
+$(document).ready(function() {
+   
+   $.ajax({
+       url: '/api-get-electricty-graph',
+       type: 'GET',
+       dataType: 'json',
+       success: function(data) {
+           // Process the received data and create the bar graph
+           createElectricityGraph(data);
+       },
+       error: function(error) {
+           console.error('Error fetching data:', error);
+       }
+   });
+
+  
+   // Function to create the bar graph
+   function createElectricityGraph(data) {
+       var labels = data.map(item => item.person_incharge_end_user);
+       var values = data.map(item => item.khw_no);
+       console.log()
+       var ctx = document.getElementById('myChart').getContext('2d');
+       var myChart = new Chart(ctx, {
+           type: 'bar',
+           data: {
+               labels: labels,
+               datasets: [{
+                   label: 'Electricity Graph',
+                   data: values,
+                   backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                   borderColor: 'rgba(75, 192, 192, 1)',
+                   borderWidth: 1
+               }]
+           },
+           options: {
+               scales: {
+                   y: {
+                       beginAtZero: true
+                   }
+               }
+           }
+       });
+   }
+  });
+  
     
 
   
     
   </script>
+
+
+
     
   
   
@@ -541,7 +595,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 

@@ -72,6 +72,8 @@ class UpdateCostBaseModel(BaseModel):
     activity_made: str 
     plate_no: str
     cost_elements: Optional[str]
+    liters: float
+    type_of_vehicle: Optional[str]
     
 
     class Config:
@@ -442,7 +444,8 @@ async def grc_template(id:Optional[int],request: Request, username: str = Depend
                 "activity_made": results.activity_made,
                 "plate_no": results.plate_no,
                 "cost_elements": results.cost_elements,
-
+                "liters": results.liters,
+                "type_of_vehicle": results.type_of_vehicle
                
             }
            
@@ -464,7 +467,8 @@ async def updateGRCRental(id,items:UpdateCostBaseModel,username: str = Depends(g
                              khw_no=items.khw_no,price=items.price,
                              cubic_meter=items.cubic_meter,pic=items.pic,person_incharge_end_user=items.person_incharge_end_user,
                              no_of_person=items.no_of_person,plate_no=items.plate_no,activity_made=items.activity_made,
-                             cost_elements=items.cost_elements,date_updated=today,user=username,item_id=id)
+                             cost_elements=items.cost_elements,date_updated=today,liters=items.liters,
+                             type_of_vehicle=items.type_of_vehicle,user=username,item_id=id)
 
     except Exception as e:
         error_message = str(e)  # Use the actual error message from the exception
@@ -475,6 +479,30 @@ async def updateGRCRental(id,items:UpdateCostBaseModel,username: str = Depends(g
     return  {'Messeges':'Data has been Updated'}
 
 
+@login_router.get("/api-get-electricty-graph")
+async def api_get_costGRaph(username: str = Depends(get_current_user)):
+    
+
+    results = CostViews.get_all_cost_graph()
+    print(results)
+
+    costData = [
+        
+            {
+                "id": i.id,
+                "khw_no": i.khw_no,
+               
+                "person_incharge_end_user": i.person_incharge_end_user,
+                
+            }
+           for i in results
+        ]
+    
+   
+    return costData
+
+
+
 @login_router.get("/electricity-dashboard/", response_class=HTMLResponse)
 async def insert_cost(request: Request):
     return templates.TemplateResponse("electricity/electricity_monitoring.html", {"request":request})
@@ -482,6 +510,9 @@ async def insert_cost(request: Request):
 @login_router.get("/testing-dashboard/", response_class=HTMLResponse)
 async def insert_cost(request: Request):
     return templates.TemplateResponse("electricity/testing.html", {"request":request})
+
+
+
 
 
 
