@@ -484,7 +484,7 @@ async def api_get_costGRaph(username: str = Depends(get_current_user)):
     
 
     results = CostViews.get_all_cost_graph()
-    print(results)
+    
 
     costData = [
         
