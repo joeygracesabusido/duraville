@@ -333,7 +333,7 @@
 
 
 
-  <!-- Modal--------------------------------------------------Modal for Adding Electric Consumption---------------------------------------->
+  <!-- Modal--------------------------------------------------Modal for Meralco information---------------------------------------->
   <div class="modal fade" id="meralco_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -346,51 +346,67 @@
 
               <div class="container" >
 
+                
+
+                        <div class="row g-2">
+                          <div class="col-md">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="book_meralco_info">
+                              <label for="floatingInputGrid">BOOK</label>
+                            </div>
+                          </div>
+
+                          <div class="col-md">
+                            <div class="form-floating">
+                              <input type="text" class="form-control" id="company_id_meralco_info"hidden>
+                              
+                            </div>
+                          </div>
+
+                          <div class="col-md">
+                            <div class="form-floating">
+                              <input type="number" class="form-control" id="book_id_meralco_info"hidden>
+                              
+                            </div>
+                          </div>
+                          
+                      </div>
+                      <br>
+
                         <div class="row g-2">
                             <div class="col-md">
                               <div class="form-floating">
-                                <input type="text" class="form-control" id="company">
-                                <label for="floatingInputGrid">Company</label>
-                              </div>
-                            </div>
-                            <div class="col-md">
-                              <div class="form-floating">
-                                <input type="text" class="form-control" id="can_no.">
+                                <input type="text" class="form-control" id="can_no_meralco_details">
                                 <label for="floatingInputGrid">Customer Accunt Number</label>
                               </div>
                             </div>
-                        </div>
-                        <br>
+                       
+                       
                 
-                        <div class="row g-2">
+                       
                             <div class="col-md">
                               <div class="form-floating">
-                                <input type="text" class="form-control" id="sin_no">
+                                <input type="text" class="form-control" id="sin_no_meralco_details">
                                 <label for="floatingInputGrid">SIN</label>
                               </div>
                             </div>
-
-                            <div class="col-md">
-                              <div class="form-floating">
-                                <input type="text" class="form-control" id="can_number">
-                                <label for="floatingInputGrid">BOOK</label>
-                              </div>
-                            </div>
-                            
                         </div>
+                            
+                            
+                        
                         <br>
 
                         <div class="row g-2">
                           <div class="col-md">
                             <div class="form-floating">
-                              <input type="text" class="form-control" id="end_user">
+                              <input type="text" class="form-control" id="end_user_meralco_info">
                               <label for="floatingInputGrid">END USER</label>
                             </div>
                           </div>
 
                           <div class="col-md">
                             <div class="form-floating">
-                                <select class="form-select" id="subject_to_ewt" aria-label="Floating label select example">
+                                <select class="form-select" id="subject_to_ewt_meralco_info" aria-label="Floating label select example">
 
                                     <option selected>----select menu----</option>
                                     <option value="True">True</option>
@@ -424,7 +440,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" id="Btn_save_electricity_details" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
@@ -441,7 +457,7 @@
           Add Electricty Consumption
         </button>
 
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btn_meralco_info"
+        <button type="button" class="btn btn-primary"  id="btn_meralco_info"
              style="width: 190px;">
           Add Meralco Details
         </button>
@@ -542,7 +558,7 @@
 
 
 
-<script src="/static/electricity_monitoring.js"></script>
+<script src="/static/electricity.js"></script>
 
 
 

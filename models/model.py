@@ -141,7 +141,7 @@ class Cost(SQLModel, table=True):
     date_credited: datetime = Field(default_factory=datetime.utcnow)
 
 
-class ElectricityDertails(SQLModel, table = True):
+class ElectricityDetails(SQLModel, table = True):
     """This is for table of electricity Details"""
     __tablename__ = 'electricity_details'
     id: Optional[int] = Field(default=None, primary_key=True)

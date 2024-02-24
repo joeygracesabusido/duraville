@@ -148,6 +148,7 @@ $("#btn_insert_electric_data").on("click", function() {
 //  Open Modal for Meralco Info
 $("#btn_meralco_info").on("click", function() {
   $("#meralco_info").modal("show");  // Adjust modal ID as needed
+  initializeAutocomplete_books()
  
 });
 
@@ -196,6 +197,90 @@ $(document).ready(function() {
       });
   }
  });
+
+
+ function initializeAutocomplete_books() {
+  $("#book_meralco_info").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/api-search-autocomplete-books/",
+              data: { term: request.term },
+              dataType: "json",
+              success: function(data) {
+                  response(data);
+              },
+              error: function(err) {
+                  console.log("Error fetching autocomplete data:", err);
+              }
+          });
+      },
+      minLength: 2,  // Minimum length of the input before triggering autocomplete
+      select: function(event, ui) {
+          $("#book_meralco_info").val(ui.item.value);
+          $("#company_id_meralco_info").val(ui.item.company_id);
+          $("#book_id_meralco_info").val(ui.item.id);
+
+          
+          return false;
+      }
+  });
+}
+
+// this function is to insert 
+const insert_meralco_details = async () => {
+    const data = {
+        company_id: document.getElementById("company_id_meralco_info").value,
+        customer_account_no: document.getElementById("can_no_meralco_details").value,
+        service_id_no: document.getElementById("sin_no_meralco_details").value,
+        book_id: document.getElementById("book_id_meralco_info").value,
+        end_user: document.getElementById("end_user_meralco_info").value,
+        subject_to_ewt: document.getElementById("subject_to_ewt_meralco_info").value,
+        
+
+    };
+    
+    try {
+        const response = await fetch(`/api-insert-meralco-details/`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log(responseData);
+            // Data saved successfully
+            window.alert("Your data has been saved!!!!");
+            // Optionally, you can redirect to another page
+            window.location.assign("/dashboard/");
+        } else if (response.status === 401) {
+            // Unauthorized, session has expired
+            window.alert("Session has expired");
+        } 
+        else if (response.status === 500) {
+            // Unauthorized, session has expired
+            window.alert("Duplicate Entry");
+        } 
+        else if (response.status === 400) {
+            // Bad Request, duplicate branch
+            const responseData = await response.json();
+            window.alert(`Error: ${responseData.detail}`);
+        } else {
+            // Handle other errors
+            window.alert("An unexpected error occurred");
+        }
+    } catch (error) {
+        // Handle unexpected errors
+        window.alert("An unexpected error occurred");
+        console.log(error);
+    }
+};
+
+var Btn_save_electric_details = document.querySelector('#Btn_save_electricity_details');
+Btn_save_electric_details.addEventListener("click", insert_meralco_details);
+
+
+ 
  
 
 
