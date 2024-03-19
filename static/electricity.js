@@ -214,7 +214,7 @@ $(document).ready(function() {
               }
           });
       },
-      minLength: 2,  // Minimum length of the input before triggering autocomplete
+      minLength: 0,  // Minimum length of the input before triggering autocomplete
       select: function(event, ui) {
           $("#book_meralco_info").val(ui.item.value);
           $("#company_id_meralco_info").val(ui.item.company_id);
@@ -224,6 +224,11 @@ $(document).ready(function() {
           return false;
       }
   });
+
+  // Open the dropdown on focus
+  $("#book_meralco_info").on("focus", function() {
+    $(this).autocomplete("search", $(this).val());
+});
 }
 
 // this function is to insert 
@@ -238,6 +243,18 @@ const insert_meralco_details = async () => {
         
 
     };
+
+    if (
+        customer_account_no === '' ||
+        service_id_no === '' ||
+        book_id === '' ||
+        end_user === '' ||
+        subject_to_ewt.value === '----select menu----'
+    ) {
+        // Display an alert or handle the validation error as needed
+        window.alert("Please fill in all fields before saving.");
+        return;
+    }
     
     try {
         const response = await fetch(`/api-insert-meralco-details/`, {
