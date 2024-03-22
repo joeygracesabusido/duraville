@@ -39,7 +39,7 @@ class EmployeeListDetails(BaseModel):
 @payroll_router.get("/insert-employee-list/", response_class=HTMLResponse)
 async def api_login(request: Request,username: str = Depends(get_current_user)):
     try:
-        if username == 'joeysabusido' or username == 'jing':
+        if username == 'joeysabusido' or username == 'eliza':
 
             results = PayrollTransaction.get_employee_list()
 
