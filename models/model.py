@@ -16,7 +16,7 @@ sys.path.append(parent_dir)
 
 from database.mongodb_connection import Connection
 
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 
 engine = Connection.db()
 
@@ -159,6 +159,25 @@ class ElectricityDetails(SQLModel, table = True):
     __table_args__ = (Index("idx_customer_account_no", "customer_account_no", unique=True),)
     __table_args__ = (Index("idx_service_id_no", "service_id_no", unique=True),)
     
+class EmployeeList(SQLModel, table = True):
+    """this is for table of employee list"""
+    __tablename__ = 'employee_list'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    employee_id: str = Field(index=True, unique=True)
+    first_name: str = Field(default=None, max_length=150)
+    last_name: str = Field(default=None, max_length=150)
+    company_id: Optional[int] = Field(default=None, foreign_key="company.id")
+    basic_monthly_pay: float = Field(default=None)
+    tax_code: str = Field(default=None, max_length=100)
+    book_id: Optional[int] = Field(default=None, foreign_key="books.id")
+    department: str = Field(default=None, max_length=150)
+    is_active: bool
+    user: str =Field(default=None)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_created: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (Index("idx_employee_id", "employee_id", unique=True),)
+
 
     
 

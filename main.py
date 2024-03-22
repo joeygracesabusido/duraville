@@ -10,6 +10,7 @@ from routes.admin import login_router
 from routes.smart_globe import smart_globe_router
 from routes.books import books_router
 from routes.electricity import electricity_router
+from routes.payroll_routes import payroll_router
 #from routes.forms import form_htlm
 #from routes.graph import  graphql_app
 
@@ -33,6 +34,7 @@ app.include_router(login_router)
 app.include_router(smart_globe_router)
 app.include_router(books_router)
 app.include_router(electricity_router)
+app.include_router(payroll_router)
 #app.include_router(graphql_app, prefix="/graphql")
 # app.include_router(graph)
 
