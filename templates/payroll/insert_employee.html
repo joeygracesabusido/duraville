@@ -11,7 +11,7 @@
 
 <style>
     #container {
-              width: 50%; /* Set the width of the div element */
+              width: 60%; /* Set the width of the div element */
               margin: auto; /* Center the div */
               border-width: 1px;
               /* border-style: solid; */
@@ -125,7 +125,16 @@
     <div class="row g-2">
         <div class="col-md">
           <div class="form-floating">
-            <input type="text" class="form-control" id="tax_code" >
+            <select class="form-select" id="tax_code" aria-label="Floating label select example">
+
+              <option selected>----select menu----</option>
+              <option value="TAXABLE">TAXABLE</option>
+              <option value="NON-TAXABLE">NON-TAXABLE</option>
+              <option value="MWE">MWE</option>
+             
+          </select>
+
+            
             <label for="floatingInputGrid"class="label-large" >Tax Code</label>
           </div>
         </div>
@@ -218,16 +227,18 @@
             <div class="container mt-3">
   
              
-              <table id="my_table_cost" class="table table-bordered"  style="text-align: center;">
+              <table id="my_table_employee_list" class="table table-bordered"  style="text-align: center;">
                   <thead class="border-bottom font-weight-bold">
-                  
+
+                          
                           <td>Emp ID</td>
-                          <td>First Name</td>
                           <td>Last Name</td>
+                          <td>First Name</td>
+                          
                           <td>Basic Rate</td>
                           <td>Tax Code</td>
-                          
                           <td>Department</td>
+                          <td>Books</td>
                           <td>Action</td>
                           
                           
@@ -235,17 +246,18 @@
                       </tr>
                   </thead>
                   <tbody>
-                    {% for list in employee_data%}
+                    {% for list in employee_data %}
           
                           <tr>
                               
                               <td>{{list.employee_id}}</td>
-                              <td>{{list.first_name}}</td>
                               <td>{{list.last_name}}</td>
+                              <td>{{list.first_name}}</td>
+                             
                               <td>{{list.basic_monthly_pay}}</td>
                               <td>{{list.tax_code}}</td>
                               <td>{{list.department}}</td>
-                              
+                              <td>{{list.book}}</td>
                              
                               
                     
@@ -284,12 +296,36 @@
 
   
    
-    <!-- <script src="/static/sgmc/sgmc_update_cost.js"></script> -->
+    
 
 <!-- Add Bootstrap JS and Popper.js -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-            
+
+
 
 <script src="/static/payroll_insert_employee.js"></script>
+
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+
+
+<!-- <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script> -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+
+
+<script>
+    //     $(document).ready(function () {
+    //     $('#my_table_employee_list').DataTable();
+    // });
+
+  let table = new DataTable('#my_table_employee_list');
+
+</script>
+
 
 {% endblock %}

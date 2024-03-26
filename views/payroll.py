@@ -1,7 +1,7 @@
 from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfilter,within_group,Relationship,Index
 from sqlalchemy.orm.exc import NoResultFound
 
-from models.model import EmployeeList
+from models.model import EmployeeList, Books
 from database.mongodb_connection import Connection
 
 engine = Connection.db()
@@ -35,7 +35,11 @@ class PayrollTransaction(): # this class is for payroll  Transaction
     def get_employee_list(): # this function is to get all the employee kist
         with Session(engine) as session:
             try:
-                statement = select(EmployeeList)
+                statement = select(EmployeeList,Books).where(
+                    (EmployeeList.book_id == Books.id)  
+                ).order_by(EmployeeList.last_name)
+
+                # statement = select(EmployeeList, Books).join(Books, EmployeeList.book_id == Books.id)
                             
                 results = session.exec(statement) 
 

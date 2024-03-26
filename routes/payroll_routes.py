@@ -47,15 +47,18 @@ async def api_login(request: Request,username: str = Depends(get_current_user)):
 
             employee_data = [
                 {
+                'id': i.id,
                 'employee_id': i.employee_id,
                 'first_name': i.first_name,
                 'last_name': i.last_name,
                 'basic_monthly_pay': i.basic_monthly_pay,
                 'tax_code': i.tax_code,
                 'department': i.department,
+                'book': x.project,
                 'is_active': i.is_active
             }
-            for i in results
+            for i, x in results
+            
             ]
 
             return templates.TemplateResponse("payroll/insert_employee.html", {"request": request,'employee_data':employee_data})
