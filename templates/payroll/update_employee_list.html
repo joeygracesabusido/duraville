@@ -1,0 +1,260 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<style>
+    #container {
+              width: 60%; /* Set the width of the div element */
+              margin: auto; /* Center the div */
+              border-width: 1px;
+              /* border-style: solid; */
+             
+             
+      }
+  
+    #title{
+      display: flex;
+      justify-content: center; /* Horizontally center the content */
+      align-items: center; /* Vertically center the content */
+      height: 10vh; /* Assuming you want to center the h1 vertically on the page */
+    }
+  
+    .form-control{
+      background-color: smoke whitesmoke;
+      /* color: white; */
+    }
+
+
+    .sidebar {
+    position: fixed;
+    width: 15%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    padding-top: 20px;
+    z-index: 1;
+  }
+
+  .main-content {
+    margin-left: 15%;
+    padding: 20px;
+  }
+
+  @media (max-width: 767px) {
+    .sidebar {
+      width: 100%;
+      position: static;
+      border-right: none;
+      padding-top: 0;
+      background-color: red;
+    }
+  }
+
+  .label-large {
+        font-size: 19px; /* Adjust the font size as needed */
+    }
+
+  </style>
+  <div id="container" class="container mt-4">
+
+    <h2>UPDATE EMPLOYEE</h2>
+    {% for list in employee_data %}
+
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="employee_id" value="{{list.employee_id}}">
+                            <label for="floatingInputGrid" class="label-large">Employee  ID</label>
+                        </div>
+                    </div>
+
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="trans_id" value="{{list.id}}" hidden>
+                            
+                            </div>
+
+                        </div>
+                        
+                    
+                    
+                
+
+                    
+                </div>
+
+                <br>
+
+                    <div class="row g-2">
+                        <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="first_name" value="{{list.first_name}}">
+                            <label for="floatingInputGrid"class="label-large" >First Name</label>
+                        </div>
+                        </div>
+                        
+                        <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="last_name" value="{{list.last_name}}">
+                            <label for="floatingInputGrid" class="label-large">Last Name</label>
+
+                        
+                        </div>
+                        </div>
+
+                    
+                    </div>
+
+                <br>
+
+                <div class="row g-2">
+                    
+                    
+                    <div class="col-md">
+                    <div class="form-floating">
+                        <input type="number" class="form-control" id="basic_monthly_pay" value="{{list.basic_monthly_pay}}">
+                        <label for="floatingInputGrid" class="label-large">Basic Monthly Pay</label>
+
+                    
+                    </div>
+                    </div>
+
+                    
+                </div>
+
+                <br>
+
+                <div class="row g-2">
+                    <div class="col-md">
+                    <div class="form-floating">
+                        <select class="form-select" id="tax_code" aria-label="Floating label select example">
+
+                            <option value="{{list.tax_code}}">{{list.tax_code}}</option>
+                            <option value="TAXABLE">TAXABLE</option>
+                            <option value="NON-TAXABLE">NON-TAXABLE</option>
+                            <option value="MWE">MWE</option>
+                        
+                        </select>
+
+                        
+                        <label for="floatingInputGrid"class="label-large" >Tax Code</label>
+                    </div>
+                    </div>
+                    
+                    <div class="col-md">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="book" value="{{list.book}}">
+                        <label for="floatingInputGrid" class="label-large">Book</label>
+
+                    
+                    </div>
+                    </div>
+
+                    
+                </div>
+
+                <br>
+                <div class="row g-2">
+                    <div class="col-md">
+                    <div class="form-floating">
+                        
+                        <select class="form-select" id="department" aria-label="Floating label select example">
+
+                        <option value="{{list.department}}">{{list.department}}</option>
+                        <option value="ACCOUNTING">ACCOUNTING</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="EMD">EMD</option>
+                        <option value="ENGINEERING - ANTIPOLO">ENGINEERING - ANTIPOLO</option>
+                        <option value="ENGINEERING - CAVITE">ENGINEERING - CAVITE</option>
+                        <option value="FINANCE">FINANCE</option>
+                        <option value="HR">HR</option>
+                        <option value="OFFICE OF THE PRESIDENT">OFFICE OF THE PRESIDENT</option>
+                        <option value="PERMITS & LICENSES">PERMITS & LICENSES</option>
+                        <option value="PLANNING & DESIGN">PLANNING & DESIGN</option>
+                        <option value="SALES & LOAN DOCUMENTATION">SALES & LOAN DOCUMENTATION</option>
+                        <option value="TREASURY">TREASURY</option>
+                        
+                        
+                    </select>
+                        <label for="floatingInputGrid" class="label-large">Department</label>
+                    </div>
+                    </div>
+
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <select class="form-select" id="is_active" aria-label="Floating label select example">
+
+                                <option value="{{list.is_active}}">{{list.is_active}}</option>
+                                <option value="True">True</option>
+                                <option value="False">False</option>
+                            
+                            </select>
+                        <label for="floatingInputGrid" class="label-large">ACTIVE STATUS</label>
+                        </div>
+                    </div>
+                    
+                
+
+                    
+                </div>
+
+                <br>
+
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="company_id" value="{{list.company_id}}" hidden >
+                        
+                        </div>
+                    </div>
+                    
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="book_id"value="{{list.book_id}}"  hidden >
+                            
+
+                        
+                        </div>
+                    </div>
+
+                    
+                </div>
+            
+                
+                <button type="button" id="btn_save_employee" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+                    
+                <br>
+
+    
+   
+    {% endfor %}
+     
+
+             
+                
+
+  </div>
+
+
+  
+   
+    
+
+<!-- Add Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+
+<script src="/static/update_employee_list.js"></script>
+
+
+{% endblock %}

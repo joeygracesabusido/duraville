@@ -88,7 +88,56 @@ async def api_insert_cost_elements(items:EmployeeListDetails,username: str = Dep
         return {"message": "Data has been saved"}
     except Exception as e:
         error_message = str(e)
-        raise HTTPException(status_code=500, detail=error_message)   
+        raise HTTPException(status_code=500, detail=error_message)  
+
+
+@payroll_router.get("/update-employee-list/{id}")
+async def grc_template(id:Optional[int],request: Request, username: str = Depends(get_current_user)):
+    
+
+    results = PayrollTransaction.get_employee_by_id(item_id=id)
+
+    if results:
+        employee_data = [
+            {
+                'id': employee.id,
+                'employee_id': employee.employee_id,
+                'first_name': employee.first_name,
+                'last_name': employee.last_name,
+                'company_id': employee.company_id,
+                'basic_monthly_pay': employee.basic_monthly_pay,
+                'tax_code': employee.tax_code,
+                'department': employee.department,
+                'book': book.project,
+                'book_id': employee.book_id,
+                'is_active': employee.is_active
+            }
+            for employee, book in results
+        ]
+        # return employee_data
+        return templates.TemplateResponse("payroll/update_employee_list.html", {"request":request,"employee_data":employee_data})
+    else:
+        return None  # Or handle the case where no employees are found
+   
+@payroll_router.put("/api-update-employee-details/{id}")
+async def updateGRCRental(id,items:EmployeeListDetails,username: str = Depends(get_current_user)):
+
+    today = datetime.now()
+    try:
+        PayrollTransaction.update_employee_details(employee_id=items.employee_id,first_name=items.first_name,
+                                                   last_name=items.last_name,company_id=items.company_id,
+                                                   basic_monthly_pay=items.basic_monthly_pay,tax_code=items.tax_code,
+                                                   book_id=items.book_id,department=items.department,is_active=items.is_active,
+                                                   user=username,date_updated=today,item_id=id)
+
+    except Exception as e:
+        error_message = str(e)  # Use the actual error message from the exception
+    
+        return {"error": error_message}
+
+
+    return  {'Messeges':'Data has been Updated'}
+ 
 
 
     

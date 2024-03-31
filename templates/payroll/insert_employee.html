@@ -155,7 +155,25 @@
     <div class="row g-2">
         <div class="col-md">
           <div class="form-floating">
-            <input type="text" class="form-control" id="department" >
+            
+            <select class="form-select" id="department" aria-label="Floating label select example">
+
+              <option selected>----select menu----</option>
+              <option value="ACCOUNTING">ACCOUNTING</option>
+              <option value="ADMIN">ADMIN</option>
+              <option value="EMD">EMD</option>
+              <option value="ENGINEERING - ANTIPOLO">ENGINEERING - ANTIPOLO</option>
+              <option value="ENGINEERING - CAVITE">ENGINEERING - CAVITE</option>
+              <option value="FINANCE">FINANCE</option>
+              <option value="HR">HR</option>
+              <option value="OFFICE OF THE PRESIDENT">OFFICE OF THE PRESIDENT</option>
+              <option value="PERMITS & LICENSES">PERMITS & LICENSES</option>
+              <option value="PLANNING & DESIGN">PLANNING & DESIGN</option>
+              <option value="SALES & LOAN DOCUMENTATION">SALES & LOAN DOCUMENTATION</option>
+              <option value="TREASURY">TREASURY</option>
+             
+             
+          </select>
             <label for="floatingInputGrid" class="label-large">Department</label>
           </div>
         </div>
@@ -262,7 +280,7 @@
                               
                     
                               <td>
-                                  <a href="#"
+                                  <a href="/update-employee-list/{{list.id}}"
                                   <button type="button" class="btn btn-primary">
                                   <i class="fas fa-database"></i>Edit</button></a>
                               </td>

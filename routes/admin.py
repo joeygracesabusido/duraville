@@ -15,7 +15,7 @@ from jose import jwt
 
 JWT_SECRET = 'myjwtsecret'
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 120
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # login_router = APIRouter(include_in_schema=False)
 login_router = APIRouter(include_in_schema=True)
