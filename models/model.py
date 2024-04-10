@@ -178,6 +178,42 @@ class EmployeeList(SQLModel, table = True):
 
     __table_args__ = (Index("idx_employee_id", "employee_id", unique=True),)
 
+class CashAdvance(SQLModel, table=True):
+    """This is for cash advances"""
+    __tablename__ = 'cash_advance'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    employee_id_id: Optional[int] = Field(default=None, foreign_key="employee_list.id")
+    amount_deduction: float = Field(default=None)
+    is_active: bool
+    user: str =Field(default=None)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_created: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class SSSLoanDeduction(SQLModel, table=True):
+    """This is for cash advances"""
+    __tablename__ = 'sss_loan_deduction'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    employee_id_id: Optional[int] = Field(default=None, foreign_key="employee_list.id")
+    amount_deduction: float = Field(default=None)
+    is_active: bool
+    user: str =Field(default=None)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_created: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class HDMFLoanDeduction(SQLModel, table=True):
+    """This is for cash advances"""
+    __tablename__ = 'hdmf_loan_deduction'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    employee_id_id: Optional[int] = Field(default=None, foreign_key="employee_list.id")
+    amount_deduction: float = Field(default=None)
+    is_active: bool
+    user: str =Field(default=None)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_created: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+
 
     
 
