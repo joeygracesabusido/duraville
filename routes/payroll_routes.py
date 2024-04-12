@@ -243,7 +243,8 @@ def autocomplete_branch_code(term: Optional[str] = None,username: str = Depends(
                 filtered_employee = []
 
             # Construct suggestions from filtered employees
-            suggestions = [{"value": f"{item.last_name}, {item.first_name}", "id": item.id} for item in filtered_employee]
+            suggestions = [{"value": f"{item.last_name}, {item.first_name}", "id": item.id,
+                            "basic_monthly_pay":item.basic_monthly_pay} for item in filtered_employee]
            
 
             return suggestions
@@ -271,7 +272,29 @@ async def api_insert_cost_elements(items:CashAdvanceDetails,username: str = Depe
         detail="Not Authorized",
         # headers={"WWW-Authenticate": "Basic"},
     )
+
+@payroll_router.get("/payroll-computation/", response_class=HTMLResponse)
+async def api_login(request: Request,username: str = Depends(get_current_user)):
+
+    if username == 'joeysabusido' or username == 'eliza':
+
+        
+
+        return templates.TemplateResponse("payroll/payroll_computation_1st_cut_off.html", {"request": request})
+        
+        
+
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
     
+
+
+
+
 
     
 

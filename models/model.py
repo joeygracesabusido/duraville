@@ -213,6 +213,20 @@ class HDMFLoanDeduction(SQLModel, table=True):
     date_created: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
+class PayrollActivity(SQLModel, table=True):
+    """This is for table for Payroll Activity"""
+    __tablename__ = 'payroll_activity'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    date_from: date
+    date_to: date
+    late: float
+    absent: float
+    undertime: float
+    
+
+
+
+
 
 
     
