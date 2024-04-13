@@ -12,7 +12,9 @@ from routes.books import books_router
 from routes.electricity import electricity_router
 from routes.payroll_routes import payroll_router
 #from routes.forms import form_htlm
-#from routes.graph import  graphql_app
+
+
+from routes.graphql import graphql_app
 
 
 app = FastAPI()
@@ -35,7 +37,9 @@ app.include_router(smart_globe_router)
 app.include_router(books_router)
 app.include_router(electricity_router)
 app.include_router(payroll_router)
-#app.include_router(graphql_app, prefix="/graphql")
+# Mount Strawberry's GraphQL app onto FastAPI
+app.mount("/graphql", graphql_app)
+# app.include_router(graphql_app, prefix="/graphql")
 # app.include_router(graph)
 
 # app.include_router(graphql_app, prefix="/graphql")

@@ -4,6 +4,9 @@ from sqlalchemy.orm.exc import NoResultFound
 from models.model import EmployeeList, Books, CashAdvance
 from database.mongodb_connection import Connection
 
+
+from sqlalchemy.orm import selectinload
+
 engine = Connection.db()
 
 
@@ -46,6 +49,17 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 data = results.all()
                 
                 return data
+            except NoResultFound:
+                return None
+            
+
+    @staticmethod
+    def get_employee_list2():
+        with Session(engine) as session:
+            try:
+                statement = select(EmployeeList).options(selectinload(EmployeeList.Book)).order_by(EmployeeList.last_name)
+                results = session.exec(statement).all()
+                return results
             except NoResultFound:
                 return None
             
