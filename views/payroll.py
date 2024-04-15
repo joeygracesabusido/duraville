@@ -165,6 +165,55 @@ class PayrollTransaction(): # this class is for payroll  Transaction
             except NoResultFound:
                 return None
             
+    @staticmethod
+    def get_cash_advance_id(item_id): # this function is to get all the employee list
+        with Session(engine) as session:
+            try:
+                statement = select(CashAdvance,EmployeeList).where(
+                    (CashAdvance.employee_id_id == EmployeeList.id) 
+                )
+
+                
+                if item_id:
+
+                    statement.filter(CashAdvance.id == item_id)
+                            
+                    results = session.exec(statement) 
+
+                    data = results.all()
+            
+                return data
+            except NoResultFound:
+                return None
+            
+    @staticmethod   
+    def update_cash_advance(employee_id_id,amount_deduction,
+                        is_active,
+                        user,date_updated, item_id):
+        """This function is for updating Rizal Equipment"""
+
+        with Session(engine) as session:
+            statement = select(CashAdvance).where(CashAdvance.id == item_id)
+            results = session.exec(statement)
+
+            result = results.one()
+
+            
+            result.employee_id_id = employee_id_id
+            result.amount_deduction = amount_deduction
+           
+           
+           
+            result.is_active = is_active
+            
+            result.user = user
+            result.date_updated = date_updated
+
+            session.add(result)
+            session.commit()
+            session.refresh(result)
+            session.close()
+            
 
 
 

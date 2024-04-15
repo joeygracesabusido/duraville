@@ -3,12 +3,18 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from typing import Union, List, Optional
 from datetime import datetime, date , timedelta
+from fastapi.responses import JSONResponse
 
 from pydantic import BaseModel
 
 from authentication.authenticate_user import get_current_user
 
 from views.payroll import PayrollTransaction
+
+
+import strawberry
+
+from routes.graphql import graphql_app
 
 
 from views.electricity_details import ElectricityDetailsView
@@ -290,7 +296,35 @@ async def api_login(request: Request,username: str = Depends(get_current_user)):
         detail="Not Authorized",
         # headers={"WWW-Authenticate": "Basic"},
     )
+
+
+
+@payroll_router.get("/update-cash-advance/{id}")
+async def grc_template(id:Optional[int],request: Request, username: str = Depends(get_current_user)):
     
+
+    results = PayrollTransaction.get_cash_advance_id(item_id=id)
+    # results = PayrollTransaction.get_cash_advance_list()
+
+    cash_advance_data = [
+        
+            {
+                    "id":i.id,
+                    "employee_id_id":j.first_name,
+                    "amount_deduction":i.amount_deduction,
+                    "is_active":i.is_active,
+                    "user":i.user,
+                    "date_updated":i.date_updated,
+                    "date_created":i.date_created,
+               
+            }
+           for i,j in  results
+        ]
+    return cash_advance_data
+   
+    # return templates.TemplateResponse("cost/update_cost.html", {"request":request,"costData":costData})
+
+
 
 
 
