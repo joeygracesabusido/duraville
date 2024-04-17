@@ -95,8 +95,35 @@ class Query:
 
         return amounts
     
+    # @strawberry.field
+    # async def get_cash_advance_by_id(self, search_term: str) -> List[CashAdvanceDetails]:
+    #     # Assuming search_term is the item ID
+    #     data = PayrollTransaction.get_cash_advance_id(search_term)
+    #     print(data)
+        
+    #     cash_advance_details = []
+
+    #     if data:
+    #         # Process data as per your requirements and create CashAdvanceDetails objects
+            
+    #         for cash_advance, employee in data:  # Unpack the tuple
+    #             # If date_updated is None (NULL), set it to 0
+    #             date_updated = cash_advance.date_updated or 0
+    #             cash_advance_detail = CashAdvanceDetails(
+    #                 id=cash_advance.id,  # Access "id" from CashAdvance object
+    #                 employee_id_id=cash_advance.employee_id_id,
+    #                 amount_deduction=cash_advance.amount_deduction,
+    #                 is_active=cash_advance.is_active,
+    #                 user=cash_advance.user,
+    #                 date_updated=date_updated,
+    #                 date_created=cash_advance.date_created,
+                
+    #             )
+    #             cash_advance_details.append(cash_advance_detail)
+
+    #     return cash_advance_details
     @strawberry.field
-    async def get_cash_advance_by_id(self, search_term: str) -> List[CashAdvanceDetails]:
+    async def get_cash_advance_by_id(self, search_term: str) -> Optional[List[CashAdvanceDetails]]:
         # Assuming search_term is the item ID
         data = PayrollTransaction.get_cash_advance_id(search_term)
         print(data)
@@ -121,6 +148,6 @@ class Query:
                 )
                 cash_advance_details.append(cash_advance_detail)
 
-        return cash_advance_details
+        return cash_advance_details or None
 
     

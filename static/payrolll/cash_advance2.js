@@ -77,3 +77,60 @@ const insert_cash_advances = async () => {
 // Attach the event listener to the button
 const btn_save_cash_advance = document.querySelector('#btn_save_cash_advance');
 btn_save_cash_advance.addEventListener("click", insert_cash_advances);
+
+
+// jQuery code to call the modal
+$(document).ready(function() {
+    $('#btn_update_cash_advance').click(function() {
+        $('#update_cash_advance_modal').modal('show');
+    });
+});
+
+
+// jQuery code to update amount deduction field based on update_id input
+$(document).ready(function() {
+    $('#update_id').on('keyup', function() {
+        fetchData();
+    });
+
+    // $('#search_button_update').click(function() {
+    //     fetchData();
+    // });
+
+    function fetchData() {
+        var updateIdValue = $('#update_id').val();
+
+        // Make a GraphQL request to fetch data based on the update ID
+        $.ajax({
+            url: '/graphql', // Replace with your GraphQL endpoint
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                query: `
+                    query GetCashAdvanceById($searchTerm: String!) {
+                        getCashAdvanceById(searchTerm: $searchTerm) {
+                            amountDeduction
+                        }
+                    }
+                `,
+                variables: {
+                    searchTerm: updateIdValue
+                }
+            }),
+            success: function(response) {
+                // Check if response has data
+                if (response.data && response.data.getCashAdvanceById) {
+                    var amountDeductionValue = response.data.getCashAdvanceById[0].amountDeduction; // Access the first element of the array
+                    console.log(amountDeductionValue)
+                    $('#update_amount_deduction').val(amountDeductionValue);
+                } else {
+                    // Clear amount deduction field if no data found
+                    $('#update_amount_deduction').val('');
+                }
+            },
+            error: function(error) {
+                console.error('GraphQL request failed:', error);
+            }
+        });
+    }
+});

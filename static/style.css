@@ -50,3 +50,15 @@ background-color: red;
 .label-large {
 font-size: 19px; /* Adjust the font size as needed */
 }
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.btn-right {
+    margin-left: auto; /* Push the button to the right */
+    background-color: gray;
+}

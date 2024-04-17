@@ -177,6 +177,8 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 if item_id:
 
                     statement.filter(CashAdvance.id == item_id)
+                  
+
                             
                     results = session.exec(statement) 
 
@@ -187,8 +189,7 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 return None
             
     @staticmethod   
-    def update_cash_advance(employee_id_id,amount_deduction,
-                        is_active,
+    def update_cash_advance(amount_deduction,
                         user,date_updated, item_id):
         """This function is for updating Rizal Equipment"""
 
@@ -197,15 +198,8 @@ class PayrollTransaction(): # this class is for payroll  Transaction
             results = session.exec(statement)
 
             result = results.one()
-
-            
-            result.employee_id_id = employee_id_id
             result.amount_deduction = amount_deduction
-           
-           
-           
-            result.is_active = is_active
-            
+          
             result.user = user
             result.date_updated = date_updated
 
