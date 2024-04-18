@@ -131,3 +131,102 @@ $(document).ready(function() {
     populateTable();
 });
 
+
+// jQuery code to call the modal for updating the sss loan
+$(document).ready(function() {
+    
+    $('#btn_update_sss_loan').click(function() {
+        $('#update_sss_loan_modal').modal('show');
+    });
+});
+
+
+
+// jQuery code to update amount deduction field based on update_id input
+$(document).ready(function() {
+    $('#update_id').on('keyup', function() {
+        fetchData();
+    });
+
+    // $('#search_button_update').click(function() {
+    //     fetchData();
+    // });
+
+    function fetchData() {
+        var updateIdValue = $('#update_id').val();
+
+        // Make a GraphQL request to fetch data based on the update ID
+        $.ajax({
+            url: '/graphql', // Replace with your GraphQL endpoint
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                query: `
+                    query getSssLoanById($searchTerm: String!) {
+                        getSssLoanById(searchTerm: $searchTerm) {
+                            amountDeduction
+                        }
+                    }
+                `,
+                variables: {
+                    searchTerm: updateIdValue
+                }
+            }),
+            success: function(response) {
+                // Check if response has data
+                if (response.data && response.data.getSssLoanById) {
+                    var amountDeductionValue = response.data.getSssLoanById[0].amountDeduction; // Access the first element of the array
+                    console.log(amountDeductionValue)
+                    $('#update_amount_deduction').val(amountDeductionValue);
+                } else {
+                    // Clear amount deduction field if no data found
+                    $('#update_amount_deduction').val('');
+                }
+            },
+            error: function(error) {
+                console.error('GraphQL request failed:', error);
+            }
+        });
+    }
+
+});
+
+//  this function is to update 
+$(document).ready(function() {
+    // Bind fetchData function to modal show event
+   
+
+    $('#btn_save_changes').click(function() {
+        
+        updateSSSDeduction();
+    });
+
+   
+
+    function updateSSSDeduction() {
+        var id = $('#update_id').val();
+        var amountDeduction = $('#update_amount_deduction').val();
+
+        // Make an AJAX request to update the cash advance
+        $.ajax({
+            url: '/api-update-sss-loan/' + id,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                amount_deduction: amountDeduction
+            }),
+            success: function(response) {
+                // Handle success response
+                console.log('Cash advance updated successfully:', response);
+                $('#update_cash_advance_modal').modal('hide'); // Close the modal
+                window.location.href = '/insert-sss-loan/';
+            },
+            error: function(error) {
+                // Handle error response
+                console.error('Error updating cash advance:', error);
+                // Display error message to user if needed
+            }
+        });
+    }
+});
+

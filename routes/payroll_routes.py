@@ -401,6 +401,25 @@ async def insert_sss_loan(items:SssLoanDetails,username: str = Depends(get_curre
 
 
         return  {'Messeges':'Data has been Updated'}
+    
+
+    @payroll_router.put("/api-update-sss-loan/{id}")
+    async def update_sss_laon(id,items:SssLoanDetails,username: str = Depends(get_current_user)):
+        
+        if username == 'joeysabusido' or username == 'eliza':
+    
+            today = datetime.now()
+            try:
+                PayrollTransaction.update_sss_loan(amount_deduction=items.amount_deduction,
+                                                    date_updated=today,user=username,item_id=id)
+
+            except Exception as e:
+                error_message = str(e)  # Use the actual error message from the exception
+            
+                return {"error": error_message}
+
+
+            return  {'Messeges':'Data has been Updated'}
 
 
 

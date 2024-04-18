@@ -136,6 +136,8 @@ class Query:
 
         return cash_advance_details or None
     
+#=========================================SSS Loan Frame=======================================
+    
     @strawberry.field
     async def get_sss_loan_deductions(self) -> Optional[List[SSSLoanDeductionDetails]]:
         data = PayrollTransaction.get_cash_sss_loan_list()
@@ -158,5 +160,35 @@ class Query:
                 sss_loan_deduction_details.append(sss_loan_deduction_detail)
 
         return sss_loan_deduction_details or None
+    
+
+    @strawberry.field
+    async def get_sss_loan_by_id(self, search_term: str) -> Optional[List[SSSLoanDeductionDetails]]:
+        # Assuming search_term is the item ID
+        data = PayrollTransaction.get_cash_sss_loan_id(search_term)
+        
+        cash_advance_details = []
+
+        if data:
+            # Process data as per your requirements and create CashAdvanceDetails objects
+            
+            for cash_advance, employee in data:  # Unpack the tuple
+                # If date_updated is None (NULL), set it to 0
+                date_updated = cash_advance.date_updated or 0
+                cash_advance_detail = SSSLoanDeductionDetails(
+                    id=cash_advance.id,  # Access "id" from CashAdvance object
+                    employee_id=cash_advance.employee_id_id,
+                    first_name=employee.first_name,
+                    last_name=employee.last_name,
+                    amount_deduction=cash_advance.amount_deduction,
+                    is_active=cash_advance.is_active,
+                    user=cash_advance.user,
+                    date_updated=date_updated,
+                    date_created=cash_advance.date_created,
+                
+                )
+                cash_advance_details.append(cash_advance_detail)
+
+        return cash_advance_details or None
 
     

@@ -240,6 +240,45 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 return data
             except NoResultFound:
                 return None
+            
+    @staticmethod
+    def get_cash_sss_loan_id(item_id): # this function is to get all the sss loan deduction
+        with Session(engine) as session:
+            try:
+                statement = select(SSSLoanDeduction,EmployeeList).where(
+                    (SSSLoanDeduction.employee_id_id == EmployeeList.id) 
+                )
+
+                
+                if item_id:
+                    statement = statement.where(SSSLoanDeduction.id == item_id)
+                          
+                results = session.exec(statement) 
+                data = results.all()
+            
+                return data
+            except NoResultFound:
+                return None
+            
+    @staticmethod   
+    def update_sss_loan(amount_deduction,
+                        user,date_updated, item_id):
+        """This function is for updating SSS Loan"""
+
+        with Session(engine) as session:
+            statement = select(SSSLoanDeduction).where(SSSLoanDeduction.id == item_id)
+            results = session.exec(statement)
+
+            result = results.one()
+            result.amount_deduction = amount_deduction
+          
+            result.user = user
+            result.date_updated = date_updated
+
+            session.add(result)
+            session.commit()
+            session.refresh(result)
+            session.close()
 
 
 
