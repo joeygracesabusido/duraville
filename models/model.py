@@ -194,7 +194,7 @@ class SSSLoanDeduction(SQLModel, table=True):
     """This is for cash advances"""
     __tablename__ = 'sss_loan_deduction'
     id: Optional[int] = Field(default=None, primary_key=True)
-    employee_id_id: Optional[int] = Field(default=None, foreign_key="employee_list.id")
+    employee_id_id: Optional[int] = Field(index=True,default=None, foreign_key="employee_list.id")
     amount_deduction: float = Field(default=None)
     is_active: bool
     user: str =Field(default=None)
@@ -205,7 +205,7 @@ class HDMFLoanDeduction(SQLModel, table=True):
     """This is for cash advances"""
     __tablename__ = 'hdmf_loan_deduction'
     id: Optional[int] = Field(default=None, primary_key=True)
-    employee_id_id: Optional[int] = Field(default=None, foreign_key="employee_list.id")
+    employee_id_id: Optional[int] = Field(index=True,default=None, foreign_key="employee_list.id")
     amount_deduction: float = Field(default=None)
     is_active: bool
     user: str =Field(default=None)
@@ -213,15 +213,15 @@ class HDMFLoanDeduction(SQLModel, table=True):
     date_created: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
-class PayrollActivity(SQLModel, table=True):
-    """This is for table for Payroll Activity"""
-    __tablename__ = 'payroll_activity'
-    id: Optional[int] = Field(default=None, primary_key=True)
-    date_from: date
-    date_to: date
-    late: float
-    absent: float
-    undertime: float
+# class PayrollActivity(SQLModel, table=True):
+#     """This is for table for Payroll Activity"""
+#     __tablename__ = 'payroll_activity'
+#     id: Optional[int] = Field(default=None, primary_key=True)
+#     date_from: date
+#     date_to: date
+#     late: float
+#     absent: float
+#     undertime: float
     
 
 
@@ -250,4 +250,5 @@ def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
 # create_db_and_tables()
+
 

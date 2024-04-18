@@ -81,6 +81,7 @@ btn_save_cash_advance.addEventListener("click", insert_cash_advances);
 
 // jQuery code to call the modal
 $(document).ready(function() {
+    
     $('#btn_update_cash_advance').click(function() {
         $('#update_cash_advance_modal').modal('show');
     });
@@ -130,6 +131,47 @@ $(document).ready(function() {
             },
             error: function(error) {
                 console.error('GraphQL request failed:', error);
+            }
+        });
+    }
+
+});
+
+
+
+$(document).ready(function() {
+    // Bind fetchData function to modal show event
+   
+
+    $('#btn_save_changes').click(function() {
+        console.log('Im Button')
+        updateCashAdvance();
+    });
+
+   
+
+    function updateCashAdvance() {
+        var id = $('#update_id').val();
+        var amountDeduction = $('#update_amount_deduction').val();
+
+        // Make an AJAX request to update the cash advance
+        $.ajax({
+            url: '/api-update-cash-advance/' + id,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                amount_deduction: amountDeduction
+            }),
+            success: function(response) {
+                // Handle success response
+                console.log('Cash advance updated successfully:', response);
+                $('#update_cash_advance_modal').modal('hide'); // Close the modal
+                window.location.href = '/insert-cash-advance/';
+            },
+            error: function(error) {
+                // Handle error response
+                console.error('Error updating cash advance:', error);
+                // Display error message to user if needed
             }
         });
     }

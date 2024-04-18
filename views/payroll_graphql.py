@@ -32,12 +32,25 @@ class CashAdvanceList:
 @strawberry.type
 class CashAdvanceDetails:
     id: Optional[int] 
-    employee_id_id: Optional[int]
+    employee_id_id: str
     amount_deduction: float 
     is_active: bool
     user: str 
     date_updated: str  # Represent date_updated as a datetime object
     date_created: Optional[datetime]  # Assuming date_created is also a datetime object
+
+
+@strawberry.type
+class SSSLoanDeductionDetails:
+    id: Optional[int]
+    employee_id: Optional[int]
+    last_name: str
+    first_name: str
+    amount_deduction: Optional[float]
+    is_active: Optional[bool]
+    user: Optional[str]
+    date_updated: Optional[datetime]
+    date_created: Optional[datetime]
     
     
 
@@ -95,39 +108,12 @@ class Query:
 
         return amounts
     
-    # @strawberry.field
-    # async def get_cash_advance_by_id(self, search_term: str) -> List[CashAdvanceDetails]:
-    #     # Assuming search_term is the item ID
-    #     data = PayrollTransaction.get_cash_advance_id(search_term)
-    #     print(data)
-        
-    #     cash_advance_details = []
-
-    #     if data:
-    #         # Process data as per your requirements and create CashAdvanceDetails objects
-            
-    #         for cash_advance, employee in data:  # Unpack the tuple
-    #             # If date_updated is None (NULL), set it to 0
-    #             date_updated = cash_advance.date_updated or 0
-    #             cash_advance_detail = CashAdvanceDetails(
-    #                 id=cash_advance.id,  # Access "id" from CashAdvance object
-    #                 employee_id_id=cash_advance.employee_id_id,
-    #                 amount_deduction=cash_advance.amount_deduction,
-    #                 is_active=cash_advance.is_active,
-    #                 user=cash_advance.user,
-    #                 date_updated=date_updated,
-    #                 date_created=cash_advance.date_created,
-                
-    #             )
-    #             cash_advance_details.append(cash_advance_detail)
-
-    #     return cash_advance_details
+   
     @strawberry.field
     async def get_cash_advance_by_id(self, search_term: str) -> Optional[List[CashAdvanceDetails]]:
         # Assuming search_term is the item ID
         data = PayrollTransaction.get_cash_advance_id(search_term)
-        print(data)
-        
+       
         cash_advance_details = []
 
         if data:
@@ -138,7 +124,7 @@ class Query:
                 date_updated = cash_advance.date_updated or 0
                 cash_advance_detail = CashAdvanceDetails(
                     id=cash_advance.id,  # Access "id" from CashAdvance object
-                    employee_id_id=cash_advance.employee_id_id,
+                    employee_id_id=employee.first_name,
                     amount_deduction=cash_advance.amount_deduction,
                     is_active=cash_advance.is_active,
                     user=cash_advance.user,
@@ -149,5 +135,28 @@ class Query:
                 cash_advance_details.append(cash_advance_detail)
 
         return cash_advance_details or None
+    
+    @strawberry.field
+    async def get_sss_loan_deductions(self) -> Optional[List[SSSLoanDeductionDetails]]:
+        data = PayrollTransaction.get_cash_sss_loan_list()
+
+        sss_loan_deduction_details = []
+
+        if data:
+            for sss_loan_deduction, employee in data:
+                sss_loan_deduction_detail = SSSLoanDeductionDetails(
+                    id=sss_loan_deduction.id,
+                    employee_id=employee.employee_id,
+                    last_name=employee.last_name,
+                    first_name=employee.first_name,
+                    amount_deduction=sss_loan_deduction.amount_deduction,
+                    is_active=sss_loan_deduction.is_active,
+                    user=sss_loan_deduction.user,
+                    date_updated=sss_loan_deduction.date_updated,
+                    date_created=sss_loan_deduction.date_created
+                )
+                sss_loan_deduction_details.append(sss_loan_deduction_detail)
+
+        return sss_loan_deduction_details or None
 
     

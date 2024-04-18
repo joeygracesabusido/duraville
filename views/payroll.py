@@ -1,7 +1,7 @@
 from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfilter,within_group,Relationship,Index
 from sqlalchemy.orm.exc import NoResultFound
 
-from models.model import EmployeeList, Books, CashAdvance
+from models.model import EmployeeList, Books, CashAdvance, SSSLoanDeduction
 from database.mongodb_connection import Connection
 
 
@@ -130,6 +130,7 @@ class PayrollTransaction(): # this class is for payroll  Transaction
             session.refresh(result)
             session.close()
 
+#======================================Cash Advance Frame==========================================
     @staticmethod
     def insert_cash_advance(employee_id_id,amount_deduction,
                         is_active,
@@ -175,14 +176,10 @@ class PayrollTransaction(): # this class is for payroll  Transaction
 
                 
                 if item_id:
-
-                    statement.filter(CashAdvance.id == item_id)
-                  
-
-                            
-                    results = session.exec(statement) 
-
-                    data = results.all()
+                    statement = statement.where(CashAdvance.id == item_id)
+                          
+                results = session.exec(statement) 
+                data = results.all()
             
                 return data
             except NoResultFound:
@@ -208,6 +205,41 @@ class PayrollTransaction(): # this class is for payroll  Transaction
             session.refresh(result)
             session.close()
             
+#======================================SSS Loan Deduction   ==========================================
+    @staticmethod
+    def insert_sss_loan_deduction(employee_id_id,amount_deduction,
+                        is_active,
+                        user): # this is for inserting cash advances
+        
+        insertData = SSSLoanDeduction(employee_id_id=employee_id_id,amount_deduction=amount_deduction,
+                                 is_active=is_active,user=user)
+        
+
+        session = Session(engine)
+
+        session.add(insertData)
+        
+        session.commit()
+
+        session.close()
+
+
+    @staticmethod
+    def get_cash_sss_loan_list(): # this function is to get all the employee list
+        with Session(engine) as session:
+            try:
+                statement = select(SSSLoanDeduction,EmployeeList).where(
+                    (SSSLoanDeduction.employee_id_id == EmployeeList.id)  
+                ).order_by(EmployeeList.last_name)
+
+                            
+                results = session.exec(statement) 
+
+                data = results.all()
+                
+                return data
+            except NoResultFound:
+                return None
 
 
 

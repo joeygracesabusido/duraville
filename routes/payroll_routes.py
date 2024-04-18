@@ -43,14 +43,27 @@ class EmployeeListDetails(BaseModel):
 
 class CashAdvanceDetails(BaseModel):
     
-    employee_id_id: Optional[int] 
+    
     amount_deduction: float
-    is_active: bool
+    
     
     
 
     class Config:
         from_attributes = True
+
+class SssLoanDetails(BaseModel):
+    employee_id_id: Optional[int] 
+    amount_deduction: float
+    is_active: bool
+    # user: Optional[str] 
+    # date_updated: Optional[datetime] 
+    # date_created: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
 
 
 @payroll_router.get("/insert-employee-list/", response_class=HTMLResponse)
@@ -150,6 +163,9 @@ async def grc_template(id:Optional[int],request: Request, username: str = Depend
         detail="Not Authorized",
         # headers={"WWW-Authenticate": "Basic"},
     )
+
+
+
 
 
     
@@ -323,6 +339,69 @@ async def grc_template(id:Optional[int],request: Request, username: str = Depend
     return cash_advance_data
    
     # return templates.TemplateResponse("cost/update_cost.html", {"request":request,"costData":costData})
+
+@payroll_router.put("/api-update-cash-advance/{id}")
+async def update_cash_advance(id,items:CashAdvanceDetails,username: str = Depends(get_current_user)):
+    if username == 'joeysabusido' or username == 'eliza':
+   
+        today = datetime.now()
+        try:
+            PayrollTransaction.update_cash_advance(amount_deduction=items.amount_deduction,
+                                                   date_updated=today,user=username,item_id=id)
+
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
+
+
+        return  {'Messeges':'Data has been Updated'}
+    
+
+
+# =====================================This is for SSS Loan Deduction===============================
+
+@payroll_router.get("/insert-sss-loan/", response_class=HTMLResponse)
+async def api_login(request: Request,username: str = Depends(get_current_user)):
+
+    if username == 'joeysabusido' or username == 'eliza':
+
+        try:
+            
+
+            return templates.TemplateResponse("payroll/sss_loan_deduction.html", {"request": request})
+        
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
+
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
+
+@payroll_router.post("/api-insert-sss-loan/")
+async def insert_sss_loan(items:SssLoanDetails,username: str = Depends(get_current_user)):
+    if username == 'joeysabusido' or username == 'eliza':
+   
+        today = datetime.now()
+        try:
+            PayrollTransaction.insert_sss_loan_deduction(employee_id_id=items.employee_id_id,
+                                                         amount_deduction=items.amount_deduction,
+                                                         is_active=items.is_active,
+                                                         user=username)
+
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
+
+
+        return  {'Messeges':'Data has been Updated'}
+
 
 
 
