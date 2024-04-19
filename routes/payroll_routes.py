@@ -41,14 +41,18 @@ class EmployeeListDetails(BaseModel):
     class Config:
         from_attributes = True
 
+
 class CashAdvanceDetails(BaseModel):
-    
-    
+    employee_id_id: Optional[int]
     amount_deduction: float
     
-    
-    
+    class Config:
+        from_attributes = True
 
+class CashAdvanceDetails2(BaseModel):
+     
+    amount_deduction: float
+    
     class Config:
         from_attributes = True
 
@@ -56,9 +60,17 @@ class SssLoanDetails(BaseModel):
     employee_id_id: Optional[int] 
     amount_deduction: float
     is_active: bool
-    # user: Optional[str] 
+    user: Optional[str] 
     # date_updated: Optional[datetime] 
     # date_created: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+class SssLoanDetails2(BaseModel):
+    
+    amount_deduction: float
+  
 
     class Config:
         from_attributes = True
@@ -341,7 +353,7 @@ async def grc_template(id:Optional[int],request: Request, username: str = Depend
     # return templates.TemplateResponse("cost/update_cost.html", {"request":request,"costData":costData})
 
 @payroll_router.put("/api-update-cash-advance/{id}")
-async def update_cash_advance(id,items:CashAdvanceDetails,username: str = Depends(get_current_user)):
+async def update_cash_advance(id,items:CashAdvanceDetails2,username: str = Depends(get_current_user)):
     if username == 'joeysabusido' or username == 'eliza':
    
         today = datetime.now()
@@ -403,23 +415,23 @@ async def insert_sss_loan(items:SssLoanDetails,username: str = Depends(get_curre
         return  {'Messeges':'Data has been Updated'}
     
 
-    @payroll_router.put("/api-update-sss-loan/{id}")
-    async def update_sss_laon(id,items:SssLoanDetails,username: str = Depends(get_current_user)):
-        
-        if username == 'joeysabusido' or username == 'eliza':
+@payroll_router.put("/api-update-sss-loan/{id}")
+async def update_sss_laon(id,items:SssLoanDetails2,username: str = Depends(get_current_user)):
     
-            today = datetime.now()
-            try:
-                PayrollTransaction.update_sss_loan(amount_deduction=items.amount_deduction,
-                                                    date_updated=today,user=username,item_id=id)
+    if username == 'joeysabusido' or username == 'eliza':
 
-            except Exception as e:
-                error_message = str(e)  # Use the actual error message from the exception
-            
-                return {"error": error_message}
+        today = datetime.now()
+        try:
+            PayrollTransaction.update_sss_loan(amount_deduction=items.amount_deduction,
+                                                date_updated=today,user=username,item_id=id)
+
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
 
 
-            return  {'Messeges':'Data has been Updated'}
+        return  {'Messeges':'Data has been Updated'}
 
 
 
