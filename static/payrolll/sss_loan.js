@@ -108,15 +108,22 @@ $(document).ready(function() {
 
                     // Populate table rows with data
                     response.data.getSssLoanDeductions.forEach(function(item) {
+                        // var formattedAmount = parseFloat(item.amountDeduction).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        var formattedAmount = parseFloat(item.amountDeduction).toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
                         var row = '<tr>' +
                             '<td>'  + item.id + '</td>' + // Adjust this line to include ID
                             '<td>'  + item.employeeId + '</td>' + // Adjust this line to include Employee ID
                             '<td>' + item.lastName + '</td>' +
                             '<td>' + item.firstName + '</td>' +
-                            '<td>' + item.amountDeduction + '</td>' +
+                            '<td>' + formattedAmount + '</td>' +
                             '</tr>';
                         tableBody.append(row);
                     });
+                    // Initialize DataTable after populating the table
+                    $('#table_sss_loan').DataTable();
                 } else {
                     console.error('Data format error or empty data received from server.');
                 }
@@ -130,6 +137,10 @@ $(document).ready(function() {
     // Call populateTable function on document ready
     populateTable();
 });
+
+
+// this is for Data Table
+// let table = new DataTable('#table_sss_loan');
 
 
 // jQuery code to call the modal for updating the sss loan

@@ -60,8 +60,8 @@ class SssLoanDetails(BaseModel):
     employee_id_id: Optional[int] 
     amount_deduction: float
     is_active: bool
-    user: Optional[str] 
-    # date_updated: Optional[datetime] 
+    user: str | None = None
+    date_updated: datetime | None = None
     # date_created: Optional[datetime]
 
     class Config:
