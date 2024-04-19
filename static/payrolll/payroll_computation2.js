@@ -22,9 +22,10 @@ $(document).ready(function() {
             // Get the value of the input field with id 'name'
             var nameValue = $("#name").val();
             // console.log(nameValue)
-            // $("#name_for_ca").val(ui.item.value);
+            // $("#name_for").val(ui.item.value);
             $("#name_for_ca").autocomplete("search", ui.item.value);
-
+           
+            $("#name_for_ca2").autocomplete("search", ui.item.value);
            
 
             return false;
@@ -34,8 +35,12 @@ $(document).ready(function() {
   
 });
 
-// // this  function is for autocomplete for cash advances
 
+
+
+
+
+// this  function is for autocomplete for cash advances
 
 $(function() {
     $("#name_for_ca").autocomplete({
@@ -47,7 +52,7 @@ $(function() {
                 data: JSON.stringify({
                     query: `
                         query($searchTerm: String!) {
-                            getCashAdvanceByTerm(searchTerm: $searchTerm)
+                            getSssByTerm(searchTerm: $searchTerm)
                         }
                     `,
                     variables: {
@@ -56,9 +61,9 @@ $(function() {
                 }),
                 success: function(result) {
                     // Extract the autocomplete results from the GraphQL response
-                    var autocompleteResults = result.data.getCashAdvanceByTerm;
+                    var autocompleteResults = result.data.getSssByTerm;
                     // Display the autocomplete results in the 'name' input field
-                    $("#general_loan").val(autocompleteResults);
+                    $("#sss_loan").val(autocompleteResults);
                 }
             });
         },
@@ -67,10 +72,8 @@ $(function() {
 });
 
 
-
-// Define a function for the second code
-function setupSecondAutocomplete() {
-    $("#name").autocomplete({
+$(function() {
+    $("#name_for_ca2").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "/graphql",
@@ -78,7 +81,7 @@ function setupSecondAutocomplete() {
                 contentType: "application/json",
                 data: JSON.stringify({
                     query: `
-                        query($searchTerm: String!) {
+                        query GetCashAdvance($searchTerm: String!) {
                             getCashAdvanceByTerm(searchTerm: $searchTerm)
                         }
                     `,
@@ -89,14 +92,55 @@ function setupSecondAutocomplete() {
                 success: function(result) {
                     // Extract the autocomplete results from the GraphQL response
                     var autocompleteResults = result.data.getCashAdvanceByTerm;
-                    // Display the autocomplete results in the 'name' input field
-                    $("#general_loan").val(autocompleteResults);
+                   
+                    // Pass the results array to the response callback function
+                    response(autocompleteResults);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching autocomplete data:", error);
+                    response([]); // Provide an empty response in case of an error
                 }
             });
         },
-        minLength: 2 // Minimum characters before autocomplete starts
+        minLength: 2, // Minimum characters before autocomplete starts
+        select: function(event, ui) {
+            // Handle the selection event if needed
+        }
     });
-}
+});
+
+
+
+
+// Define a function for the second code
+// function setupSecondAutocomplete() {
+//     $("#name").autocomplete({
+//         source: function(request, response) {
+//             $.ajax({
+//                 url: "/graphql",
+//                 method: "POST",
+//                 contentType: "application/json",
+//                 data: JSON.stringify({
+//                     query: `
+//                         query($searchTerm: String!) {
+//                             getCashAdvanceByTerm(searchTerm: $searchTerm)
+//                         }
+//                     `,
+//                     variables: {
+//                         searchTerm: request.term
+//                     }
+//                 }),
+//                 success: function(result) {
+//                     // Extract the autocomplete results from the GraphQL response
+//                     var autocompleteResults = result.data.getCashAdvanceByTerm;
+//                     // Display the autocomplete results in the 'name' input field
+//                     $("#general_loan").val(autocompleteResults);
+//                 }
+//             });
+//         },
+//         minLength: 2 // Minimum characters before autocomplete starts
+//     });
+// }
 
 
 

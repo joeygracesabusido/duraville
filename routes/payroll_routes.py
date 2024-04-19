@@ -45,7 +45,7 @@ class EmployeeListDetails(BaseModel):
 class CashAdvanceDetails(BaseModel):
     employee_id_id: Optional[int]
     amount_deduction: float
-    
+    is_active: bool | None = None
     class Config:
         from_attributes = True
 
@@ -74,6 +74,20 @@ class SssLoanDetails2(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class HmdfLoanDetails(BaseModel):
+
+    employee_id_id: Optional[int] | None = None
+    amount_deduction: float | None = None
+    is_active: bool | None = None
+    user: str | None = None
+    date_updated: datetime | None = None
+    date_created: datetime | None = None
+
+    class Config:
+        from_attributes = True
+
 
 
 
@@ -175,15 +189,7 @@ async def grc_template(id:Optional[int],request: Request, username: str = Depend
         detail="Not Authorized",
         # headers={"WWW-Authenticate": "Basic"},
     )
-
-
-
-
-
-    
-
-    
-   
+  
 @payroll_router.put("/api-update-employee-details/{id}")
 async def updateGRCRental(id,items:EmployeeListDetails,username: str = Depends(get_current_user)):
 
@@ -432,6 +438,68 @@ async def update_sss_laon(id,items:SssLoanDetails2,username: str = Depends(get_c
 
 
         return  {'Messeges':'Data has been Updated'}
+
+# =====================================HDMF loan Frame =======================================
+@payroll_router.get("/insert-hdmf-loan/", response_class=HTMLResponse)
+async def hdmf_frame(request: Request,username: str = Depends(get_current_user)):
+
+    if username == 'joeysabusido' or username == 'eliza':
+
+        try:
+            
+
+            return templates.TemplateResponse("payroll/hdmf_loan.html", {"request": request})
+        
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
+
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
+
+@payroll_router.post("/api-insert-hdmf-loan/")
+async def insert_sss_loan(items:HmdfLoanDetails,username: str = Depends(get_current_user)):
+    if username == 'joeysabusido' or username == 'eliza':
+   
+        today = datetime.now()
+        try:
+            PayrollTransaction.insert_hdmf_loan_deduction(employee_id_id=items.employee_id_id,
+                                                         amount_deduction=items.amount_deduction,
+                                                         is_active=items.is_active,
+                                                         user=username)
+
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
+
+
+        return  {'Messeges':'Data has been Updated'}
+    
+@payroll_router.put("/api-update-hdmf-loan/{id}")
+async def update_hdmf_laon(id,items:HmdfLoanDetails,username: str = Depends(get_current_user)):
+    
+    if username == 'joeysabusido' or username == 'eliza':
+
+        today = datetime.now()
+        try:
+            PayrollTransaction.update_hdmf_loan(amount_deduction=items.amount_deduction,
+                                                date_updated=today,user=username,item_id=id)
+
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
+
+
+        return  {'Messeges':'Data has been Updated'}
+    
+
 
 
 

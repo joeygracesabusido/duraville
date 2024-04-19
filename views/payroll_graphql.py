@@ -51,6 +51,34 @@ class SSSLoanDeductionDetails:
     user: Optional[str]
     date_updated: Optional[datetime]
     date_created: Optional[datetime]
+
+@strawberry.type
+class HmdfLoanDetails:
+    id: Optional[int] 
+    employee_id: Optional[int] | None = None
+    last_name: str | None = None
+    first_name: str
+    amount_deduction: float | None = None
+    is_active: bool | None = None
+    user: str | None = None
+    date_updated: datetime | None = None
+    date_created: datetime | None = None
+
+@strawberry.type
+class jointTableDetails:
+
+    id: Optional[int] 
+    employee_id: Optional[int] | None = None
+    last_name: str | None = None
+    first_name: str
+    amount_deduction: float | None = None
+    cash_advance_amount: float | None = None
+    sss_loan_deduction_amount: float | None = None
+    hdmf_loan_deduction_amount: float | None = None
+    is_active: bool | None = None
+    user: str | None = None
+    date_updated: datetime | None = None
+    date_created: datetime | None = None
     
     
 
@@ -190,5 +218,113 @@ class Query:
                 cash_advance_details.append(cash_advance_detail)
 
         return cash_advance_details or None
+    
+    @strawberry.field
+    async def get_sss_by_term(self, search_term: str) -> List[float]:
+        data = PayrollTransaction.get_sss_loan_list()
+
+        results = search_term.split(',')
+
+        filtered_data = [
+            (ca, emp) for ca, emp in data
+            if any(result.lower() in emp.last_name.lower() or result.lower() in emp.first_name.lower() for result in results)
+        ]
+
+        amounts = [ca.amount_deduction for ca, _ in filtered_data]
+        
+        
+        
+        if not amounts:
+            return [0.0]
+
+        return amounts
+    
+
+#=========================================HDMF Loan Frame=======================================
+    
+    @strawberry.field
+    async def get_hdmf_loan_deductions(self) -> Optional[List[HmdfLoanDetails]]:
+        data = PayrollTransaction.get_hdmf_loan_list()
+
+        hdmf_loan_deduction_details = []
+
+        if data:
+            for hdmf_loan_deduction, employee in data:
+                sss_loan_deduction_detail = HmdfLoanDetails(
+                    id=hdmf_loan_deduction.id,
+                    employee_id=employee.employee_id,
+                    last_name=employee.last_name,
+                    first_name=employee.first_name,
+                    amount_deduction=hdmf_loan_deduction.amount_deduction,
+                    is_active=hdmf_loan_deduction.is_active,
+                    user=hdmf_loan_deduction.user,
+                    date_updated=hdmf_loan_deduction.date_updated,
+                    date_created=hdmf_loan_deduction.date_created
+                )
+                hdmf_loan_deduction_details.append(sss_loan_deduction_detail)
+
+        return hdmf_loan_deduction_details or None
+    
+
+    @strawberry.field
+    async def get_hdmf_loan_by_id(self, search_term: str) -> Optional[List[HmdfLoanDetails]]:
+        data = PayrollTransaction.get_hdmf_loan_id(search_term)
+
+        hdmf_loan_deduction_details = []
+
+        if data:
+            for hdmf_loan_deduction, employee in data:
+                sss_loan_deduction_detail = HmdfLoanDetails(
+                    id=hdmf_loan_deduction.id,
+                    employee_id=employee.employee_id,
+                    last_name=employee.last_name,
+                    first_name=employee.first_name,
+                    amount_deduction=hdmf_loan_deduction.amount_deduction,
+                    is_active=hdmf_loan_deduction.is_active,
+                    user=hdmf_loan_deduction.user,
+                    date_updated=hdmf_loan_deduction.date_updated,
+                    date_created=hdmf_loan_deduction.date_created
+                )
+                hdmf_loan_deduction_details.append(sss_loan_deduction_detail)
+
+        return hdmf_loan_deduction_details or None
+    
+
+    @strawberry.field
+    async def get_employee_with_deductions(self, search_term: str) -> Optional[List[jointTableDetails]]:
+        data = PayrollTransaction.testJoinTable(employee_id=search_term)  # Replace YourClassName with the appropriate class name containing the testJoinTable() method
+
+        employee_with_deductions = []
+
+        if data:
+            for item in data:
+                # Extract the relevant data from the returned tuple
+                employee = item[0]
+                cash_advance_amount = item[1]
+                sss_loan_deduction_amount = item[2]
+                hdmf_loan_deduction_amount = item[3]
+
+                # Construct the jointTableDetails object
+                employee_with_deduction = jointTableDetails(
+                    id=employee.id,
+                    employee_id=employee.employee_id,
+                    last_name=employee.last_name,
+                    first_name=employee.first_name,
+                    cash_advance_amount=cash_advance_amount,
+                    sss_loan_deduction_amount=sss_loan_deduction_amount,
+                    hdmf_loan_deduction_amount=hdmf_loan_deduction_amount
+                    # Add other fields as needed
+                )
+                employee_with_deductions.append(employee_with_deduction)
+
+        return employee_with_deductions or None
+
+
+   
+
+
+
+
+
 
     
