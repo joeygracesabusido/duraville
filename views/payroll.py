@@ -357,7 +357,7 @@ class PayrollTransaction(): # this class is for payroll  Transaction
             session.close()
 # ==================================this is for joint ==========================================
     @staticmethod
-    def testJoinTable(employee_id: int):
+    def testJoinTable():
         """Function for Testing Joining Table using sqlmodel"""
         with Session(engine) as session:
             subquery_cash_advance = (
@@ -365,7 +365,7 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                     CashAdvance.employee_id_id,
                     func.sum(CashAdvance.amount_deduction).label("totalCashAdvance")
                 )
-                .where(CashAdvance.employee_id_id == employee_id)  # Filter by employee_id
+                .where(CashAdvance.employee_id_id == EmployeeList.id)  # Filter by employee_id
                 .group_by(CashAdvance.employee_id_id)
                 .subquery()
             )
@@ -375,7 +375,7 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                     SSSLoanDeduction.employee_id_id,
                     func.sum(SSSLoanDeduction.amount_deduction).label("totalSSSLoanDeduction")
                 )
-                .where(SSSLoanDeduction.employee_id_id == employee_id)  # Filter by employee_id
+                .where(SSSLoanDeduction.employee_id_id == EmployeeList.id)  # Filter by employee_id
                 .group_by(SSSLoanDeduction.employee_id_id)
                 .subquery()
             )
@@ -385,7 +385,7 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                     HDMFLoanDeduction.employee_id_id,
                     func.sum(HDMFLoanDeduction.amount_deduction).label("totalHDMFLoanDeduction")
                 )
-                .where(HDMFLoanDeduction.employee_id_id == employee_id)  # Filter by employee_id
+                .where(HDMFLoanDeduction.employee_id_id == EmployeeList.id)  # Filter by employee_id
                 .group_by(HDMFLoanDeduction.employee_id_id)
                 .subquery()
             )

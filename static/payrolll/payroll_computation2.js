@@ -2,7 +2,7 @@ $(document).ready(function() {
     $("#name").autocomplete({
         source: function(request, response) {
             $.ajax({
-                url: "/api-acutocomplte-employee/",
+                url: "/employee-with-deductions/",
                 data: { term: request.term },
                 dataType: "json",
                 success: function(data) {
@@ -19,15 +19,9 @@ $(document).ready(function() {
             $("#name").val(ui.item.value); 
             $("#employee_id_id").val(ui.item.id);
             $("#basic_pay").val(ui.item.basic_monthly_pay / 2);
-            // Get the value of the input field with id 'name'
-            var nameValue = $("#name").val();
-            // console.log(nameValue)
-            // $("#name_for").val(ui.item.value);
-            $("#name_for_ca").autocomplete("search", ui.item.value);
-           
-            $("#name_for_ca2").autocomplete("search", ui.item.value);
-           
-
+            $("#sss_loan").val(Number(ui.item.total_sss_loan_deduction).toFixed(2));
+            $("#hdmf_loan").val(Number(ui.item.total_hdmf_loan_deduction).toFixed(2));
+            $("#general_loan").val(Number(ui.item.total_cash_advance).toFixed(2));
             return false;
         }
     });
@@ -38,76 +32,6 @@ $(document).ready(function() {
 
 
 
-
-
-// this  function is for autocomplete for cash advances
-
-$(function() {
-    $("#name_for_ca").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/graphql",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    query: `
-                        query($searchTerm: String!) {
-                            getSssByTerm(searchTerm: $searchTerm)
-                        }
-                    `,
-                    variables: {
-                        searchTerm: request.term
-                    }
-                }),
-                success: function(result) {
-                    // Extract the autocomplete results from the GraphQL response
-                    var autocompleteResults = result.data.getSssByTerm;
-                    // Display the autocomplete results in the 'name' input field
-                    $("#sss_loan").val(autocompleteResults);
-                }
-            });
-        },
-        minLength: 2 // Minimum characters before autocomplete starts
-    });
-});
-
-
-$(function() {
-    $("#name_for_ca2").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/graphql",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    query: `
-                        query GetCashAdvance($searchTerm: String!) {
-                            getCashAdvanceByTerm(searchTerm: $searchTerm)
-                        }
-                    `,
-                    variables: {
-                        searchTerm: request.term
-                    }
-                }),
-                success: function(result) {
-                    // Extract the autocomplete results from the GraphQL response
-                    var autocompleteResults = result.data.getCashAdvanceByTerm;
-                   
-                    // Pass the results array to the response callback function
-                    response(autocompleteResults);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error fetching autocomplete data:", error);
-                    response([]); // Provide an empty response in case of an error
-                }
-            });
-        },
-        minLength: 2, // Minimum characters before autocomplete starts
-        select: function(event, ui) {
-            // Handle the selection event if needed
-        }
-    });
-});
 
 
 
@@ -151,7 +75,7 @@ $(function() {
 
 $(document).ready(function() {
     $('#basic_pay,#late,#absent,#under_time,#normal_working_day_ot, \
-        #holiday_ot,#basic_pay_adjustment').on('input', function() {
+        #holiday_ot,#basic_pay_adjustment,#spl_30,#legal_holiday').on('input', function() {
         calculatetotalGross();
     });
     });
@@ -165,6 +89,8 @@ $(document).ready(function() {
     let normal_working_day_ot;
     let holiday_ot;
     let basic_pay_adjustment;
+    let spl_30;
+    let legal_holiday;
    
 
 
@@ -175,6 +101,8 @@ $(document).ready(function() {
     normal_working_day_ot = $('#normal_working_day_ot').val() || 0;
     holiday_ot = $('#holiday_ot').val() || 0;
     basic_pay_adjustment = $('#basic_pay_adjustment').val() || 0;
+    spl_30 = $('#spl_30').val() || 0;
+    legal_holiday = $('#legal_holiday').val() || 0;
     
     
     let product;
@@ -182,7 +110,9 @@ $(document).ready(function() {
     product = (parseFloat(basic_pay) + parseFloat(late)
                     + parseFloat(absent) + parseFloat(under_time)
                     + parseFloat(normal_working_day_ot) + parseFloat(holiday_ot)
-                    + parseFloat(basic_pay_adjustment));
+                    + parseFloat(basic_pay_adjustment)
+                    + parseFloat(spl_30)
+                    + parseFloat(legal_holiday));
 
     product2 = product.toFixed(2);
     const stringNumber = product.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
@@ -198,7 +128,8 @@ $(document).ready(function() {
 // this is for computation of total deduction
 
 $(document).ready(function() {
-    $('#housing_loan,#sss_loan,#hdmf_loan,#general_loan,#company_loan').on('input', function() {
+    $('#housing_loan,#sss_loan,#hdmf_loan,#general_loan,#company_loan',
+    ).on('input', function() {
         calculatetotalDeduction();
     });
     });
@@ -233,7 +164,7 @@ $(document).ready(function() {
     const stringNumber = product.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     $('#total_deduction').val(stringNumber);
     $('#total_deduction2').val(product2);
-    calculatetotalNetpay()
+   
     }
 
 

@@ -88,6 +88,20 @@ class HmdfLoanDetails(BaseModel):
     class Config:
         from_attributes = True
 
+class EmployeeWithDeductions(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    basic_monthly_pay: float
+    department: str
+    user: str
+    date_created: datetime
+    is_active: bool
+    date_updated: datetime | None = None
+    total_cash_advance: float
+    total_sss_loan_deduction: float
+    total_hdmf_loan_deduction: float
+
 
 
 
@@ -498,6 +512,71 @@ async def update_hdmf_laon(id,items:HmdfLoanDetails,username: str = Depends(get_
 
 
         return  {'Messeges':'Data has been Updated'}
+    
+@payroll_router.get("/employee-with-deductions/")
+async def get_employee_with_deductions(term: Optional[str] = None,username: str = Depends(get_current_user)):
+    data = PayrollTransaction.testJoinTable()
+    employees_with_deductions = []
+
+    for emp, ca, ss, hd in data:
+        employee_with_deductions = EmployeeWithDeductions(
+            id=emp.id,
+            first_name=emp.first_name,
+            last_name=emp.last_name,
+            basic_monthly_pay=emp.basic_monthly_pay,
+            department=emp.department,
+            user=emp.user,
+            date_created=emp.date_created,
+            is_active=emp.is_active,
+            date_updated=emp.date_updated,
+            total_cash_advance=ca if ca else 0,
+            total_sss_loan_deduction=ss if ss else 0,
+            total_hdmf_loan_deduction=hd if hd else 0
+        )
+        employees_with_deductions.append(employee_with_deductions)
+
+    # Filter employees based on the search term
+    if term:
+        term = term.lower()
+        filtered_employees = [emp for emp in employees_with_deductions if term in emp.last_name.lower() or term in emp.first_name.lower()]
+    else:
+        filtered_employees = employees_with_deductions
+
+    # Construct suggestions from filtered employees
+    suggestions = [{"value": f"{item.last_name}, {item.first_name}", "id": item.id,
+                    "basic_monthly_pay":item.basic_monthly_pay,
+                    'total_cash_advance':item.total_cash_advance,
+                    'total_sss_loan_deduction':item.total_sss_loan_deduction,
+                    'total_hdmf_loan_deduction':item.total_hdmf_loan_deduction} for item in filtered_employees]
+
+    return suggestions
+
+@payroll_router.get("/employee-with-deductions2")
+async def get_employee_with_deductions2(term: Optional[str] = None):
+    data = PayrollTransaction.testJoinTable()
+    employees_with_deductions = []
+
+    for emp, ca, ss, hd in data:
+        employee_with_deductions = {
+            "id": emp.id,
+            "first_name": emp.first_name,
+            "last_name": emp.last_name,
+            "basic_monthly_pay": emp.basic_monthly_pay,
+            "department": emp.department,
+            "user": emp.user,
+            "date_created": emp.date_created,
+            "is_active": emp.is_active,
+            "date_updated": emp.date_updated,
+            "total_cash_advance": ca if ca else 0,
+            "total_sss_loan_deduction": ss if ss else 0,
+            "total_hdmf_loan_deduction": hd if hd else 0
+        }
+        employees_with_deductions.append(employee_with_deductions)
+
+   
+
+    return employees_with_deductions
+    
     
 
 
