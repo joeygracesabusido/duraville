@@ -182,7 +182,7 @@ class Query:
     
     @strawberry.field
     async def get_sss_loan_deductions(self) -> Optional[List[SSSLoanDeductionDetails]]:
-        data = PayrollTransaction.get_cash_sss_loan_list()
+        data = PayrollTransaction.get_sss_loan_list()
 
         sss_loan_deduction_details = []
 
