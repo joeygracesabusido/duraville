@@ -213,15 +213,45 @@ class HDMFLoanDeduction(SQLModel, table=True):
     date_created: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
-# class PayrollActivity(SQLModel, table=True):
-#     """This is for table for Payroll Activity"""
-#     __tablename__ = 'payroll_activity'
-#     id: Optional[int] = Field(default=None, primary_key=True)
-#     date_from: date
-#     date_to: date
-#     late: float
-#     absent: float
-#     undertime: float
+class PayrollActivity(SQLModel, table=True):
+    """This is for table for Payroll Activity"""
+    __tablename__ = 'payroll_activity'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    date_from: date
+    date_to: date
+    payroll_date: date
+    basic_pay: float = Field(default= 0)
+    late: float = Field(default= 0)
+    absent: float = Field(default= 0)
+    undertime: float = Field(default= 0)
+    normal_working_day_ot: float = Field(default= 0)
+    spl_30: float = Field(default= 0)
+    legal: float = Field(default= 0)
+    holiday_ot: float = Field(default= 0)
+    basic_pay_adjustment: float = Field(default= 0)
+    gross_pay: float = Field(default= 0)
+    housing_loan: float = Field(default= 0)
+    sss_loan: float = Field(default= 0)
+    hdmf_loan: float = Field(default= 0)
+    general_loan:float = Field(default= 0)
+    company_loan: float = Field(default= 0)
+    other_adjustment: float = Field(default= 0)
+    total_deduction: float = Field(default= 0)
+    net_pay: float = Field(default= 0)
+    sss: float = Field(default= 0)
+    phic: float = Field(default= 0)
+    hdmf: float = Field(default= 0)
+    tax_withheld: float = Field(default= 0)
+    books: str
+    employee_specs: str
+
+    employee_id_id: Optional[int] = Field(index=True,default=None, foreign_key="employee_list.id")
+
+
+    user: str =Field(default=None)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_created: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    
     
 
 
@@ -229,19 +259,6 @@ class HDMFLoanDeduction(SQLModel, table=True):
 
 
 
-    
-
-
-
-
-
-# class Department(SQLModel, table=True):
-#     """This is for department table"""
-#     __tablename__ = 'department'
-#     id: Optional[int] = Field(default=None, primary_key=True)
-#     department: str =Field(index=True, unique=True)
-
-#     __table_args__ = (Index("idx_department_unique", "department", unique=True),)
 
 
 

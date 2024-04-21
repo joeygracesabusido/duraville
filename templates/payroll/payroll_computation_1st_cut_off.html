@@ -31,10 +31,57 @@
               
               </div>
             </div>
+
+
+            <div class="col-md">
+              <div class="form-floating">
+                <input type="date" class="form-control" id="payroll_date" >
+                <label for="floatingInputGrid" class="label-large">Payroll Date</label>
+  
+              
+              </div>
+            </div>
   
             
         </div>
         <br>
+
+
+        <div class="row g-3">
+
+          <div class="col-md">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="books" >
+                <label for="floatingInputGrid"class="label-large" >BOOKS</label>
+              </div>
+            </div>
+            
+            <div class="col-md">
+              <div class="form-floating">
+                <select class="form-select" id="employee_specs" aria-label="Floating label select example">
+                  <option value="Personel">Personel</option>
+                  <option value="Officer">Officer</option>
+                 
+              </select>
+                <label for="floatingInputGrid"class="label-large" >Employee Specs</label>
+              </div>
+            </div>
+
+            <div class="col-md">
+              <div class="form-floating">
+                <input type="number" class="form-control" id="for_waiting" hidden>
+                
+              </div>
+            </div>
+         
+      
+      </div>
+
+  
+      <br>
+
+
+
 
         <div class="row g-2">
             <div class="col-md">
@@ -52,35 +99,30 @@
               
               </div>
             </div>
+
+            <div class="col-md">
+              <div class="form-floating">
+                <input type="number" class="form-control" id="late" >
+                <label for="floatingInputGrid"class="label-large" >LATE</label>
+              </div>
+            </div>
   
             
         </div>
         <br>
-        <div class="row g-2">
-
-            <div class="col-md">
-                <div class="form-floating">
-                  <input type="number" class="form-control" id="late" >
-                  <label for="floatingInputGrid"class="label-large" >LATE</label>
-                </div>
-              </div>
-              
-              <div class="col-md">
-                <div class="form-floating">
-                  <input type="number" class="form-control" id="absent" >
-                  <label for="floatingInputGrid" class="label-large">ABSENT</label>
-    
-                
-                </div>
-              </div>
-           
-        
-        </div>
-
-    
-        <br>
+       
 
         <div class="row g-2">
+
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="absent" >
+              <label for="floatingInputGrid" class="label-large">ABSENT</label>
+
+            
+            </div>
+
+          </div>
 
             <div class="col-md">
                 <div class="form-floating">
@@ -122,31 +164,13 @@
                 
                 </div>
               </div>
-           
-        
-        </div>
 
-    
-        <br>
-
-
-        <div class="row g-2">
-
-            <div class="col-md">
+              <div class="col-md">
                 <div class="form-floating">
                   <input type="number" class="form-control" id="holiday_ot" >
                   <label for="floatingInputGrid"class="label-large" >HOLIDAY OT</label>
                 </div>
               </div>
-              
-              <div class="col-md">
-                <div class="form-floating">
-                  <input type="number" class="form-control" id="basic_pay_adjustment" >
-                  <label for="floatingInputGrid" class="label-large">BASIC PAY ADJUSTMENT</label>
-    
-                
-                </div>
-              </div>
            
         
         </div>
@@ -156,6 +180,28 @@
 
 
         <div class="row g-2">
+
+            
+              
+              
+           
+        
+        </div>
+
+    
+        <br>
+
+
+        <div class="row g-2">
+
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="basic_pay_adjustment" >
+              <label for="floatingInputGrid" class="label-large">BASIC PAY ADJUSTMENT</label>
+
+            
+            </div>
+          </div>
 
             <div class="col-md">
                 <div class="form-floating">
@@ -196,30 +242,14 @@
                 
                 </div>
               </div>
-           
-        
-        </div>
 
-    
-        <br>
 
-        <div class="row g-2">
-
-            <div class="col-md">
+              <div class="col-md">
                 <div class="form-floating">
                   <input type="number" class="form-control" id="hdmf_loan" >
                   <label for="floatingInputGrid"class="label-large" >HDMF LOAN</label>
                 </div>
               </div>
-              
-              <div class="col-md">
-                <div class="form-floating">
-                  <input type="number" class="form-control" id="general_loan" >
-                  <label for="floatingInputGrid" class="label-large">GENERAL LOAN</label>
-    
-                
-                </div>
-              </div>
            
         
         </div>
@@ -227,8 +257,18 @@
     
         <br>
 
+        
 
-        <div class="row g-2">
+        <div class="row g-3">
+
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="general_loan" >
+              <label for="floatingInputGrid" class="label-large">GENERAL LOAN</label>
+
+            
+            </div>
+          </div>
 
             <div class="col-md">
                 <div class="form-floating">
@@ -236,23 +276,36 @@
                   <label for="floatingInputGrid"class="label-large" >COMPANY LOAN</label>
                 </div>
               </div>
-              
+
+
               <div class="col-md">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="total_deduction" style="background-color: yellow;" >
-                  <label for="floatingInputGrid" class="label-large">TOTAL DEDUCTION</label>
+                  <input type="text" class="form-control" id="other_adjustment"  >
+                  <label for="floatingInputGrid" class="label-large">OTHER ADJUSTMENT</label>
     
                 
                 </div>
               </div>
+              
+              
            
         
         </div>
 
-    
         <br>
 
-        <div class="row g-2">
+       
+
+        <div class="row g-3">
+
+          <div class="col-md">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="total_deduction" style="background-color: yellow;" >
+              <label for="floatingInputGrid" class="label-large">TOTAL DEDUCTION</label>
+
+            
+            </div>
+          </div>
 
             <div class="col-md">
                 <div class="form-floating">
@@ -263,23 +316,31 @@
               
               <div class="col-md">
                 <div class="form-floating">
-                  <input type="number" class="form-control" id="total_deduction2" hidden >
+                  <input type="number" class="form-control" id="net_pay2" hidden >
+                  
+                </div>
+              </div>
+
+              <div class="col-md">
+                <div class="form-floating">
+                  <input type="number" class="form-control" id="total_deduction2" hidden>
                   
                 </div>
               </div>
            
         
         </div>
+        <br>
 
 
         <div class="row g-2">
 
           <div class="col-md">
-              <div class="form-floating">
-                <input type="text" class="form-control" id="name_for_ca" hidden>
-                
-              </div>
+            <div class="form-floating">
+              <input type="text" class="form-control" id="employee_id_id" hidden >
+             
             </div>
+          </div>
             
             
          
@@ -295,7 +356,7 @@
 
 
         
-        <button type="button" id="btn_save_cash_advance" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+        <button type="button" id="btn_save_payroll_computation" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
             
         <br>
 

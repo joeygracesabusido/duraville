@@ -1,7 +1,7 @@
 from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfilter,within_group,Relationship,Index
 from sqlalchemy.orm.exc import NoResultFound
 
-from models.model import EmployeeList, Books, CashAdvance, SSSLoanDeduction, HDMFLoanDeduction
+from models.model import EmployeeList, Books, CashAdvance, SSSLoanDeduction, HDMFLoanDeduction,PayrollActivity
 from database.mongodb_connection import Connection
 
 
@@ -356,6 +356,63 @@ class PayrollTransaction(): # this class is for payroll  Transaction
             session.refresh(result)
             session.close()
 # ==================================this is for joint ==========================================
+    # @staticmethod
+    # def testJoinTable():
+    #     """Function for Testing Joining Table using sqlmodel"""
+    #     with Session(engine) as session:
+    #         subquery_cash_advance = (
+    #             select(
+    #                 CashAdvance.employee_id_id,
+    #                 func.sum(CashAdvance.amount_deduction).label("totalCashAdvance")
+    #             )
+    #             .where(CashAdvance.employee_id_id == EmployeeList.id)  # Filter by employee_id
+    #             .group_by(CashAdvance.employee_id_id)
+    #             .subquery()
+    #         )
+
+    #         subquery_sss_loan = (
+    #             select(
+    #                 SSSLoanDeduction.employee_id_id,
+    #                 func.sum(SSSLoanDeduction.amount_deduction).label("totalSSSLoanDeduction")
+    #             )
+    #             .where(SSSLoanDeduction.employee_id_id == EmployeeList.id)  # Filter by employee_id
+    #             .group_by(SSSLoanDeduction.employee_id_id)
+    #             .subquery()
+    #         )
+
+    #         subquery_hdmf_loan = (
+    #             select(
+    #                 HDMFLoanDeduction.employee_id_id,
+    #                 func.sum(HDMFLoanDeduction.amount_deduction).label("totalHDMFLoanDeduction")
+    #             )
+    #             .where(HDMFLoanDeduction.employee_id_id == EmployeeList.id)  # Filter by employee_id
+    #             .group_by(HDMFLoanDeduction.employee_id_id)
+    #             .subquery()
+    #         )
+
+    #         statement = select(EmployeeList,Books).where(
+    #                 (EmployeeList.book_id == Books.id)  
+    #             ).order_by(EmployeeList.last_name)
+
+    #         statement = (
+    #             select(
+    #                 EmployeeList,
+    #                 func.coalesce(subquery_cash_advance.c.totalCashAdvance, 0).label("TotalCashAdvance"),
+    #                 func.coalesce(subquery_sss_loan.c.totalSSSLoanDeduction, 0).label("TotalSSSLoanDeduction"),
+    #                 func.coalesce(subquery_hdmf_loan.c.totalHDMFLoanDeduction, 0).label("TotalHDMFLoanDeduction")
+    #             )
+    #             .select_from(EmployeeList)
+    #             .outerjoin(subquery_cash_advance, EmployeeList.id == subquery_cash_advance.c.employee_id_id)
+    #             .outerjoin(subquery_sss_loan, EmployeeList.id == subquery_sss_loan.c.employee_id_id)
+    #             .outerjoin(subquery_hdmf_loan, EmployeeList.id == subquery_hdmf_loan.c.employee_id_id)
+    #             .order_by(EmployeeList.id)
+    #         )
+
+
+    #         results = session.exec(statement)
+    #         data = results.all()
+    #         return data
+        
     @staticmethod
     def testJoinTable():
         """Function for Testing Joining Table using sqlmodel"""
@@ -390,24 +447,75 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 .subquery()
             )
 
-            statement = (
+            final_statement = (
                 select(
                     EmployeeList,
+                    Books,
                     func.coalesce(subquery_cash_advance.c.totalCashAdvance, 0).label("TotalCashAdvance"),
                     func.coalesce(subquery_sss_loan.c.totalSSSLoanDeduction, 0).label("TotalSSSLoanDeduction"),
                     func.coalesce(subquery_hdmf_loan.c.totalHDMFLoanDeduction, 0).label("TotalHDMFLoanDeduction")
                 )
                 .select_from(EmployeeList)
+                .join(Books, EmployeeList.book_id == Books.id)
                 .outerjoin(subquery_cash_advance, EmployeeList.id == subquery_cash_advance.c.employee_id_id)
                 .outerjoin(subquery_sss_loan, EmployeeList.id == subquery_sss_loan.c.employee_id_id)
                 .outerjoin(subquery_hdmf_loan, EmployeeList.id == subquery_hdmf_loan.c.employee_id_id)
                 .order_by(EmployeeList.id)
             )
 
-            results = session.exec(statement)
+            results = session.exec(final_statement)
             data = results.all()
             return data
+    
 
+    @staticmethod
+    def insert_payroll_activity(
+                                date_from, date_to, payroll_date, basic_pay, late, absent, undertime, 
+                                normal_working_day_ot, spl_30, legal, holiday_ot, basic_pay_adjustment, 
+                                gross_pay, housing_loan, sss_loan, hdmf_loan, general_loan, 
+                                company_loan, other_adjustment, total_deduction, net_pay, sss, 
+                                phic, hdmf, tax_withheld, books, employee_specs, employee_id_id, user
+                            ): # this function is for inserting payroll acitivity
+
+        insertData = PayrollActivity(date_from=date_from,
+                date_to=date_to,
+                payroll_date=payroll_date,
+                basic_pay=basic_pay,
+                late=late,
+                absent=absent,
+                undertime=undertime,
+                normal_working_day_ot=normal_working_day_ot,
+                spl_30=spl_30,
+                legal=legal,
+                holiday_ot=holiday_ot,
+                basic_pay_adjustment=basic_pay_adjustment,
+                gross_pay=gross_pay,
+                housing_loan=housing_loan,
+                sss_loan=sss_loan,
+                hdmf_loan=hdmf_loan,
+                general_loan=general_loan,
+                company_loan=company_loan,
+                other_adjustment=other_adjustment,
+                total_deduction=total_deduction,
+                sss=sss,
+                phic=phic,
+                hdmf=hdmf,
+                tax_withheld=tax_withheld,
+                net_pay=net_pay,
+                books=books,
+                employee_specs=employee_specs,
+                employee_id_id=employee_id_id,
+                user=user,)
+            
+
+        session = Session(engine)
+
+        session.add(insertData)
+        
+        session.commit()
+
+        session.close()
+       
 
 
         

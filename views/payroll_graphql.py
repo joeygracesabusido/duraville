@@ -85,8 +85,10 @@ class EmployeeListObject:
     id: int
     first_name: str
     last_name: str
+    name: str | None = None
     basic_monthly_pay: float
     department: str
+    books: str | None = None
     user: str
     date_created: datetime
     is_active: bool
@@ -338,12 +340,14 @@ class Query:
         data = PayrollTransaction.testJoinTable()
         employees_with_deductions = []
 
-        for emp, ca, ss, hd in data:
+        for emp, bok,ca, ss, hd in data:
             employee_with_deductions = EmployeeListObject(
                 id=emp.id,
                 first_name=emp.first_name,
                 last_name=emp.last_name,
+                name=f"{emp.last_name}, {emp.first_name}",
                 basic_monthly_pay=emp.basic_monthly_pay,
+                books=bok.project,
                 department=emp.department,
                 user=emp.user,
                 date_created=emp.date_created,
@@ -362,4 +366,15 @@ class Query:
         else:
             filtered_employees = employees_with_deductions
 
+        # Construct suggestions from filtered employees
+        print(filtered_employees)
+        
+        
+
         return filtered_employees
+    
+   
+    
+
+    
+

@@ -102,7 +102,49 @@ class EmployeeWithDeductions(BaseModel):
     total_sss_loan_deduction: float
     total_hdmf_loan_deduction: float
 
+    class Config:
+        from_attributes = True
 
+
+class PayrollActivityDetails(BaseModel):
+    date_from: date 
+    date_to: date
+    payroll_date: date
+    basic_pay: float
+    late: float 
+    absent: float 
+    undertime: float 
+    normal_working_day_ot: float 
+    spl_30: float 
+    legal: float 
+    holiday_ot: float 
+    basic_pay_adjustment: float
+    gross_pay: float 
+    housing_loan: float
+    sss_loan: float 
+    hdmf_loan: float 
+    general_loan:float 
+    company_loan: float 
+    other_adjustment: float 
+    total_deduction: float 
+    net_pay: float 
+    sss: float | None = None
+    phic: float | None = None
+    hdmf: float  | None = None
+    tax_withheld: float | None = None
+    books: str
+    employee_specs: str
+
+    employee_id_id: Optional[int] 
+
+
+    user: str | None = None
+    date_updated: datetime | None = None
+    date_created: datetime | None = None
+
+    class Config:
+        from_attributes = True
+    
 
 
 
@@ -576,6 +618,59 @@ async def get_employee_with_deductions2(term: Optional[str] = None):
    
 
     return employees_with_deductions
+
+
+@payroll_router.post("/api-insert-payroll-activity/")
+async def api_insert_payroll_activity(items:PayrollActivityDetails, username: str = Depends(get_current_user)):
+
+    if username == 'joeysabusido' or username == 'eliza':
+        try:
+           
+
+            PayrollTransaction.insert_payroll_activity(
+                date_from=items.date_from,
+                date_to=items.date_to,
+                payroll_date=items.payroll_date,
+                basic_pay=items.basic_pay,
+                late=items.late,
+                absent=items.absent,
+                undertime=items.undertime,
+                normal_working_day_ot=items.normal_working_day_ot,
+                spl_30=items.spl_30,
+                legal=items.legal,
+                holiday_ot=items.holiday_ot,
+                basic_pay_adjustment=items.basic_pay_adjustment,
+                gross_pay=items.gross_pay,
+                housing_loan=items.housing_loan,
+                sss_loan=items.sss_loan,
+                hdmf_loan=items.hdmf_loan,
+                general_loan=items.general_loan,
+                company_loan=items.company_loan,
+                other_adjustment=items.other_adjustment,
+                total_deduction=items.total_deduction,
+                net_pay=items.net_pay,
+                sss=items.sss,
+                phic=items.phic,
+                hdmf=items.hdmf,
+                tax_withheld=items.tax_withheld,
+                books=items.books,
+                employee_specs=items.employee_specs,
+                employee_id_id=items.employee_id_id,
+                user=username
+            )
+
+            return {"message": "Data has been saved"}
+
+        except Exception as e:
+            error_message = str(e)
+            raise HTTPException(status_code=500, detail=error_message)
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
+
     
     
 
