@@ -120,12 +120,12 @@ class PayrollActivityDetails(BaseModel):
     holiday_ot: float 
     basic_pay_adjustment: float
     gross_pay: float 
-    housing_loan: float
-    sss_loan: float 
-    hdmf_loan: float 
-    general_loan:float 
-    company_loan: float 
-    other_adjustment: float 
+    housing_loan: float | None = None
+    sss_loan: float | None = None
+    hdmf_loan: float | None = None
+    general_loan:float | None = None
+    company_loan: float | None = None
+    other_adjustment: float | None = None
     total_deduction: float 
     net_pay: float 
     sss: float | None = None
@@ -671,8 +671,46 @@ async def api_insert_payroll_activity(items:PayrollActivityDetails, username: st
         # headers={"WWW-Authenticate": "Basic"},
     )
 
-    
-    
+@payroll_router.get("/payroll-report-display/", response_class=HTMLResponse)
+async def payroll_reports(request: Request,username: str = Depends(get_current_user)):
+
+    if username == 'joeysabusido' or username == 'eliza':
+
+        try:
+            
+
+            return templates.TemplateResponse("reports/payroll_activity.html", {"request": request})
+        
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
+
+
+@payroll_router.get("/payroll-2nd-comp/", response_class=HTMLResponse) # this function is for templae for 2nd cut-off
+async def payroll_computation_2nd(request: Request,username: str = Depends(get_current_user)):
+
+    if username == 'joeysabusido' or username == 'eliza':
+
+        try:
+            
+
+            return templates.TemplateResponse("payroll/payroll_computation_2nd_cut_off.html", {"request": request})
+        
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
 
 
 

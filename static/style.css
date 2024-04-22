@@ -87,3 +87,11 @@ font-size: 19px; /* Adjust the font size as needed */
     background-color: rgba(0, 0, 0, 0.5); /* Color of the scrollbar thumb */
     border-radius: 4px; /* Radius of the scrollbar thumb */
 }
+
+#body {
+    width: 60%; /* Set the width of the div element */
+    margin: auto; /* Center the div */
+    border-width: 1px;
+    /* border-style: solid; */
+   
+}

@@ -515,6 +515,24 @@ class PayrollTransaction(): # this class is for payroll  Transaction
         session.commit()
 
         session.close()
+
+    @staticmethod
+    def get_payroll_all(): # this function is to query for payroll activity
+        with Session(engine) as session:
+            try:
+                statement = select(PayrollActivity,EmployeeList).where(
+                    (PayrollActivity.employee_id_id == EmployeeList.id) 
+                )
+
+                                
+                results = session.exec(statement) 
+                data = results.all()
+            
+                return data
+            except NoResultFound:
+                return None
+
+    
        
 
 
