@@ -8,9 +8,9 @@ engine = Connection.db()
 
 class BooksView():
     @staticmethod
-    def insert_books_details(company_id,project,user,date_credited):
+    def insert_books_details(company_id,project,user):
         """This function is for inserting books"""
-        insertData = Books(company_id=company_id,project=project,user=user,date_credited=date_credited)
+        insertData = Books(company_id=company_id,project=project,user=user)
         
 
         session = Session(engine)

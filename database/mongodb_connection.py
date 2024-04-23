@@ -7,9 +7,9 @@ import pymongo
 
 
 def create_mongo_client():
-    var_url = f"mongodb+srv://joeysabusido:genesis11@cluster0.bmdqy.mongodb.net/ldglobal?retryWrites=true&w=majority"
+    var_url = f"mongodb+srv://joeysabusido:genesis11@cluster0.r76lv.mongodb.net/drdc_payroll?retryWrites=true&w=majority"
     client = MongoClient(var_url, maxPoolSize=None)
-    conn = client['accounting_database']
+    conn = client['drdc_payroll']
 
     return conn 
 

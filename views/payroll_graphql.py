@@ -3,9 +3,19 @@ from typing import Optional,List
 
 from datetime import date, datetime
 
+
 # import datetime
 
+
+from fastapi import APIRouter, Body, HTTPException, Depends, Request, Response, status
+
 from views.payroll import PayrollTransaction
+from views.books import BooksView
+
+from authentication.authenticate_user import get_current_user
+
+from database.mongodb_connection import create_mongo_client
+mydb = create_mongo_client()
 
 
 @strawberry.type
@@ -133,6 +143,17 @@ class PayrollActivityDetails:
     user: str | None = None
     date_updated: datetime | None = None
     date_created: datetime | None = None
+
+@strawberry.type
+class SssTableObject:
+    rate_from: float  | None = None
+    rate_to: float | None = None
+    employee_shares: float | None = None
+    ss_provident_emp: float | None = None
+    employer_Share: float | None = None
+    ss_provident_empr: float | None = None
+    ecc: float | None = None
+   
     
 
 @strawberry.type
@@ -415,48 +436,109 @@ class Query:
     async def get_payroll_all_api(self) -> Optional[List[PayrollActivityDetails]]:
         data = PayrollTransaction.get_payroll_all()
 
-        payroll_activities = []
-        for payroll_activity, employee in data:
-            payroll_activity_detail = PayrollActivityDetails(
-                date_from=payroll_activity.date_from,
-                date_to=payroll_activity.date_to,
-                payroll_date=payroll_activity.payroll_date,
-                basic_pay=payroll_activity.basic_pay,
-                late=payroll_activity.late,
-                absent=payroll_activity.absent,
-                undertime=payroll_activity.undertime,
-                normal_working_day_ot=payroll_activity.normal_working_day_ot,
-                spl_30=payroll_activity.spl_30,
-                legal=payroll_activity.legal,
-                holiday_ot=payroll_activity.holiday_ot,
-                basic_pay_adjustment=payroll_activity.basic_pay_adjustment,
-                gross_pay=payroll_activity.gross_pay,
-                housing_loan=payroll_activity.housing_loan,
-                sss_loan=payroll_activity.sss_loan,
-                hdmf_loan=payroll_activity.hdmf_loan,
-                general_loan=payroll_activity.general_loan,
-                company_loan=payroll_activity.company_loan,
-                other_adjustment=payroll_activity.other_adjustment,
-                total_deduction=payroll_activity.total_deduction,
-                net_pay=payroll_activity.net_pay,
-                sss=payroll_activity.sss,
-                phic=payroll_activity.phic,
-                hdmf=payroll_activity.hdmf,
-                tax_withheld=payroll_activity.tax_withheld,
-                books=payroll_activity.books,
-                employee_specs=payroll_activity.employee_specs,
-                employee_id_id=payroll_activity.employee_id_id,
-                name=f"{employee.last_name}, {employee.first_name}",
-                user=payroll_activity.user,
-                date_updated=payroll_activity.date_updated,
-                date_created=payroll_activity.date_created
-            )
-            payroll_activities.append(payroll_activity_detail)
+        username: str = Depends(get_current_user)
 
-        return payroll_activities
+        if username:
+
+            payroll_activities = []
+            for payroll_activity, employee in data:
+                payroll_activity_detail = PayrollActivityDetails(
+                    date_from=payroll_activity.date_from,
+                    date_to=payroll_activity.date_to,
+                    payroll_date=payroll_activity.payroll_date,
+                    basic_pay=payroll_activity.basic_pay,
+                    late=payroll_activity.late,
+                    absent=payroll_activity.absent,
+                    undertime=payroll_activity.undertime,
+                    normal_working_day_ot=payroll_activity.normal_working_day_ot,
+                    spl_30=payroll_activity.spl_30,
+                    legal=payroll_activity.legal,
+                    holiday_ot=payroll_activity.holiday_ot,
+                    basic_pay_adjustment=payroll_activity.basic_pay_adjustment,
+                    gross_pay=payroll_activity.gross_pay,
+                    housing_loan=payroll_activity.housing_loan,
+                    sss_loan=payroll_activity.sss_loan,
+                    hdmf_loan=payroll_activity.hdmf_loan,
+                    general_loan=payroll_activity.general_loan,
+                    company_loan=payroll_activity.company_loan,
+                    other_adjustment=payroll_activity.other_adjustment,
+                    total_deduction=payroll_activity.total_deduction,
+                    net_pay=payroll_activity.net_pay,
+                    sss=payroll_activity.sss,
+                    phic=payroll_activity.phic,
+                    hdmf=payroll_activity.hdmf,
+                    tax_withheld=payroll_activity.tax_withheld,
+                    books=payroll_activity.books,
+                    employee_specs=payroll_activity.employee_specs,
+                    employee_id_id=payroll_activity.employee_id_id,
+                    name=f"{employee.last_name}, {employee.first_name}",
+                    user=payroll_activity.user,
+                    date_updated=payroll_activity.date_updated,
+                    date_created=payroll_activity.date_created
+                )
+                payroll_activities.append(payroll_activity_detail)
+
+            return payroll_activities
+        
+        raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
    
-   
+    @strawberry.field
+    async def get_sss_table(self, amount: float) -> Optional[List[SssTableObject]]:
+
+        # results = mydb.sss_table.find()
+
+        query = {
+        "rate_from": {"$lte": amount},
+        "rate_to": {"$gte": amount}
+        }
+
+        # Retrieve the document matching the query
+        results = mydb.sss_table.find_one(query)
+
+        # sssTableData = [SssTableObject(rate_from=x['rate_from'],rate_to=x['rate_to'],
+        #                                employee_shares=x['employee_share'],
+        #                                ss_provident_emp=x['ss_provident_emp'],
+        #                                employer_Share=x['employer_Share'],
+        #                                ss_provident_empr=x['ss_provident_empr'],
+        #                                ecc=x['ecc']) for x in results]
+
+         # Convert the result to SssTableObject
+        if results:
+            sssTableData = [SssTableObject(employee_shares=results['employee_share'],
+                                           ss_provident_emp=results['ss_provident_emp'],
+                                           employer_Share=results['employer_Share'],
+                                           ss_provident_empr=results['ss_provident_empr'],
+                                            ecc=results['ecc']) ]
+        else:
+            sssTableData = []
+
+
+        return sssTableData
+
+
+
     
 
-    
 
+# ========================================This is for Mutation ===========================================
+@strawberry.type
+class Mutation:
+
+    @strawberry.mutation
+    async def insert_books(company_id: int,project: str,
+                          ) -> str:
+        username: str = Depends(get_current_user)
+        
+        if username:
+            BooksView.insert_books_details(company_id=company_id,project=project,user=username)
+
+
+        raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
