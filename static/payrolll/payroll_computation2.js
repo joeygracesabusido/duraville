@@ -111,6 +111,7 @@ $(document).ready(function() {
     $('#basic_pay,#late,#absent,#under_time,#normal_working_day_ot, \
         #holiday_ot,#basic_pay_adjustment,#spl_30,#legal_holiday').on('input', function() {
         calculatetotalGross();
+        calculatetotalDeduction()
     });
     });
 
@@ -153,7 +154,7 @@ $(document).ready(function() {
     $('#gross_pay').val(stringNumber);
     $('#gross_pay2').val(product2);
     
-    calculatetotalDeduction()
+   
     calculatetotalNetpay()
 
     }

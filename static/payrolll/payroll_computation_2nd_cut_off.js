@@ -93,8 +93,10 @@ $( function() {
         success: function(data) {
           const empshares = data.data.getSssTable.map(item => item.employeeShares);
           const ssProvidentEmp = data.data.getSssTable.map(item => item.ssProvidentEmp);
+          const otherdeduction = parseFloat(0)
           $("#sss").val(empshares);
           $("#sss_provident").val(ssProvidentEmp);
+          $("#other_adjustment").val(otherdeduction);
 
           
 
@@ -116,6 +118,8 @@ $( function() {
           $("#hdmf").val(hdmf_comp);
         
           last_cutoff_gross()
+          calculatetotalDeduction()
+          calculatetotalNetpay();
           
         },
         error: function(xhr, status, error) {
