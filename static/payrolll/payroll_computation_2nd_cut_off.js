@@ -283,7 +283,7 @@ function with_tax_calculation() {
     // this is for computation of total deduction
 
 $(document).ready(function() {
-    $('#sss,#sss_provident,#phic,#hdmf,#other_adjustment').on('input', function() {
+    $('#sss,#sss_provident,#phic,#hdmf,#other_adjustment,#tax_withheld').on('input', function() {
         calculatetotalDeduction();
         calculatetotalNetpay();
        
@@ -296,6 +296,7 @@ $(document).ready(function() {
     let sss_provident;
     let phic;
     let hdmf;
+    let tax_withheld;
     let other_adjustment;
    
    
@@ -306,6 +307,7 @@ $(document).ready(function() {
     sss_provident = $('#sss_provident').val() || 0;
     phic = $('#phic').val() || 0;
     hdmf = $('#hdmf').val() || 0;
+    tax_withheld = $('#tax_withheld').val() || 0;
     other_adjustment =  $('#other_adjustment').val() || 0;
     
     
@@ -314,7 +316,7 @@ $(document).ready(function() {
     let product2
     product = (parseFloat(sss) + parseFloat(sss_provident)
                     + parseFloat(phic) + parseFloat(hdmf)
-                    + parseFloat(other_adjustment)
+                    + parseFloat(other_adjustment) +parseFloat(tax_withheld)
                     );
 
     product2 = product.toFixed(2);
