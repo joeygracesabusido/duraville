@@ -131,6 +131,7 @@ class PayrollActivityDetails:
     total_deduction: float 
     net_pay: float 
     sss: float | None = None
+    sss_provident_emp: float | None = None
     phic: float | None = None
     hdmf: float  | None = None
     tax_withheld: float | None = None
@@ -518,6 +519,59 @@ class Query:
 
 
         return sssTableData
+    
+ 
+    @strawberry.field
+    async def get_api_payroll_for_tax_comp(self, payroll_date: Optional[str],
+                                            employee_id_search: Optional[int] ) -> Optional[List[PayrollActivityDetails]]: 
+        """this  function is for getting the last Cut-off Payroll for with holding Tax Purposes"""
+        data = PayrollTransaction.get_payroll_for_tax_comp(payroll_date=payroll_date,
+                                                           employee_id_search=employee_id_search)
+
+       
+        payroll_activities = []
+        for payroll_activity, employee in data:
+            payroll_activity_detail = PayrollActivityDetails(
+                date_from=payroll_activity.date_from,
+                date_to=payroll_activity.date_to,
+                payroll_date=payroll_activity.payroll_date,
+                basic_pay=payroll_activity.basic_pay,
+                late=payroll_activity.late,
+                absent=payroll_activity.absent,
+                undertime=payroll_activity.undertime,
+                normal_working_day_ot=payroll_activity.normal_working_day_ot,
+                spl_30=payroll_activity.spl_30,
+                legal=payroll_activity.legal,
+                holiday_ot=payroll_activity.holiday_ot,
+                basic_pay_adjustment=payroll_activity.basic_pay_adjustment,
+                gross_pay=payroll_activity.gross_pay,
+                housing_loan=payroll_activity.housing_loan,
+                sss_loan=payroll_activity.sss_loan,
+                hdmf_loan=payroll_activity.hdmf_loan,
+                general_loan=payroll_activity.general_loan,
+                company_loan=payroll_activity.company_loan,
+                other_adjustment=payroll_activity.other_adjustment,
+                total_deduction=payroll_activity.total_deduction,
+                net_pay=payroll_activity.net_pay,
+                sss=payroll_activity.sss,
+                phic=payroll_activity.phic,
+                hdmf=payroll_activity.hdmf,
+                tax_withheld=payroll_activity.tax_withheld,
+                books=payroll_activity.books,
+                employee_specs=payroll_activity.employee_specs,
+                employee_id_id=payroll_activity.employee_id_id,
+                name=f"{employee.last_name}, {employee.first_name}",
+                user=payroll_activity.user,
+                date_updated=payroll_activity.date_updated,
+                date_created=payroll_activity.date_created
+            )
+            payroll_activities.append(payroll_activity_detail)
+
+        return payroll_activities
+        
+       
+    
+   
 
 
 

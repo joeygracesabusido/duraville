@@ -53,12 +53,14 @@ $( function() {
         $("#books").val(ui.item.books);
 
         const basicPayValue = $("#basic_pay").val();
-        console.log(basicPayValue);
+        
 
         calculatetotalGross();
         BtnMandatory();
         calculatetotalDeduction();
-       
+        calculatetotalNetpay();
+        last_cutoff_gross();
+        // with_tax_calculation();
        
         return false;
       }
@@ -69,7 +71,6 @@ $( function() {
 
   // this is for autocomplete of sss
 
- 
     function BtnMandatory() {
       const searchBasicPay = ($("#basic_pay").val()) * 2; // Get the value of the input field
       const getSSSQuery = `
@@ -113,7 +114,8 @@ $( function() {
           }
           
           $("#hdmf").val(hdmf_comp);
-
+        
+          last_cutoff_gross()
           
         },
         error: function(xhr, status, error) {
@@ -123,6 +125,40 @@ $( function() {
     }
 
 
+   // this is for autocomplete of sss
+
+      function last_cutoff_gross() {
+        const search_employee_id = ($("#employee_id_id").val()) ; // Get the value of the input field
+        const search_payroll_date = ($("#payroll_date_last_cut_off").val()) ; // Get the value of the input field
+        const getGrossLastPayroll = `
+          query {
+            getApiPayrollForTaxComp(employeeIdSearch: ${search_employee_id},payrollDate: "${search_payroll_date}") {
+              grossPay
+            }
+          }
+        `;
+
+        $.ajax({
+          url: "/graphql",
+          method: "POST",
+          data: JSON.stringify({ query: getGrossLastPayroll }),
+          contentType: "application/json",
+          success: function(data) {
+            const last_gross_payroll = data.data.getApiPayrollForTaxComp.map(item => item.grossPay);
+            $("#grosspay_last_cut_off").val(last_gross_payroll);
+
+            with_tax_calculation()
+
+                   
+          },
+          error: function(xhr, status, error) {
+            console.error("Request failed:", error);
+          }
+        });
+      }
+
+
+
 
 
   // // Or call the function when a button is clicked
@@ -130,7 +166,55 @@ $( function() {
   //   BtnMandatory();
   // });
   
+
+// this is for computation of with holding tax
+$(document).ready(function() {
+  $('#grosspay_last_cut_off,#sss,#sss_provident,#phic,#hdmf').on('input', function() {
+      with_tax_calculation();
+  });
+});
+
+function with_tax_calculation() {
+  let sss = parseFloat($('#sss').val()) || 0;
+  let sss_provident = parseFloat($('#sss_provident').val()) || 0;
+  let phic = parseFloat($('#phic').val()) || 0;
+  let hdmf = parseFloat($('#hdmf').val()) || 0;
+  let total_gross1 = parseFloat($('#grosspay_last_cut_off').val()) || 0;
+  let total_gross2 = parseFloat($('#gross_pay2').val()) || 0;
+  let total_mandatory = sss + sss_provident + phic + hdmf;
+  let grand_total_gross = parseFloat(total_gross1) + parseFloat(total_gross2);
+  let tax_base_amount = parseFloat(grand_total_gross) - parseFloat(total_mandatory);
+
+  // console.log(total_mandatory)
+  // console.log(total_gross2)
+  console.log(tax_base_amount)
+  // Define your tax brackets and rates
+  const bracket_1 = [0, 20833];
+  const bracket_2 = [20833.01, 33332];
+  const bracket_3 = [33332.01, 66666];
+  // ... Add more rates corresponding to the brackets
+
+  // Apply tax rates based on the income brackets
+  const tax = [];
+
+  for (let income of [tax_base_amount]) {
+      let incomeTax = 0;
+      if (income > bracket_1[0] && income <= bracket_1[1]) {
+          incomeTax = parseFloat((income * 0).toFixed(2));
+      } else if (income > bracket_2[0] && income <= bracket_2[1]) {
+          incomeTax = parseFloat(((income - 20833) * 0.15).toFixed(2));
+      } else if (income > bracket_3[0] && income <= bracket_3[1]) {
+          incomeTax = parseFloat(((income - 33332) * 0.20 + 1875).toFixed(2));
+      }
+      tax.push(incomeTax);
+  }
+
+  let stringNumber = tax[0].toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   
+  $('#tax_withheld').val(tax);
+}
+
+
   
   
 
@@ -141,6 +225,8 @@ $( function() {
         #holiday_ot,#basic_pay_adjustment,#spl_30,#legal_holiday').on('input', function() {
         calculatetotalGross();
         calculatetotalDeduction()
+        calculatetotalNetpay();
+        with_tax_calculation();
     });
     });
 
@@ -191,6 +277,7 @@ $( function() {
 $(document).ready(function() {
     $('#sss,#sss_provident,#phic,#hdmf,#other_adjustment').on('input', function() {
         calculatetotalDeduction();
+        calculatetotalNetpay();
        
     });
     });
@@ -228,4 +315,40 @@ $(document).ready(function() {
     $('#total_deduction2').val(product2);
    
     }
+
+
+// this is for computation of NET PAY
+
+  $(document).ready(function() {
+    $('#gross_pay2,#total_deduction2').on('input', function() {
+        calculatetotalDeduction();
+        calculatetotalNetpay();
+        
+    });
+    });
+
+    function calculatetotalNetpay() {
+    
+    let gross_pay2;
+    let total_deduction2;
+    
+
+
+    gross_pay2 = $('#gross_pay2').val() || 0;
+    total_deduction2 = $('#total_deduction2').val() || 0;
+  
+    
+    
+    
+    let product;
+    let product2;
+    product = (parseFloat(gross_pay2) - parseFloat(total_deduction2)
+                    );
+
+    product2 = product.toFixed(2);
+    const stringNumber = product.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    $('#net_pay').val(stringNumber);
+    $('#net_pay2').val(product2);
+    }
+
 

@@ -129,6 +129,7 @@ class PayrollActivityDetails(BaseModel):
     total_deduction: float 
     net_pay: float 
     sss: float | None = None
+    sss_provident_emp: float | None = None
     phic: float | None = None
     hdmf: float  | None = None
     tax_withheld: float | None = None
@@ -656,7 +657,8 @@ async def api_insert_payroll_activity(items:PayrollActivityDetails, username: st
                 books=items.books,
                 employee_specs=items.employee_specs,
                 employee_id_id=items.employee_id_id,
-                user=username
+                user=username,
+                sss_provident_emp=items.sss_provident_emp
             )
 
             return {"message": "Data has been saved"}

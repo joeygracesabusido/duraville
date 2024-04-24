@@ -474,7 +474,7 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                                 normal_working_day_ot, spl_30, legal, holiday_ot, basic_pay_adjustment, 
                                 gross_pay, housing_loan, sss_loan, hdmf_loan, general_loan, 
                                 company_loan, other_adjustment, total_deduction, net_pay, sss, 
-                                phic, hdmf, tax_withheld, books, employee_specs, employee_id_id, user
+                                phic, hdmf, tax_withheld, books, employee_specs, employee_id_id, user,sss_provident_emp
                             ): # this function is for inserting payroll acitivity
 
         insertData = PayrollActivity(date_from=date_from,
@@ -505,7 +505,8 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 books=books,
                 employee_specs=employee_specs,
                 employee_id_id=employee_id_id,
-                user=user,)
+                user=user,
+                sss_provident_emp=sss_provident_emp)
             
 
         session = Session(engine)
@@ -525,6 +526,27 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 )
 
                                 
+                results = session.exec(statement) 
+                data = results.all()
+            
+                return data
+            except NoResultFound:
+                return None
+
+    @staticmethod
+    def get_payroll_for_tax_comp(payroll_date,employee_id_search): # this function is to query for payroll activity
+        with Session(engine) as session:
+            try:
+                statement = select(PayrollActivity,EmployeeList).where(
+                    (PayrollActivity.employee_id_id == EmployeeList.id) 
+                )
+
+                                
+                if payroll_date and employee_id_search:
+                    statement = statement.where(PayrollActivity.employee_id_id == employee_id_search).where(
+                        PayrollActivity.payroll_date == payroll_date
+                    )
+                          
                 results = session.exec(statement) 
                 data = results.all()
             

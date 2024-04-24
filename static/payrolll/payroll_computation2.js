@@ -220,9 +220,7 @@ $(document).ready(function() {
         let total_deduction2;
         
     
-    
-
-
+  
         gross_pay2 = $('#gross_pay2').val() || 0;
         total_deduction2 = $('#total_deduction2').val() || 0;
        

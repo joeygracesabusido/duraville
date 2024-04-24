@@ -239,6 +239,7 @@ class PayrollActivity(SQLModel, table=True):
     total_deduction: float = Field(default= 0)
     net_pay: float = Field(default= 0)
     sss: float = Field(default= 0)
+    sss_provident_emp: float = Field(default= 0)
     phic: float = Field(default= 0)
     hdmf: float = Field(default= 0)
     tax_withheld: float = Field(default= 0)
