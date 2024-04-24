@@ -192,6 +192,7 @@ function with_tax_calculation() {
   const bracket_1 = [0, 20833];
   const bracket_2 = [20833.01, 33332];
   const bracket_3 = [33332.01, 66666];
+  const bracket_4 = [66667, 166666];
   // ... Add more rates corresponding to the brackets
 
   // Apply tax rates based on the income brackets
@@ -205,7 +206,10 @@ function with_tax_calculation() {
           incomeTax = parseFloat(((income - 20833) * 0.15).toFixed(2));
       } else if (income > bracket_3[0] && income <= bracket_3[1]) {
           incomeTax = parseFloat(((income - 33332) * 0.20 + 1875).toFixed(2));
-      }
+      } else if (income > bracket_4[0] && income <= bracket_4[1]) {
+        incomeTax = parseFloat(((income - 66666) * 0.25 + 8541.80).toFixed(2));
+    }
+
       tax.push(incomeTax);
   }
 

@@ -152,7 +152,7 @@ class PayrollActivityDetails(BaseModel):
 @payroll_router.get("/insert-employee-list/", response_class=HTMLResponse)
 async def api_login(request: Request,username: str = Depends(get_current_user)):
     try:
-        if username == 'joeysabusido' or username == 'eliza':
+        if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
 
             results = PayrollTransaction.get_employee_list()
 
@@ -188,7 +188,7 @@ async def api_login(request: Request,username: str = Depends(get_current_user)):
 @payroll_router.post("/api-insert-employee-details/")
 async def api_insert_cost_elements(items:EmployeeListDetails,username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
         try:
         
             PayrollTransaction.insert_employee(employee_id=items.employee_id,
@@ -216,7 +216,7 @@ async def api_insert_cost_elements(items:EmployeeListDetails,username: str = Dep
 async def grc_template(id:Optional[int],request: Request, username: str = Depends(get_current_user)):
 
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
         results = PayrollTransaction.get_employee_by_id(item_id=id)
 
         if results:
@@ -253,7 +253,7 @@ async def updateGRCRental(id,items:EmployeeListDetails,username: str = Depends(g
     
 
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
             
             today = datetime.now()
             try:
@@ -286,7 +286,7 @@ async def updateGRCRental(id,items:EmployeeListDetails,username: str = Depends(g
 @payroll_router.get("/insert-cash-advance/", response_class=HTMLResponse)
 async def api_login(request: Request,username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
 
         try:
             results = PayrollTransaction.get_cash_advance_list()
@@ -353,7 +353,7 @@ def autocomplete_branch_code(term: Optional[str] = None,username: str = Depends(
 @payroll_router.post("/api-insert-cash-advance/")
 async def api_insert_cost_elements(items:CashAdvanceDetails,username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
         try:
         
             PayrollTransaction.insert_cash_advance(employee_id_id=items.employee_id_id,amount_deduction=items.amount_deduction,
@@ -373,7 +373,7 @@ async def api_insert_cost_elements(items:CashAdvanceDetails,username: str = Depe
 @payroll_router.get("/payroll-computation/", response_class=HTMLResponse)
 async def api_login(request: Request,username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
 
         
 
@@ -417,7 +417,7 @@ async def grc_template(id:Optional[int],request: Request, username: str = Depend
 
 @payroll_router.put("/api-update-cash-advance/{id}")
 async def update_cash_advance(id,items:CashAdvanceDetails2,username: str = Depends(get_current_user)):
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
    
         today = datetime.now()
         try:
@@ -439,7 +439,7 @@ async def update_cash_advance(id,items:CashAdvanceDetails2,username: str = Depen
 @payroll_router.get("/insert-sss-loan/", response_class=HTMLResponse)
 async def api_login(request: Request,username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
 
         try:
             
@@ -460,7 +460,7 @@ async def api_login(request: Request,username: str = Depends(get_current_user)):
 
 @payroll_router.post("/api-insert-sss-loan/")
 async def insert_sss_loan(items:SssLoanDetails,username: str = Depends(get_current_user)):
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
    
         today = datetime.now()
         try:
@@ -481,7 +481,7 @@ async def insert_sss_loan(items:SssLoanDetails,username: str = Depends(get_curre
 @payroll_router.put("/api-update-sss-loan/{id}")
 async def update_sss_laon(id,items:SssLoanDetails2,username: str = Depends(get_current_user)):
     
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
 
         today = datetime.now()
         try:
@@ -500,7 +500,7 @@ async def update_sss_laon(id,items:SssLoanDetails2,username: str = Depends(get_c
 @payroll_router.get("/insert-hdmf-loan/", response_class=HTMLResponse)
 async def hdmf_frame(request: Request,username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
 
         try:
             
@@ -521,7 +521,7 @@ async def hdmf_frame(request: Request,username: str = Depends(get_current_user))
 
 @payroll_router.post("/api-insert-hdmf-loan/")
 async def insert_sss_loan(items:HmdfLoanDetails,username: str = Depends(get_current_user)):
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
    
         today = datetime.now()
         try:
@@ -541,7 +541,7 @@ async def insert_sss_loan(items:HmdfLoanDetails,username: str = Depends(get_curr
 @payroll_router.put("/api-update-hdmf-loan/{id}")
 async def update_hdmf_laon(id,items:HmdfLoanDetails,username: str = Depends(get_current_user)):
     
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
 
         today = datetime.now()
         try:
@@ -624,7 +624,7 @@ async def get_employee_with_deductions2(term: Optional[str] = None):
 @payroll_router.post("/api-insert-payroll-activity/")
 async def api_insert_payroll_activity(items:PayrollActivityDetails, username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
         try:
            
 
@@ -676,7 +676,7 @@ async def api_insert_payroll_activity(items:PayrollActivityDetails, username: st
 @payroll_router.get("/payroll-report-display/", response_class=HTMLResponse)
 async def payroll_reports(request: Request,username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
 
         try:
             
@@ -697,7 +697,7 @@ async def payroll_reports(request: Request,username: str = Depends(get_current_u
 @payroll_router.get("/payroll-2nd-comp/", response_class=HTMLResponse) # this function is for templae for 2nd cut-off
 async def payroll_computation_2nd(request: Request,username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza':
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
 
         try:
             
