@@ -362,3 +362,89 @@ $(document).ready(function() {
     }
 
 
+
+// this function is for saving payroll
+
+const savePayrollComputation = () => {
+  const data = {
+      date_from: document.getElementById("date_from").value,
+      date_to: document.getElementById("date_to").value,
+      payroll_date: document.getElementById("payroll_date").value,
+      books: document.getElementById("books").value,
+      employee_specs: document.getElementById("employee_specs").value,
+      basic_pay: document.getElementById("basic_pay").value,
+      late: document.getElementById("late").value || 0,
+      absent: document.getElementById("absent").value || 0,
+      undertime: document.getElementById("under_time").value || 0,
+      normal_working_day_ot: document.getElementById("normal_working_day_ot").value || 0,
+      spl_30: document.getElementById("spl_30").value || 0,
+      legal: document.getElementById("legal_holiday").value || 0,
+      holiday_ot: document.getElementById("holiday_ot").value || 0,
+      basic_pay_adjustment: document.getElementById("basic_pay_adjustment").value || 0,
+      gross_pay: document.getElementById("gross_pay2").value,
+      sss: document.getElementById("sss").value || 0,
+      sss_provident_emp: document.getElementById("sss_provident").value || 0,
+      phic: document.getElementById("phic").value || 0,
+      hdmf: document.getElementById("hdmf").value || 0,
+      tax_withheld: document.getElementById("tax_withheld").value || 0,
+      other_adjustment: document.getElementById("other_adjustment").value || 0,
+      total_deduction: document.getElementById("total_deduction2").value,
+      net_pay: document.getElementById("net_pay2").value,
+      employee_id_id: document.getElementById("employee_id_id").value,
+     
+      
+  };
+
+  fetch('/api-insert-payroll-activity/', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      else{
+        alert('Data has been Save')
+        fieldEmpty()
+
+      }
+      return response.json();
+  })
+  .then(data => {
+      console.log(data);
+      // Do something with the response data
+  })
+  .catch(error => {
+      console.error('There has been a problem with your fetch operation:', error);
+  });
+};
+
+document.getElementById("btn_save_payroll_computation").addEventListener("click", savePayrollComputation);
+
+// this funcotion is for emptying the field once the transaction proceed or save
+const fieldEmpty = () => {
+  document.getElementById("books").value = "",
+  document.getElementById("employee_specs").value = "" ,
+      document.getElementById("basic_pay").value= "",
+      document.getElementById("late").value = "",
+      document.getElementById("absent").value = "",
+      document.getElementById("under_time").value = "",
+      ndocument.getElementById("normal_working_day_ot").value = "",
+      document.getElementById("spl_30").value = "",
+      document.getElementById("legal_holiday").value = "",
+      document.getElementById("holiday_ot").value = "",
+      document.getElementById("basic_pay_adjustment").value = "",
+      document.getElementById("gross_pay").value = "",
+      document.getElementById("sss").value = "",
+      document.getElementById("sss_provident").value = "",
+      document.getElementById("phic").value = "",
+      document.getElementById("hdmf").value = "",
+      document.getElementById("tax_withheld").value = "",
+      document.getElementById("other_adjustment").value = "",
+      document.getElementById("total_deduction2").value = "",
+     document.getElementById("net_pay").value = ""
+     
+};
