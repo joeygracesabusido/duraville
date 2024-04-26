@@ -41,7 +41,8 @@ $(document).ready(function() {
                         tableBody.append(row);
                     });
                     // Initialize DataTable after populating the table
-                    $('#table_payroll_report').DataTable();
+                    // $('#table_payroll_report').DataTable();
+                    initializeDataTable()
                 } else {
                     console.error('Data format error or empty data received from server.');
                 }
@@ -55,3 +56,55 @@ $(document).ready(function() {
     // Call populateTable function on document ready
     populateTable();
 });
+
+
+const initializeDataTable = () => {
+    $('#table_payroll_report').DataTable();
+    // $('#table_payroll_report').DataTable( {
+    //     dom: 'LBfrtip',
+    //     buttons: [
+    //         { // COPY
+    //             extend : 'copy',
+    //             text: 'Copy',
+    //             className: 'btn btn-secondary',
+    //             titleArttr: 'Copy',
+    //             exportOptions: {
+    //                 columns: [0,1,2,3]
+    //             },
+    //         },
+    //         { // EXCEL
+    //             extend : 'excel',
+    //             text: 'Export Excel',
+    //             className: 'btn btn-success',
+    //             titleArttr: 'Excel',
+    //             exportOptions: {
+    //                 columns: [0,1,2,3]
+    //             },
+    //         },
+    //         { // Print
+    //             extend : 'print',
+    //             text: 'Print',
+    //             className: 'btn btn-danger',
+    //             titleArttr: 'Print',
+    //             exportOptions: {
+    //                 columns: [0,1,2,3]
+    //             },
+    //         },
+
+        
+    //     ]
+
+    // } );
+
+    
+};
+
+
+function payrollListExcel(type){
+    var data = document.getElementById('table_payroll_report');
+    var file = XLSX.utils.table_to_book(data,{sheet: "sheet1"});
+    XLSX.write(file,{ booktype: type, bookSST: true, type: 'base64'});
+    XLSX.writeFile(file, 'payroll_list.' + type);
+
+}
+

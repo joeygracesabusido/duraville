@@ -193,13 +193,22 @@
                             <li><a class="dropdown-item" href="/payroll-2nd-comp/">Payroll Computation 2ND cut-off</a></li>
                             <li><a class="dropdown-item" href="/insert-sss-loan/">SSS Loan Deduction</a></li>
                             <li><a class="dropdown-item" href="/insert-hdmf-loan/">HDMF Loan Deduction</a></li>
+                            <li><a class="dropdown-item" href="/frame-allowance/">Allowance</a></li>
                         </ul>
                     </li>
                     
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-users"></i> Customers
+                   
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-users"></i> LOT ACQUISITION
                         </a>
+                        
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" href="/insert-cost/">INSERT LOT ACQUISITION</a></li>
+                            <li><a class="dropdown-item" href="/electricity-dashboard/">Electricity</a></li>
+                            <li><a class="dropdown-item" href="/smart-globe-dashboard/">Smart-Globe-Dashboard</a></li>
+                        </ul>
                     </li>
                     
 
@@ -227,6 +236,12 @@
 
 </body>
 </html>
+
+<script type="text/javascript" 
+  src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"
+  >
+
+  </script>
 
 {% block content %}
 
