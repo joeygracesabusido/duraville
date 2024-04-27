@@ -10,10 +10,12 @@ $(document).ready(function() {
                 query: `
                     query {
                         getPayrollAllApi {
+                            id
                             name
                             grossPay
                             netPay
                             payrollDate
+                            books2
                         }
                     }
                 `
@@ -32,8 +34,10 @@ $(document).ready(function() {
                             maximumFractionDigits: 2
                         });
                         var row = '<tr>' +
+                            '<td>'  + item.id + '</td>' +
                             '<td>'  + item.payrollDate + '</td>' + 
                             '<td>'  + item.name + '</td>' + 
+                            '<td>'  + item.books2 + '</td>' + 
                             '<td>' + formattedGrossPayAmount + '</td>' +
                             '<td>' + (Number(item.netPay).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})) + '</td>' +
                            

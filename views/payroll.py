@@ -1,5 +1,6 @@
 from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfilter,within_group,Relationship,Index
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import select, and_
 
 from models.model import EmployeeList, Books, CashAdvance, SSSLoanDeduction, HDMFLoanDeduction,PayrollActivity
 from database.mongodb_connection import Connection
@@ -521,11 +522,20 @@ class PayrollTransaction(): # this class is for payroll  Transaction
     def get_payroll_all(): # this function is to query for payroll activity
         with Session(engine) as session:
             try:
-                statement = select(PayrollActivity,EmployeeList).where(
-                    (PayrollActivity.employee_id_id == EmployeeList.id) 
+                # statement = select(PayrollActivity,EmployeeList,Books).where(
+                #     (PayrollActivity.employee_id_id == EmployeeList.id)
+                    
+                # )
+                statement = select(PayrollActivity, EmployeeList, Books).where(
+                and_(
+                    PayrollActivity.employee_id_id == EmployeeList.id,
+                        EmployeeList.book_id == Books.id
+                    )
                 )
 
-                                
+
+
+                         
                 results = session.exec(statement) 
                 data = results.all()
             

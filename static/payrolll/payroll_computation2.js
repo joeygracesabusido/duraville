@@ -265,9 +265,9 @@ const savePayrollComputation = () => {
       general_loan: document.getElementById("general_loan").value || 0,
       company_loan: document.getElementById("company_loan").value || 0,
       other_adjustment: document.getElementById("other_adjustment").value || 0,
-      total_deduction: document.getElementById("total_deduction2").value,
-      net_pay: document.getElementById("net_pay2").value,
-      employee_id_id: document.getElementById("employee_id_id").value,
+      total_deduction: document.getElementById("total_deduction2").value || 0,
+      net_pay: document.getElementById("net_pay2").value || 0,
+      employee_id_id: document.getElementById("employee_id_id").value 
      
       
   };

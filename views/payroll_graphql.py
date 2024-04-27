@@ -109,6 +109,7 @@ class EmployeeListObject:
 
 @strawberry.type
 class PayrollActivityDetails:
+    id: Optional[int] | None = None
     date_from: date 
     date_to: date
     payroll_date: date
@@ -144,6 +145,8 @@ class PayrollActivityDetails:
     user: str | None = None
     date_updated: datetime | None = None
     date_created: datetime | None = None
+
+    books2: str | None = None
 
 @strawberry.type
 class SssTableObject:
@@ -442,8 +445,9 @@ class Query:
         if username:
 
             payroll_activities = []
-            for payroll_activity, employee in data:
+            for payroll_activity, employee,book_id in data:
                 payroll_activity_detail = PayrollActivityDetails(
+                    id=payroll_activity.id,
                     date_from=payroll_activity.date_from,
                     date_to=payroll_activity.date_to,
                     payroll_date=payroll_activity.payroll_date,
@@ -475,7 +479,8 @@ class Query:
                     name=f"{employee.last_name}, {employee.first_name}",
                     user=payroll_activity.user,
                     date_updated=payroll_activity.date_updated,
-                    date_created=payroll_activity.date_created
+                    date_created=payroll_activity.date_created,
+                    books2=book_id.project
                 )
                 payroll_activities.append(payroll_activity_detail)
 
@@ -530,7 +535,7 @@ class Query:
 
        
         payroll_activities = []
-        for payroll_activity, employee in data:
+        for payroll_activity, employee,book_id in data:
             payroll_activity_detail = PayrollActivityDetails(
                 date_from=payroll_activity.date_from,
                 date_to=payroll_activity.date_to,
@@ -563,7 +568,8 @@ class Query:
                 name=f"{employee.last_name}, {employee.first_name}",
                 user=payroll_activity.user,
                 date_updated=payroll_activity.date_updated,
-                date_created=payroll_activity.date_created
+                date_created=payroll_activity.date_created,
+                books2=book_id.project
             )
             payroll_activities.append(payroll_activity_detail)
 
