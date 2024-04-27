@@ -535,7 +535,7 @@ class Query:
 
        
         payroll_activities = []
-        for payroll_activity, employee,book_id in data:
+        for payroll_activity, employee in data:
             payroll_activity_detail = PayrollActivityDetails(
                 date_from=payroll_activity.date_from,
                 date_to=payroll_activity.date_to,
@@ -569,7 +569,7 @@ class Query:
                 user=payroll_activity.user,
                 date_updated=payroll_activity.date_updated,
                 date_created=payroll_activity.date_created,
-                books2=book_id.project
+               
             )
             payroll_activities.append(payroll_activity_detail)
 

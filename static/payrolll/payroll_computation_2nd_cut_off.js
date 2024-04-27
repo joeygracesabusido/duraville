@@ -283,7 +283,7 @@ function with_tax_calculation() {
     // this is for computation of total deduction
 
 $(document).ready(function() {
-    $('#sss,#sss_provident,#phic,#hdmf,#other_adjustment,#tax_withheld').on('input', function() {
+    $('#sss,#sss_provident,#phic,#hdmf,#other_adjustment,#tax_withheld,#general_loan,#company_loan').on('input', function() {
         calculatetotalDeduction();
         calculatetotalNetpay();
        
@@ -298,6 +298,8 @@ $(document).ready(function() {
     let hdmf;
     let tax_withheld;
     let other_adjustment;
+    let general_loan;
+    let company_loan;
    
    
    
@@ -309,6 +311,8 @@ $(document).ready(function() {
     hdmf = $('#hdmf').val() || 0;
     tax_withheld = $('#tax_withheld').val() || 0;
     other_adjustment =  $('#other_adjustment').val() || 0;
+    general_loan =  $('#general_loan').val() || 0;
+    company_loan =  $('#company_loan').val() || 0;
     
     
     
@@ -316,7 +320,8 @@ $(document).ready(function() {
     let product2
     product = (parseFloat(sss) + parseFloat(sss_provident)
                     + parseFloat(phic) + parseFloat(hdmf)
-                    + parseFloat(other_adjustment) +parseFloat(tax_withheld)
+                    + parseFloat(other_adjustment) + parseFloat(tax_withheld)
+                    + parseFloat(general_loan) + parseFloat(company_loan)
                     );
 
     product2 = product.toFixed(2);
@@ -391,6 +396,8 @@ const savePayrollComputation = () => {
       total_deduction: document.getElementById("total_deduction2").value,
       net_pay: document.getElementById("net_pay2").value,
       employee_id_id: document.getElementById("employee_id_id").value,
+      general_loan: document.getElementById("general_loan").value || 0,
+      company_loan: document.getElementById("company_loan").value || 0,
      
       
   };
