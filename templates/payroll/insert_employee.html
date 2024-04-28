@@ -13,6 +13,55 @@
 
     <h2>INSERT EMPLOYEE</h2>
 
+    <!-- ====================================================modal for updating employee=================================================== -->
+   
+    <div class="modal" id="update_employeelist_modal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Update List</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+
+            <div class="row g-2">
+              <div class="col-md">
+                <div class="form-floating">
+                  <input type="text" class="form-control" id="update_id" >
+                  <label for="floatingInputGrid"class="label-large" >Update ID</label>
+                </div>
+              </div>
+
+              <div class="col-md">
+                <div class="form-floating">
+                  <input type="number" class="form-control" id="update_basic_monthly_pay" >
+                  <label for="floatingInputGrid" class="label-large">Basic Salary</label>
+    
+                
+                </div>
+              </div>
+              
+              
+             
+              
+              
+            </div>
+
+           
+         
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="btn_save_changes">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- =================================================================EMPLOYEE TRANSACTION FRAME============================================== -->
+
     <div class="row g-2">
         <div class="col-md">
           <div class="form-floating">
@@ -185,6 +234,11 @@
                style="width: 190px;">
             Add Meralco Details
           </button> -->
+
+          <button type="button" class="btn btn-primary"  id="btn_update_emp"
+          style="width: 190px;">
+            Update Employee
+          </button>
   
         </div>
         <div class="card-body">
@@ -195,7 +249,7 @@
               <table id="my_table_employee_list" class="table table-bordered"  style="text-align: center;">
                   <thead class="border-bottom font-weight-bold">
 
-                          
+                          <td>ID</td>
                           <td>Emp ID</td>
                           <td>Last Name</td>
                           <td>First Name</td>
@@ -214,7 +268,7 @@
                     {% for list in employee_data %}
           
                           <tr>
-                              
+                              <td>{{list.id}}</td>
                               <td>{{list.employee_id}}</td>
                               <td>{{list.last_name}}</td>
                               <td>{{list.first_name}}</td>
@@ -268,7 +322,7 @@
 
 
 
-<script src="/static/payroll_insert_employee.js"></script>
+<script src="/static/payrolll/insert_employee.js"></script>
 
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"></script>
@@ -289,6 +343,9 @@
   let table = new DataTable('#my_table_employee_list');
 
 </script>
+
+
+
 
 
 {% endblock %}

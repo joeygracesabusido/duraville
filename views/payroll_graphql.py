@@ -602,3 +602,11 @@ class Mutation:
         detail="Not Authorized",
         # headers={"WWW-Authenticate": "Basic"},
     )
+
+    @strawberry.mutation
+    async def update_employee(basic_monthly_pay: float, book_id:int, item_id: int
+                          ) -> str:
+        
+        PayrollTransaction.update_employee_details2(basic_monthly_pay=basic_monthly_pay, book_id=book_id, item_id=item_id)
+    
+        return "Data has been updated successfully."

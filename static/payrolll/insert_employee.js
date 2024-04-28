@@ -28,13 +28,12 @@ $(document).ready(function() {
 });
 
 
-// this function is to update for employee details
+// this function is to insert for employee details
 
-const update_employee_details = async () => {
-    const id = document.getElementById("trans_id").value; // Assigning id correctly
+const insert_employee_details = async () => {
+
     
     const data = {
-        
         employee_id: document.getElementById("employee_id").value,
         first_name: document.getElementById("first_name").value,
         last_name: document.getElementById("last_name").value,
@@ -49,8 +48,8 @@ const update_employee_details = async () => {
     console.log(data)
     
     try {
-        const response = await fetch(`/api-update-employee-details/` + id, {
-            method: "PUT",
+        const response = await fetch(`/api-insert-employee-details/`, {
+            method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
         });
@@ -82,4 +81,53 @@ const update_employee_details = async () => {
 
 // Attach the event listener to the button
 const Btn_save_employee_list = document.querySelector('#btn_save_employee');
-Btn_save_employee_list.addEventListener("click", update_employee_details);
+Btn_save_employee_list.addEventListener("click", insert_employee_details);
+
+
+// jQuery code to call the modal
+$(document).ready(function() {
+    
+    $('#btn_update_emp').click(function() {
+        $('#update_employeelist_modal').modal('show');
+    });
+});
+
+
+
+$(document).ready(function() {
+    // Bind fetchData function to modal show event
+
+    $('#btn_save_changes').click(function() {
+        console.log('Im Button')
+        updateEmployeeList();
+    });
+
+   
+
+    function updateEmployeeList() {
+        var id = $('#update_id').val();
+        var basic_monthly_pay = parseFloat($('#update_basic_monthly_pay').val());
+
+        console.log(basic_monthly_pay)
+        // Make an AJAX request to update the cash advance
+        $.ajax({
+            url: '/api-update-employee-details2/' + id,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                basic_monthly_pay: basic_monthly_pay
+            }),
+            success: function(response) {
+                // Handle success response
+                console.log('Employee List updated successfully:', response);
+                $('#update_cash_advance_modal').modal('hide'); // Close the modal
+                window.location.href = '/insert-employee-list/';
+            },
+            error: function(error) {
+                // Handle error response
+                console.error('Error updating cash advance:', error);
+                // Display error message to user if needed
+            }
+        });
+    }
+});

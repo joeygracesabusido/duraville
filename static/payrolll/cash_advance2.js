@@ -141,7 +141,6 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     // Bind fetchData function to modal show event
-   
 
     $('#btn_save_changes').click(function() {
         console.log('Im Button')

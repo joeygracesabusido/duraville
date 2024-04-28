@@ -26,15 +26,15 @@ templates = Jinja2Templates(directory="templates")
 
 
 class EmployeeListDetails(BaseModel):
-    employee_id: str 
-    first_name: str 
-    last_name: str 
-    company_id: Optional[int]
-    basic_monthly_pay: Optional[float] 
-    tax_code: str 
-    book_id: Optional[int] 
-    department: str 
-    is_active: bool
+    employee_id: str | None = None
+    first_name: str | None = None
+    last_name: str | None = None
+    company_id: Optional[int] | None = None
+    basic_monthly_pay: float | None = None
+    tax_code: str | None = None
+    book_id: Optional[int]  | None = None
+    department: str  | None = None
+    is_active: bool | None = None
     
     
 
@@ -248,34 +248,62 @@ async def grc_template(id:Optional[int],request: Request, username: str = Depend
     )
   
 @payroll_router.put("/api-update-employee-details/{id}")
-async def updateGRCRental(id,items:EmployeeListDetails,username: str = Depends(get_current_user)):
-
-    
-
-
-    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
-            
-            today = datetime.now()
-            try:
-                PayrollTransaction.update_employee_details(employee_id=items.employee_id,first_name=items.first_name,
-                                                        last_name=items.last_name,company_id=items.company_id,
-                                                        basic_monthly_pay=items.basic_monthly_pay,tax_code=items.tax_code,
-                                                        book_id=items.book_id,department=items.department,is_active=items.is_active,
-                                                        user=username,date_updated=today,item_id=id)
-
-            except Exception as e:
-                error_message = str(e)  # Use the actual error message from the exception
-            
-                return {"error": error_message}
-
-
-            return  {'Messeges':'Data has been Updated'}
+async def update_employee_endpoint(id: int, items: EmployeeListDetails, username: str = Depends(get_current_user)):
+    if username in ['joeysabusido', 'eliza', 'drdc-admin']:
+        today = datetime.now()
+        try:
+            PayrollTransaction.update_employee_details(
+                employee_id=items.employee_id,
+                first_name=items.first_name,
+                last_name=items.last_name,
+                company_id=items.company_id,
+                basic_monthly_pay=items.basic_monthly_pay,
+                tax_code=items.tax_code,
+                book_id=items.book_id,
+                department=items.department,
+                is_active=items.is_active,
+                user=username,
+                date_updated=today,
+                item_id=id
+            )
+            return {'Messages': 'Data has been Updated'}
+        except Exception as e:
+            return {'error': str(e)}
 
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Not Authorized",
-        # headers={"WWW-Authenticate": "Basic"},
     )
+
+
+@payroll_router.put("/api-update-employee-details2/{id}")
+async def update_employee_endpoint2(id: int, items:EmployeeListDetails , username: str = Depends(get_current_user)):
+    if username in ['joeysabusido', 'eliza', 'drdc-admin']:
+        today = datetime.now()
+        try:
+            PayrollTransaction.update_employee_details2(
+                # employee_id=items.employee_id,
+                # first_name=items.first_name,
+                # last_name=items.last_name,
+                # company_id=items.company_id,
+                basic_monthly_pay=items.basic_monthly_pay,
+                # tax_code=items.tax_code,
+                # book_id=items.book_id,
+                # department=items.department,
+                # is_active=items.is_active,
+                # user=username,
+                # date_updated=today,
+                item_id=id
+            )
+            return {'Messages': 'Data has been Updated'}
+        except Exception as e:
+            return {'error': str(e)}
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+    )
+
 
 
 

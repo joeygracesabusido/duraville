@@ -106,11 +106,10 @@ class PayrollTransaction(): # this class is for payroll  Transaction
         """This function is for updating Rizal Equipment"""
 
         with Session(engine) as session:
-            statement = select(EmployeeList).where(EmployeeList.id == item_id)
-            results = session.exec(statement)
+            # statement = select(EmployeeList).flter(EmployeeList.id == item_id)
+            result = session.query(EmployeeList).filter(EmployeeList.id == item_id).one()
 
-            result = results.one()
-
+          
             
             result.employee_id = employee_id
             result.first_name = first_name
@@ -130,6 +129,24 @@ class PayrollTransaction(): # this class is for payroll  Transaction
             session.commit()
             session.refresh(result)
             session.close()
+
+    def update_employee_details2(basic_monthly_pay,book_id, item_id):
+        """This function is for updating Employee"""
+       
+        with Session(engine) as session:
+            # Retrieve the EmployeeList object by its ID
+            result = session.query(EmployeeList).filter(EmployeeList.id == item_id).one()
+
+            # Update the basic_monthly_pay attribute
+            result.basic_monthly_pay = basic_monthly_pay
+            result.book_id = book_id
+
+            # Commit the changes to the database
+            session.add(result)
+            session.commit()
+            session.refresh(result)
+            session.close()
+           
 
 #======================================Cash Advance Frame==========================================
     @staticmethod
