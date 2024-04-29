@@ -175,6 +175,14 @@ class AllowanceDetails:
     first_name: Optional[str] = None  # Add this attribute
     last_name: Optional[str] = None   # Add this attribute
     net_allow: Optional[float] = None   # Add this attribute
+
+
+@strawberry.type
+class PayrollReportMonthly:
+    name: str | None = None
+    employee_id: int | None = None
+    total_gross_pay: Optional[float] = None
+   
     
 
 @strawberry.type
@@ -621,6 +629,27 @@ class Query:
             allowance_list.append(allowance_detail)
 
         return allowance_list
+    
+
+    @strawberry.field
+    async def get_payroll_monthly_report(self,datefrom:str,dateto:str) -> Optional[List[PayrollReportMonthly]]:
+        
+        data = PayrollTransaction.get_payrollMonthly(datefrom=datefrom,dateto=dateto)
+       
+        # print(data)
+        employees_with_deductions = []
+        for payroll_activity, employee_list in data:
+            employee_with_deductions = PayrollReportMonthly(
+                employee_id=payroll_activity.employee_id_id,
+                total_gross_pay=payroll_activity.gross_pay
+            )
+            employees_with_deductions.append(employee_with_deductions)
+
+        return employees_with_deductions or None
+       
+
+       
+       
 
          
         

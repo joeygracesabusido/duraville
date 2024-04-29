@@ -6,6 +6,8 @@ from models.model import (EmployeeList, Books, CashAdvance,
                           SSSLoanDeduction, HDMFLoanDeduction,PayrollActivity,
                           Allowance)
 from database.mongodb_connection import Connection
+from typing import Optional
+from datetime import date, datetime
 
 
 from sqlalchemy.orm import selectinload
@@ -615,4 +617,94 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 return data
             except NoResultFound:
                 return None
+            
+    @staticmethod
+    def payroll_report_monthly(datefrom,dateto):
+        """This function is for """
+        with Session(engine) as session:
+
+            # try:
+            #     statement = select(PayrollActivity,EmployeeList).where(
+            #         (Allowance.employee_id_id == EmployeeList.id)  
+            #     )
+
+            #     statement = statement.where(PayrollActivity.payroll_date.between(datefrom,dateto))          
+            #     results = session.exec(statement) 
+
+            #     data = results.all()
+                
+            #     return data
+            # except NoResultFound:
+            #     return None
+
+
+            subquery_payroll_list = (
+                select(
+                    PayrollActivity.employee_id_id,
+                    func.sum(PayrollActivity.gross_pay).label("TotalGrossPay")
+                )
+                .where(PayrollActivity.payroll_date.between(datefrom,dateto))
+                .where(PayrollActivity.employee_id_id == EmployeeList.id)  # Filter by employee_id
+                .group_by(PayrollActivity.employee_id_id)
+                .subquery()
+            )
+
+            subquery_allowance = (
+                select(
+                    Allowance.employee_id_id,
+                    func.sum(Allowance.allowance).label("TotalAllowance")
+                )
+                .where(Allowance.employee_id_id == EmployeeList.id)  # Filter by employee_id
+                .group_by(Allowance.employee_id_id)
+                .subquery()
+            )
+
+            
+
+            final_statement = (
+                select(
+                    EmployeeList,
+                    Books,
+                    func.coalesce(subquery_payroll_list.c.TotalGrossPay, 0).label("TotalGrossPay"),
+                    func.coalesce(subquery_allowance.c.TotalAllowance, 0).label("TotalAllowance"),
+                   
+                )
+                .select_from(EmployeeList)
+                .join(Books, EmployeeList.book_id == Books.id)
+                .outerjoin(subquery_payroll_list, EmployeeList.id == subquery_payroll_list.c.employee_id_id)
+                .outerjoin(subquery_allowance, EmployeeList.id == subquery_allowance.c.employee_id_id)
+                
+                .order_by(EmployeeList.id)
+            )
+
+            results = session.exec(final_statement)
+            data = results.all()
+            return data
+        
+    @staticmethod
+    def get_payrollMonthly(datefrom: Optional[str], dateto: Optional[str]):
+
+        with Session(engine) as session:
+            datefrom = datetime.strptime(datefrom, '%Y-%m-%d') if datefrom else None
+            dateto = datetime.strptime(dateto, '%Y-%m-%d') if dateto else None
+
+            statement = (
+                select(
+                    PayrollActivity.employee_id_id,
+                    func.sum(PayrollActivity.gross_pay).label("gross_pay")
+                )
+                .where(
+                    and_(
+                        PayrollActivity.payroll_date.between(datefrom, dateto),
+                        PayrollActivity.employee_id_id == EmployeeList.id
+                    )
+                )
+                .group_by(PayrollActivity.employee_id_id)
+            )
+
+            results = session.exec(statement)
+            data = results.all()
+
+        return data
+        
         
