@@ -766,10 +766,24 @@ async def hdmf_frame(request: Request,username: str = Depends(get_current_user))
         # headers={"WWW-Authenticate": "Basic"},
     )
 
+@payroll_router.get("/monthly-payroll-report/")
+async def get_payroll_report(datefrom: Optional[str] = None,dateto: Optional[str] = None ):
+    data = PayrollTransaction.get_payrollMonthly(datefrom=datefrom,dateto=dateto)
+    print(data)
+    employees_with_deductions = []
 
+    for employee_id, total_gross_pay in data:
+        employee_with_deductions = {
+            "employee_id":employee_id,
+            "gross_pay": total_gross_pay,
+          
+            
+        }
+        employees_with_deductions.append(employee_with_deductions)
 
+   
 
-
+    return employees_with_deductions
 
 
 

@@ -685,26 +685,41 @@ class PayrollTransaction(): # this class is for payroll  Transaction
     def get_payrollMonthly(datefrom: Optional[str], dateto: Optional[str]):
 
         with Session(engine) as session:
-            datefrom = datetime.strptime(datefrom, '%Y-%m-%d') if datefrom else None
-            dateto = datetime.strptime(dateto, '%Y-%m-%d') if dateto else None
+            # datefrom = datetime.strptime(datefrom, '%Y-%m-%d') if datefrom else None
+            # dateto = datetime.strptime(dateto, '%Y-%m-%d') if dateto else None
 
-            statement = (
-                select(
-                    PayrollActivity.employee_id_id,
-                    func.sum(PayrollActivity.gross_pay).label("gross_pay")
-                )
-                .where(
-                    and_(
-                        PayrollActivity.payroll_date.between(datefrom, dateto),
-                        PayrollActivity.employee_id_id == EmployeeList.id
-                    )
+        #     statement = (
+        #         select(
+        #             PayrollActivity.employee_id_id,
+        #             func.sum(PayrollActivity.gross_pay).label("gross_pay")
+        #         )
+        #         .where(
+        #             and_(
+        #                 PayrollActivity.payroll_date.between(datefrom, dateto),
+        #                 PayrollActivity.employee_id_id == EmployeeList.id
+        #             )
+        #         )
+        #         .group_by(PayrollActivity.employee_id_id)
+        #     )
+
+        #     results = session.exec(statement)
+        #     data = results.all()
+
+        # return data
+            result = (
+            session.query(
+                PayrollActivity.employee_id_id,
+                func.sum(PayrollActivity.gross_pay)
+            )
+            .filter(
+                    PayrollActivity.payroll_date.between(datefrom, dateto)
                 )
                 .group_by(PayrollActivity.employee_id_id)
+                .all()
             )
+            return result
 
-            results = session.exec(statement)
-            data = results.all()
+        
 
-        return data
         
         

@@ -636,16 +636,16 @@ class Query:
         
         data = PayrollTransaction.get_payrollMonthly(datefrom=datefrom,dateto=dateto)
        
-        # print(data)
+       
         employees_with_deductions = []
-        for payroll_activity, employee_list in data:
-            employee_with_deductions = PayrollReportMonthly(
-                employee_id=payroll_activity.employee_id_id,
-                total_gross_pay=payroll_activity.gross_pay
-            )
-            employees_with_deductions.append(employee_with_deductions)
 
-        return employees_with_deductions or None
+        for employee_id, total_gross_pay in data:
+            employees_with_deductions.append(PayrollReportMonthly(
+                employee_id=employee_id,
+                total_gross_pay=total_gross_pay,
+            ))
+
+        return employees_with_deductions
        
 
        
