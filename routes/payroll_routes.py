@@ -766,6 +766,29 @@ async def hdmf_frame(request: Request,username: str = Depends(get_current_user))
         # headers={"WWW-Authenticate": "Basic"},
     )
 
+# =====================================reports frame =======================================
+@payroll_router.get("/frame-payroll-monthly-report/", response_class=HTMLResponse)
+async def hdmf_frame(request: Request,username: str = Depends(get_current_user)):
+
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
+
+        try:
+            
+
+            return templates.TemplateResponse("reports/monthly_payroll_report.html", {"request": request})
+        
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
+
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
+
 @payroll_router.get("/monthly-payroll-report/")
 async def get_payroll_report(datefrom: Optional[str] = None,dateto: Optional[str] = None ):
     data = PayrollTransaction.get_payrollMonthly(datefrom=datefrom,dateto=dateto)

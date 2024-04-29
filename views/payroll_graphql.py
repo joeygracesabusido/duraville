@@ -181,8 +181,14 @@ class AllowanceDetails:
 class PayrollReportMonthly:
     name: str | None = None
     employee_id: int | None = None
+    first_name: Optional[str] = None
+    book: Optional[str] = None
     total_gross_pay: Optional[float] = None
-   
+    net_pay: Optional[float] = None
+    allowance: Optional[float] = None
+    AllowanceMeals: Optional[float] = None
+    developmental: Optional[float] = None
+    allowance_deduction: Optional[float] = None
     
 
 @strawberry.type
@@ -604,7 +610,7 @@ class Query:
     async def get_allowance_list(self) -> Optional[List[AllowanceDetails]]:
         
         data = PayrollTransaction.get_allowance_list()
-        print(data)
+        # print(data)
         allowance_list = []
         for allowance, employee in data:
             allowance_detail = AllowanceDetails(
@@ -632,20 +638,51 @@ class Query:
     
 
     @strawberry.field
-    async def get_payroll_monthly_report(self,datefrom:str,dateto:str) -> Optional[List[PayrollReportMonthly]]:
+    async def get_payroll_monthly_report(self,datefrom:str,dateto:str,emp_id:Optional[int] = None) -> Optional[List[PayrollReportMonthly]]:
         
-        data = PayrollTransaction.get_payrollMonthly(datefrom=datefrom,dateto=dateto)
+        data = PayrollTransaction.get_payrollMonthly(datefrom=datefrom,dateto=dateto,emp_id=emp_id)
        
-       
+    
         employees_with_deductions = []
-
-        for employee_id, total_gross_pay in data:
+       
+        
+        for first_name, last_name,total_gross_pay in data:
             employees_with_deductions.append(PayrollReportMonthly(
-                employee_id=employee_id,
+                name=f"{first_name}, {last_name}",
                 total_gross_pay=total_gross_pay,
             ))
 
         return employees_with_deductions
+    
+    @strawberry.field
+    def get_monthly_payroll_report_test(self,datefrom:str,dateto:str) -> List[PayrollReportMonthly]:
+        data = PayrollTransaction.payroll_report_monthly_testing(datefrom=datefrom,dateto=dateto)
+       
+        employees_with_deductions = []
+        for (emp, bok, totalgross,netPay, totalAllowance,AllowanceMeals, 
+           developmental, allowance_deduction) in data:
+            employee_with_deductions = PayrollReportMonthly(
+                
+                name=f"{emp.last_name}, {emp.first_name}",
+                book=bok.project,
+                total_gross_pay=totalgross if totalgross else 0,
+                net_pay=netPay if netPay else 0,
+                allowance= totalAllowance if totalAllowance else 0,
+                AllowanceMeals= AllowanceMeals if totalAllowance else 0,
+                developmental= developmental if developmental else 0,
+                allowance_deduction= allowance_deduction if allowance_deduction else 0,
+             
+            )
+            employees_with_deductions.append(employee_with_deductions)
+
+       
+        
+
+        return employees_with_deductions
+        
+
+
+            
        
 
        

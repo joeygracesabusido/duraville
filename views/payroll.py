@@ -619,29 +619,17 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 return None
             
     @staticmethod
-    def payroll_report_monthly(datefrom,dateto):
+    def payroll_report_monthly_testing(datefrom,dateto):
         """This function is for """
         with Session(engine) as session:
 
-            # try:
-            #     statement = select(PayrollActivity,EmployeeList).where(
-            #         (Allowance.employee_id_id == EmployeeList.id)  
-            #     )
-
-            #     statement = statement.where(PayrollActivity.payroll_date.between(datefrom,dateto))          
-            #     results = session.exec(statement) 
-
-            #     data = results.all()
-                
-            #     return data
-            # except NoResultFound:
-            #     return None
 
 
             subquery_payroll_list = (
                 select(
                     PayrollActivity.employee_id_id,
-                    func.sum(PayrollActivity.gross_pay).label("TotalGrossPay")
+                    func.sum(PayrollActivity.gross_pay).label("TotalGrossPay"),
+                    func.sum(PayrollActivity.net_pay).label("NetPay")
                 )
                 .where(PayrollActivity.payroll_date.between(datefrom,dateto))
                 .where(PayrollActivity.employee_id_id == EmployeeList.id)  # Filter by employee_id
@@ -652,7 +640,10 @@ class PayrollTransaction(): # this class is for payroll  Transaction
             subquery_allowance = (
                 select(
                     Allowance.employee_id_id,
-                    func.sum(Allowance.allowance).label("TotalAllowance")
+                    func.sum(Allowance.allowance).label("TotalAllowance"),
+                    func.sum(Allowance.meal_allowance).label("Totalmeals"),
+                    func.sum(Allowance.developmental).label("AllowanceDevelopment"),
+                    func.sum(Allowance.allowance_deduction).label("AllowanceDeduction")
                 )
                 .where(Allowance.employee_id_id == EmployeeList.id)  # Filter by employee_id
                 .group_by(Allowance.employee_id_id)
@@ -666,7 +657,11 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                     EmployeeList,
                     Books,
                     func.coalesce(subquery_payroll_list.c.TotalGrossPay, 0).label("TotalGrossPay"),
+                    func.coalesce(subquery_payroll_list.c.NetPay, 0).label("NetPay"),
                     func.coalesce(subquery_allowance.c.TotalAllowance, 0).label("TotalAllowance"),
+                    func.coalesce(subquery_allowance.c.Totalmeals, 0).label("TotalMeals"),
+                    func.coalesce(subquery_allowance.c.AllowanceDevelopment, 0).label("AllowanceDevelopment"),
+                    func.coalesce(subquery_allowance.c.AllowanceDeduction, 0).label("AllowanceDeduction"),
                    
                 )
                 .select_from(EmployeeList)
@@ -682,42 +677,70 @@ class PayrollTransaction(): # this class is for payroll  Transaction
             return data
         
     @staticmethod
-    def get_payrollMonthly(datefrom: Optional[str], dateto: Optional[str]):
-
+    def get_payrollMonthly(datefrom: Optional[str], dateto: Optional[str], emp_id:Optional[int] = None):
         with Session(engine) as session:
-            # datefrom = datetime.strptime(datefrom, '%Y-%m-%d') if datefrom else None
-            # dateto = datetime.strptime(dateto, '%Y-%m-%d') if dateto else None
+            statement = select(
+                EmployeeList.first_name,EmployeeList.last_name,
+                func.sum(PayrollActivity.gross_pay).label("gross_pay")
+            ).join(
+                PayrollActivity,
+                EmployeeList.id == PayrollActivity.employee_id_id
+            )
 
-        #     statement = (
-        #         select(
-        #             PayrollActivity.employee_id_id,
+            if datefrom and dateto:
+                statement = statement.where(
+                    PayrollActivity.payroll_date.between(datefrom, dateto)
+                ).group_by(EmployeeList.id)
+
+            if datefrom and dateto and emp_id:
+                statement = statement.where(
+                    PayrollActivity.payroll_date.between(datefrom, dateto),
+                    PayrollActivity.employee_id_id == emp_id
+                ).group_by(EmployeeList.id)
+
+            results = session.execute(statement)
+            data = results.all()
+
+            return data
+     
+        # with Session(engine) as session:
+           
+        #     statement = select(
+        #         PayrollActivity.employee_id_id,
         #             func.sum(PayrollActivity.gross_pay).label("gross_pay")
-        #         )
-        #         .where(
-        #             and_(
-        #                 PayrollActivity.payroll_date.between(datefrom, dateto),
-        #                 PayrollActivity.employee_id_id == EmployeeList.id
-        #             )
-        #         )
-        #         .group_by(PayrollActivity.employee_id_id)
         #     )
+
+        #     if datefrom and dateto:
+        #         statement = statement.where(
+        #              PayrollActivity.payroll_date.between(datefrom, dateto),
+                        
+        #         ).group_by(PayrollActivity.employee_id_id)
+
+        #     if datefrom and dateto and emp_id:
+        #         statement = statement.where(
+        #              PayrollActivity.payroll_date.between(datefrom, dateto),
+                        
+        #         ).where(PayrollActivity.employee_id_id == emp_id ).group_by(PayrollActivity.employee_id_id)
+
 
         #     results = session.exec(statement)
         #     data = results.all()
 
+        #     return data
+
         # return data
-            result = (
-            session.query(
-                PayrollActivity.employee_id_id,
-                func.sum(PayrollActivity.gross_pay)
-            )
-            .filter(
-                    PayrollActivity.payroll_date.between(datefrom, dateto)
-                )
-                .group_by(PayrollActivity.employee_id_id)
-                .all()
-            )
-            return result
+            # result = (
+            # session.query(
+            #     PayrollActivity.employee_id_id,
+            #     func.sum(PayrollActivity.gross_pay)
+            # )
+            # .filter(
+            #         PayrollActivity.payroll_date.between(datefrom, dateto)
+            #     )
+            #     .group_by(PayrollActivity.employee_id_id)
+            #     .all()
+            # )
+            # return result
 
         
 
