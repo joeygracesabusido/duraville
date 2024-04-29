@@ -157,7 +157,24 @@ class SssTableObject:
     employer_Share: float | None = None
     ss_provident_empr: float | None = None
     ecc: float | None = None
-   
+
+@strawberry.type
+class AllowanceDetails:
+    
+    id: Optional[int] | None = None
+    employee_id_id: Optional[int] | None = None
+    allowance: float | None = None
+    meal_allowance: float | None = None
+    developmental: float | None = None
+    holiday_rdot_pay: float | None = None
+    allowance_deduction: float | None = None
+    allowance_adjustment: float | None = None
+    user: str | None = None
+    date_updated: Optional[datetime] | None = None
+    date_created: datetime | None = None
+    first_name: Optional[str] = None  # Add this attribute
+    last_name: Optional[str] = None   # Add this attribute
+    net_allow: Optional[float] = None   # Add this attribute
     
 
 @strawberry.type
@@ -574,6 +591,38 @@ class Query:
             payroll_activities.append(payroll_activity_detail)
 
         return payroll_activities
+    
+    @strawberry.field
+    async def get_allowance_list(self) -> Optional[List[AllowanceDetails]]:
+        
+        data = PayrollTransaction.get_allowance_list()
+        print(data)
+        allowance_list = []
+        for allowance, employee in data:
+            allowance_detail = AllowanceDetails(
+                id=allowance.id,
+                employee_id_id=allowance.employee_id_id,
+                first_name= employee.first_name,
+                last_name=employee.last_name,
+                allowance=allowance.allowance,
+                meal_allowance=allowance.meal_allowance,
+                developmental=allowance.developmental,
+                holiday_rdot_pay=allowance.holiday_rdot_pay,
+                allowance_deduction=allowance.allowance_deduction,
+                allowance_adjustment=allowance.allowance_adjustment,
+                net_allow=float((allowance.allowance + allowance.meal_allowance +
+                                            allowance.developmental + 
+                                             allowance.holiday_rdot_pay - 
+                                              allowance.allowance_deduction)),
+                user=allowance.user,
+                date_updated=allowance.date_updated,
+                date_created=allowance.date_created
+            )
+            allowance_list.append(allowance_detail)
+
+        return allowance_list
+
+         
         
        
     
@@ -610,3 +659,15 @@ class Mutation:
         PayrollTransaction.update_employee_details2(basic_monthly_pay=basic_monthly_pay, book_id=book_id, item_id=item_id)
     
         return "Data has been updated successfully."
+    
+ 
+    @strawberry.mutation
+    async def insert_allowance(employee_id_id: int, allowance: float, meal_allowance: float, 
+                               developmental: float, holiday_rdot_pay: float, allowance_deduction: float, 
+                               allowance_adjustment: float, user: str) -> str:
+        PayrollTransaction.insert_allowance(employee_id_id=employee_id_id, allowance=allowance, meal_allowance=meal_allowance,
+                                developmental=developmental, holiday_rdot_pay=holiday_rdot_pay,
+                                allowance_deduction=allowance_deduction, allowance_adjustment=allowance_adjustment,
+                                user=user)
+        return "Data has been updated successfully."
+        

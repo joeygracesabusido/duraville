@@ -252,7 +252,21 @@ class PayrollActivity(SQLModel, table=True):
     user: str =Field(default=None)
     date_updated: Optional[datetime] = Field(default=None)
     date_created: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    
+
+
+class Allowance(SQLModel, table=True):
+    __tablename__ = 'allowance'
+    id: Optional[int] = Field(default=None, primary_key=True)
+    employee_id_id: Optional[int] = Field(index=True,default=None, foreign_key="employee_list.id")
+    allowance: float = Field(default=0)
+    meal_allowance: float = Field(default=0)
+    developmental: float = Field(default=0)
+    holiday_rdot_pay: float = Field(default=0)
+    allowance_deduction: float = Field(default=0)
+    allowance_adjustment: float = Field(default=0)
+    user: str =Field(default=None)
+    date_updated: Optional[datetime] = Field(default=None)
+    date_created: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
 
 

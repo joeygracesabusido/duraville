@@ -744,7 +744,7 @@ async def payroll_computation_2nd(request: Request,username: str = Depends(get_c
 
 
 # =====================================ALLOWANCE FRAME =======================================
-@payroll_router.get("/frame-allowance/", response_class=HTMLResponse)
+@payroll_router.get("/frame-allowance-report/", response_class=HTMLResponse)
 async def hdmf_frame(request: Request,username: str = Depends(get_current_user)):
 
     if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
@@ -752,7 +752,7 @@ async def hdmf_frame(request: Request,username: str = Depends(get_current_user))
         try:
             
 
-            return templates.TemplateResponse("payroll/allowance.html", {"request": request})
+            return templates.TemplateResponse("reports/allowance_report.html", {"request": request})
         
         except Exception as e:
             error_message = str(e)  # Use the actual error message from the exception

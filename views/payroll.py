@@ -2,7 +2,9 @@ from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfil
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import select, and_
 
-from models.model import EmployeeList, Books, CashAdvance, SSSLoanDeduction, HDMFLoanDeduction,PayrollActivity
+from models.model import (EmployeeList, Books, CashAdvance, 
+                          SSSLoanDeduction, HDMFLoanDeduction,PayrollActivity,
+                          Allowance)
 from database.mongodb_connection import Connection
 
 
@@ -584,5 +586,33 @@ class PayrollTransaction(): # this class is for payroll  Transaction
     
        
 
+    @staticmethod
+    def insert_allowance(employee_id_id, allowance, meal_allowance, developmental, holiday_rdot_pay,
+                        allowance_deduction, allowance_adjustment, user):
+        insert_data = Allowance(employee_id_id=employee_id_id, allowance=allowance, meal_allowance=meal_allowance,
+                                developmental=developmental, holiday_rdot_pay=holiday_rdot_pay,
+                                allowance_deduction=allowance_deduction, allowance_adjustment=allowance_adjustment,
+                                user=user)
+        
+        session = Session(engine)
+        session.add(insert_data)
+        session.commit()
+        session.close()
 
+    @staticmethod
+    def get_allowance_list(): # this function is to get all the employee list
+        with Session(engine) as session:
+            try:
+                statement = select(Allowance,EmployeeList).where(
+                    (Allowance.employee_id_id == EmployeeList.id)  
+                )
+
+                            
+                results = session.exec(statement) 
+
+                data = results.all()
+                
+                return data
+            except NoResultFound:
+                return None
         
