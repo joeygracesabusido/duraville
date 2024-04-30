@@ -189,6 +189,15 @@ class PayrollReportMonthly:
     AllowanceMeals: Optional[float] = None
     developmental: Optional[float] = None
     allowance_deduction: Optional[float] = None
+    sss: Optional[float] = None
+    sss_provident_emp: Optional[float] = None
+    total_sss: Optional[float] = None
+    hdmf: Optional[float] = None
+    phic: Optional[float] = None
+    totalMandatory: Optional[float] = None
+    total_non_taxable_income:  Optional[float] = None
+    net_pay_after_non_tax:  Optional[float] = None
+
     
 
 @strawberry.type
@@ -659,7 +668,8 @@ class Query:
         data = PayrollTransaction.payroll_report_monthly_testing(datefrom=datefrom,dateto=dateto)
        
         employees_with_deductions = []
-        for (emp, bok, totalgross,netPay, totalAllowance,AllowanceMeals, 
+        for (emp, bok, totalgross,netPay, sss, sss_provident_emp,
+            Phic, Hdmf, totalAllowance,AllowanceMeals, 
            developmental, allowance_deduction) in data:
             employee_with_deductions = PayrollReportMonthly(
                 
@@ -667,11 +677,15 @@ class Query:
                 book=bok.project,
                 total_gross_pay=totalgross if totalgross else 0,
                 net_pay=netPay if netPay else 0,
+                total_sss= float(sss + sss_provident_emp),
+                phic=Phic,
+                hdmf=Hdmf,
                 allowance= totalAllowance if totalAllowance else 0,
                 AllowanceMeals= AllowanceMeals if totalAllowance else 0,
                 developmental= developmental if developmental else 0,
                 allowance_deduction= allowance_deduction if allowance_deduction else 0,
-             
+                total_non_taxable_income= float(totalAllowance +  AllowanceMeals + developmental - allowance_deduction),
+                net_pay_after_non_tax= netPay + float(totalAllowance +  AllowanceMeals + developmental - allowance_deduction),
             )
             employees_with_deductions.append(employee_with_deductions)
 

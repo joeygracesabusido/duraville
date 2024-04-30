@@ -53,6 +53,7 @@ $( function() {
         $("#books").val(ui.item.books);
 
         const basicPayValue = $("#basic_pay").val();
+       
         
 
         calculatetotalGross();
@@ -93,11 +94,12 @@ $( function() {
         success: function(data) {
           const empshares = data.data.getSssTable.map(item => item.employeeShares);
           const ssProvidentEmp = data.data.getSssTable.map(item => item.ssProvidentEmp);
-          const otherdeduction = parseFloat(0)
+         
+         
           $("#sss").val(empshares);
           $("#sss_provident").val(ssProvidentEmp);
-          $("#other_adjustment").val(otherdeduction);
-
+          
+         
           
 
           let basicPayValue = $("#basic_pay").val();
@@ -116,9 +118,12 @@ $( function() {
           }
           
           $("#hdmf").val(hdmf_comp);
-        
-          last_cutoff_gross()
+
+         
+         
+          // last_cutoff_gross()
           calculatetotalDeduction()
+          
           calculatetotalNetpay();
           
         },
@@ -235,6 +240,7 @@ function with_tax_calculation() {
         calculatetotalDeduction()
         calculatetotalNetpay();
         with_tax_calculation();
+        BtnMandatory();
     });
     });
 
@@ -284,13 +290,18 @@ function with_tax_calculation() {
 
 $(document).ready(function() {
     $('#sss,#sss_provident,#phic,#hdmf,#other_adjustment,#tax_withheld,#general_loan,#company_loan').on('input', function() {
+        // with_tax_calculation();
+        BtnMandatory();
+       
         calculatetotalDeduction();
-        calculatetotalNetpay();
+        // calculatetotalNetpay();
+       
        
     });
     });
 
     function calculatetotalDeduction() {
+     
     
     let sss;
     let sss_provident;
@@ -335,8 +346,8 @@ $(document).ready(function() {
 // this is for computation of NET PAY
 
   $(document).ready(function() {
-    $('#gross_pay2,#total_deduction2').on('input', function() {
-        calculatetotalDeduction();
+    $('#gross_pay2,#total_deduction2,#adjustment_non_tax').on('input', function() {
+       
         calculatetotalNetpay();
         
     });
@@ -346,18 +357,19 @@ $(document).ready(function() {
     
     let gross_pay2;
     let total_deduction2;
+    let adjustment_non_tax;
     
 
 
     gross_pay2 = $('#gross_pay2').val() || 0;
     total_deduction2 = $('#total_deduction2').val() || 0;
-  
+    adjustment_non_tax = $('#adjustment_non_tax').val() || 0;
     
     
     
     let product;
     let product2;
-    product = (parseFloat(gross_pay2) - parseFloat(total_deduction2)
+    product = (parseFloat(gross_pay2) - parseFloat(total_deduction2) + parseFloat(adjustment_non_tax)
                     );
 
     product2 = product.toFixed(2);
@@ -436,7 +448,7 @@ document.getElementById("btn_save_payroll_computation").addEventListener("click"
 // this funcotion is for emptying the field once the transaction proceed or save
 const fieldEmpty = () => {
   document.getElementById("name").value = "";
-  document.getElementById("books").value = "";
+  // document.getElementById("books").value = "";
   document.getElementById("employee_specs").value = "";
   document.getElementById("basic_pay").value = "";
   document.getElementById("late").value = "";

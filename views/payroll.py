@@ -629,7 +629,11 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 select(
                     PayrollActivity.employee_id_id,
                     func.sum(PayrollActivity.gross_pay).label("TotalGrossPay"),
-                    func.sum(PayrollActivity.net_pay).label("NetPay")
+                    func.sum(PayrollActivity.net_pay).label("NetPay"),
+                    func.sum(PayrollActivity.sss).label("SSSS"),
+                    func.sum(PayrollActivity.sss_provident_emp).label("SssProvidentEmp"),
+                    func.sum(PayrollActivity.phic).label("Phic"),
+                    func.sum(PayrollActivity.hdmf).label("Hdmf"),
                 )
                 .where(PayrollActivity.payroll_date.between(datefrom,dateto))
                 .where(PayrollActivity.employee_id_id == EmployeeList.id)  # Filter by employee_id
@@ -658,6 +662,10 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                     Books,
                     func.coalesce(subquery_payroll_list.c.TotalGrossPay, 0).label("TotalGrossPay"),
                     func.coalesce(subquery_payroll_list.c.NetPay, 0).label("NetPay"),
+                    func.coalesce(subquery_payroll_list.c.SSSS, 0).label("SSSS"),
+                    func.coalesce(subquery_payroll_list.c.SssProvidentEmp, 0).label("SssProvidentEmp"),
+                    func.coalesce(subquery_payroll_list.c.Phic, 0).label("Phic"),
+                    func.coalesce(subquery_payroll_list.c.Hdmf, 0).label("Hdmf"),
                     func.coalesce(subquery_allowance.c.TotalAllowance, 0).label("TotalAllowance"),
                     func.coalesce(subquery_allowance.c.Totalmeals, 0).label("TotalMeals"),
                     func.coalesce(subquery_allowance.c.AllowanceDevelopment, 0).label("AllowanceDevelopment"),
