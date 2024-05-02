@@ -1,5 +1,65 @@
-$(document).ready(function(){
-    $('#btn_search').click(function(){
+// $(document).ready(function(){
+//     $('#btn_search').click(function(){
+//         var datefrom = $('#datefrom').val();
+//         var dateto = $('#dateto').val();
+
+//         $.ajax({
+//             type: 'POST',
+//             url: '/graphql', // Change this to your GraphQL endpoint
+//             contentType: 'application/json',
+//             data: JSON.stringify({
+//                 query: `query MyQuery {
+//                     getMonthlyPayrollReportTest(datefrom: "${datefrom}", dateto: "${dateto}") {
+//                         name
+//                         book
+//                         totalGrossPay
+//                         netPay
+//                         allowance
+//                         AllowanceMeals
+//                         developmental
+//                         allowanceDeduction
+//                         totalSss
+//                         phic
+//                         hdmf
+//                         totalNonTaxableIncome
+//                         netPayAfterNonTax
+//                     }
+//                 }`
+//             }),
+//             success: function(response) {
+//                 var data = response.data.getMonthlyPayrollReportTest;
+//                 var tbody = $('#table_payroll_monthly_report2');
+//                 tbody.empty();
+//                 console.log(data);
+//                 $.each(data, function(index, item){
+//                     var row = $('<tr>');
+//                     row.append($('<td>').text(item.name));
+//                     row.append($('<td>').text(item.book));
+                  
+//                     row.append($('<td>').text(item.totalGrossPay));
+//                     row.append($('<td>').text(formatNumber(item.totalSss)));
+//                     row.append($('<td>').text(formatNumber(item.phic)));
+//                     row.append($('<td>').text(formatNumber(item.hdmf)));
+//                     row.append($('<td>').text(formatNumber(item.netPay)));
+//                     row.append($('<td>').text(formatNumber(item.allowance)));
+//                     row.append($('<td>').text(formatNumber(item.AllowanceMeals)));
+//                     row.append($('<td>').text(formatNumber(item.developmental)));
+//                     row.append($('<td>').text(formatNumber(item.allowanceDeduction)));
+//                     row.append($('<td>').text(formatNumber(item.totalNonTaxableIncome)));
+//                     row.append($('<td>').text(formatNumber(item.netPayAfterNonTax)));
+//                     tbody.append(row);
+//                 });
+//                 initializeDataTable();
+//             },
+//             error: function(xhr, status, error) {
+//                 console.error('Error:', error);
+//             }
+//         });
+//     });
+// });
+
+$(document).ready(function() {
+    $('#btn_search').click(function() {
         var datefrom = $('#datefrom').val();
         var dateto = $('#dateto').val();
 
@@ -13,14 +73,14 @@ $(document).ready(function(){
                         name
                         book
                         totalGrossPay
+                        totalSss
+                        phic
+                        hdmf
                         netPay
                         allowance
                         AllowanceMeals
                         developmental
                         allowanceDeduction
-                        totalSss
-                        phic
-                        hdmf
                         totalNonTaxableIncome
                         netPayAfterNonTax
                     }
@@ -28,27 +88,32 @@ $(document).ready(function(){
             }),
             success: function(response) {
                 var data = response.data.getMonthlyPayrollReportTest;
-                var tbody = $('#table_payroll_monthly_report2');
-                tbody.empty();
-                console.log(data);
-                $.each(data, function(index, item){
-                    var row = $('<tr>');
-                    row.append($('<td>').text(item.name));
-                    row.append($('<td>').text(item.book));
-                  
-                    row.append($('<td>').text(formatNumber(item.totalGrossPay)));
-                    row.append($('<td>').text(formatNumber(item.totalSss)));
-                    row.append($('<td>').text(formatNumber(item.phic)));
-                    row.append($('<td>').text(formatNumber(item.hdmf)));
-                    row.append($('<td>').text(formatNumber(item.netPay)));
-                    row.append($('<td>').text(formatNumber(item.allowance)));
-                    row.append($('<td>').text(formatNumber(item.AllowanceMeals)));
-                    row.append($('<td>').text(formatNumber(item.developmental)));
-                    row.append($('<td>').text(formatNumber(item.allowanceDeduction)));
-                    row.append($('<td>').text(formatNumber(item.totalNonTaxableIncome)));
-                    row.append($('<td>').text(formatNumber(item.netPayAfterNonTax)));
-                    tbody.append(row);
+                var tableBody = $('#table_payroll_monthly_report2');
+                tableBody.empty();
+
+                data.forEach(function(item) {
+                    var formattedGrossPayAmount = parseFloat(item.totalGrossPay).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                    var row = '<tr>' +
+                        '<td>' + item.name + '</td>' +
+                        '<td>' + item.book + '</td>' +
+                        '<td>' + formattedGrossPayAmount + '</td>' +
+                        '<td>' + formatNumber(item.totalSss) + '</td>' +
+                        '<td>' + formatNumber(item.phic) + '</td>' +
+                        '<td>' + formatNumber(item.hdmf) + '</td>' +
+                        '<td>' + formatNumber(item.netPay) + '</td>' +
+                        '<td>' + formatNumber(item.allowance) + '</td>' +
+                        '<td>' + formatNumber(item.AllowanceMeals) + '</td>' +
+                        '<td>' + formatNumber(item.developmental) + '</td>' +
+                        '<td>' + formatNumber(item.allowanceDeduction) + '</td>' +
+                        '<td>' + formatNumber(item.totalNonTaxableIncome) + '</td>' +
+                        '<td>' + formatNumber(item.netPayAfterNonTax) + '</td>' +
+                        '</tr>';
+                    tableBody.append(row);
                 });
+
                 initializeDataTable();
             },
             error: function(xhr, status, error) {
@@ -57,6 +122,7 @@ $(document).ready(function(){
         });
     });
 });
+
 
 const initializeDataTable = () => {
     $('#table_payroll_monthly_report').DataTable();
@@ -146,6 +212,38 @@ function formatNumber(number) {
 //     XLSX.writeFile(wb, 'payroll_list.' + type);
 // }
 
+// function payrollListExcel(type) {
+//     var data = document.getElementById('table_payroll_monthly_report2');
+
+//     // Define clean column headers
+//     var cleanColumnHeaders = ['Name', 'Books', 'Gross Pay', 'SSS', 'PHIC', 
+//                                 'HDMF', 'Net Pay', 'Allowance', 'Meal Allowance',
+//                                  'Developmental', 'Allowance Deduction','Total Non-Tax','Net After Non Tax'];
+
+//     // Extract data from table rows
+//     var tableData = [];
+//     $('#table_payroll_monthly_report2 tr').each(function() {
+//         var rowData = [];
+//         $(this).find('td').each(function() {
+//             rowData.push($(this).text());
+//         });
+//         tableData.push(rowData);
+//     });
+
+//     // Create a workbook
+//     var wb = XLSX.utils.book_new();
+
+//     // Convert data to worksheet
+//     var sheet = XLSX.utils.aoa_to_sheet([cleanColumnHeaders]); // Use clean column headers
+//     XLSX.utils.sheet_add_aoa(sheet, tableData, { origin: 'A2' }); // Add table data below headers
+
+//     // Append worksheet to the workbook
+//     XLSX.utils.book_append_sheet(wb, sheet, 'Sheet1');
+
+//     // Save workbook
+//     XLSX.writeFile(wb, 'payroll_list.' + type);
+// }
+
 function payrollListExcel(type) {
     var data = document.getElementById('table_payroll_monthly_report2');
 
@@ -164,6 +262,21 @@ function payrollListExcel(type) {
         tableData.push(rowData);
     });
 
+    // Calculate totals for each column
+    var totals = Array(cleanColumnHeaders.length).fill(0); // Initialize totals array with zeros
+    for (var i = 1; i < tableData[0].length; i++) { // Start from 1 to skip the 'Name' column
+        for (var j = 0; j < tableData.length; j++) {
+            var value = parseFloat(tableData[j][i]);
+            if (!isNaN(value)) {
+                totals[i] += value;
+            }
+        }
+    }
+
+    // Add totals row to table data
+    var totalsRow = ['Total'].concat(totals.slice(1)); // Concatenate 'Total' label with calculated totals
+    tableData.push(totalsRow);
+
     // Create a workbook
     var wb = XLSX.utils.book_new();
 
@@ -177,6 +290,11 @@ function payrollListExcel(type) {
     // Save workbook
     XLSX.writeFile(wb, 'payroll_list.' + type);
 }
+
+
+
+
+
 
 
 
