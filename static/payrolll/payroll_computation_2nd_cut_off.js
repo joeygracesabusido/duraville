@@ -136,35 +136,65 @@ $( function() {
 
    // this is for autocomplete of sss
 
-      function last_cutoff_gross() {
-        const search_employee_id = ($("#employee_id_id").val()) ; // Get the value of the input field
-        const search_payroll_date = ($("#payroll_date_last_cut_off").val()) ; // Get the value of the input field
-        const getGrossLastPayroll = `
-          query {
-            getApiPayrollForTaxComp(employeeIdSearch: ${search_employee_id},payrollDate: "${search_payroll_date}") {
-              grossPay
-            }
-          }
-        `;
+      // function last_cutoff_gross() {
+      //   const search_employee_id = ($("#employee_id_id").val()) ; // Get the value of the input field
+      //   const search_payroll_date = ($("#payroll_date_last_cut_off").val()) ; // Get the value of the input field
+      //   const getGrossLastPayroll = `
+      //     query {
+      //       getApiPayrollForTaxComp(employeeIdSearch: ${search_employee_id},payrollDate: "${search_payroll_date}") {
+      //         grossPay
+      //       }
+      //     }
+      //   `;
 
-        $.ajax({
-          url: "/graphql",
-          method: "POST",
-          data: JSON.stringify({ query: getGrossLastPayroll }),
-          contentType: "application/json",
-          success: function(data) {
-            const last_gross_payroll = data.data.getApiPayrollForTaxComp.map(item => item.grossPay);
-            $("#grosspay_last_cut_off").val(last_gross_payroll);
+      //   $.ajax({
+      //     url: "/graphql",
+      //     method: "POST",
+      //     data: JSON.stringify({ query: getGrossLastPayroll }),
+      //     contentType: "application/json",
+      //     success: function(data) {
+      //       const last_gross_payroll = data.data.getApiPayrollForTaxComp.map(item => item.grossPay);
+      //       $("#grosspay_last_cut_off").val(last_gross_payroll);
 
-            with_tax_calculation()
+      //       with_tax_calculation()
 
                    
-          },
-          error: function(xhr, status, error) {
-            console.error("Request failed:", error);
-          }
+      //     },
+      //     error: function(xhr, status, error) {
+      //       console.error("Request failed:", error);
+      //     }
+      //   });
+      // }
+
+
+      const last_cutoff_gross = () => {
+        const search_employee_id = $("#employee_id_id").val(); // Get the value of the input field
+        const search_payroll_date = $("#payroll_date_last_cut_off").val(); // Get the value of the input field
+        const getGrossLastPayroll = `
+            query {
+                getApiPayrollForTaxComp(employeeIdSearch: ${search_employee_id}, payrollDate: "${search_payroll_date}") {
+                    grossPay
+                }
+            }
+        `;
+    
+        $.ajax({
+            url: "/graphql",
+            method: "POST",
+            data: JSON.stringify({ query: getGrossLastPayroll }),
+            contentType: "application/json",
+            success: (data) => {
+                const last_gross_payroll = data.data.getApiPayrollForTaxComp.map(item => item.grossPay);
+                $("#grosspay_last_cut_off").val(last_gross_payroll);
+    
+                with_tax_calculation();
+            },
+            error: (xhr, status, error) => {
+                console.error("Request failed:", error);
+            }
         });
-      }
+    };
+    
 
 
 
@@ -243,7 +273,8 @@ function with_tax_calculation() {
         calculatetotalDeduction()
         calculatetotalNetpay();
         with_tax_calculation();
-        BtnMandatory();
+       
+        
     });
     });
 

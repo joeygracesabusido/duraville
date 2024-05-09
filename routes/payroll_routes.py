@@ -809,6 +809,29 @@ async def get_payroll_report(datefrom: Optional[str] = None,dateto: Optional[str
     return employees_with_deductions
 
 
+# ===========================================ALLOWANCE===========================================
+@payroll_router.get("/frame-allowance/", response_class=HTMLResponse)
+async def allowance(request: Request,username: str = Depends(get_current_user)):
+
+    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
+
+        try:
+            
+            return templates.TemplateResponse("payroll/allowance.html", {"request": request})
+        
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
+
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
+
+
 
 
     
