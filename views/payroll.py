@@ -590,10 +590,11 @@ class PayrollTransaction(): # this class is for payroll  Transaction
 
     @staticmethod
     def insert_allowance(employee_id_id, allowance, meal_allowance, developmental, holiday_rdot_pay,
-                        allowance_deduction, allowance_adjustment, user):
+                        allowance_deduction, allowance_adjustment,payroll_date, user):
         insert_data = Allowance(employee_id_id=employee_id_id, allowance=allowance, meal_allowance=meal_allowance,
                                 developmental=developmental, holiday_rdot_pay=holiday_rdot_pay,
-                                allowance_deduction=allowance_deduction, allowance_adjustment=allowance_adjustment,
+                                allowance_deduction=allowance_deduction, 
+                                allowance_adjustment=allowance_adjustment,payroll_date=payroll_date,
                                 user=user)
         
         session = Session(engine)
@@ -634,6 +635,7 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                     func.sum(PayrollActivity.sss_provident_emp).label("SssProvidentEmp"),
                     func.sum(PayrollActivity.phic).label("Phic"),
                     func.sum(PayrollActivity.hdmf).label("Hdmf"),
+                    func.sum(PayrollActivity.tax_withheld).label("TaxWithheld"),
                 )
                 .where(PayrollActivity.payroll_date.between(datefrom,dateto))
                 .where(PayrollActivity.employee_id_id == EmployeeList.id)  # Filter by employee_id
@@ -649,6 +651,7 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                     func.sum(Allowance.developmental).label("AllowanceDevelopment"),
                     func.sum(Allowance.allowance_deduction).label("AllowanceDeduction")
                 )
+                .where(Allowance.payroll_date.between(datefrom,dateto))
                 .where(Allowance.employee_id_id == EmployeeList.id)  # Filter by employee_id
                 .group_by(Allowance.employee_id_id)
                 .subquery()
@@ -666,6 +669,7 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                     func.coalesce(subquery_payroll_list.c.SssProvidentEmp, 0).label("SssProvidentEmp"),
                     func.coalesce(subquery_payroll_list.c.Phic, 0).label("Phic"),
                     func.coalesce(subquery_payroll_list.c.Hdmf, 0).label("Hdmf"),
+                    func.coalesce(subquery_payroll_list.c.TaxWithheld, 0).label("TaxWithheld"),
                     func.coalesce(subquery_allowance.c.TotalAllowance, 0).label("TotalAllowance"),
                     func.coalesce(subquery_allowance.c.Totalmeals, 0).label("TotalMeals"),
                     func.coalesce(subquery_allowance.c.AllowanceDevelopment, 0).label("AllowanceDevelopment"),

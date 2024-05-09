@@ -208,7 +208,7 @@ $(document).ready(function() {
 // this is for computation of NET PAY
 
     $(document).ready(function() {
-        $('#gross_pay2,#total_deduction2').on('input', function() {
+        $('#gross_pay2,#total_deduction2,#adjustment_non_tax').on('input', function() {
             calculatetotalDeduction();
             calculatetotalNetpay();
             
@@ -219,18 +219,19 @@ $(document).ready(function() {
         
         let gross_pay2;
         let total_deduction2;
+        let adjustment_non_tax;
         
     
   
         gross_pay2 = $('#gross_pay2').val() || 0;
         total_deduction2 = $('#total_deduction2').val() || 0;
-       
+        adjustment_non_tax = $('#adjustment_non_tax').val() || 0;
         
         
         
         let product;
         let product2;
-        product = (parseFloat(gross_pay2) - parseFloat(total_deduction2)
+        product = (parseFloat(gross_pay2) - parseFloat(total_deduction2) + parseFloat(adjustment_non_tax)
                         );
 
         product2 = product.toFixed(2);

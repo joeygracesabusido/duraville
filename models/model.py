@@ -257,6 +257,7 @@ class PayrollActivity(SQLModel, table=True):
 class Allowance(SQLModel, table=True):
     __tablename__ = 'allowance'
     id: Optional[int] = Field(default=None, primary_key=True)
+    payroll_date: Optional[date] = Field(default=None)
     employee_id_id: Optional[int] = Field(index=True,default=None, foreign_key="employee_list.id")
     allowance: float = Field(default=0)
     meal_allowance: float = Field(default=0)

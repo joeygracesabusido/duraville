@@ -52,7 +52,7 @@ $( function() {
        
         $("#books").val(ui.item.books);
 
-        const basicPayValue = $("#basic_pay").val();
+        // const basicPayValue = $("#basic_pay").val();
        
         
 
@@ -109,12 +109,12 @@ $( function() {
           hdmf_comp = 200
           if ((basicPayValue * 2) <= 10000){
             phic_com =  500 / 2
-            phic_come = phic_com.toFixed(2)
-            $("#phic").val(phic_come);
+            // phic_come = phic_com.toFixed(2)
+            $("#phic").val(phic_com);
           } else{
             phic_com =  (basicPayValue * 2) * 0.05 / 2
-            phic_come = phic_com.toFixed(2)
-            $("#phic").val(phic_come);
+            // phic_come = phic_com.toFixed(2)
+            $("#phic").val(phic_com);
           }
           
           $("#hdmf").val(hdmf_comp);
@@ -202,6 +202,7 @@ function with_tax_calculation() {
   const bracket_2 = [20833.01, 33333];
   const bracket_3 = [33333.01, 66666];
   const bracket_4 = [66667, 166666];
+  const bracket_5 = [166667, 666666];
   // ... Add more rates corresponding to the brackets
 
   // Apply tax rates based on the income brackets
@@ -217,7 +218,9 @@ function with_tax_calculation() {
           incomeTax = parseFloat(((income - 33333) * 0.20 + 1875).toFixed(2));
       } else if (income > bracket_4[0] && income <= bracket_4[1]) {
         incomeTax = parseFloat(((income - 66666) * 0.25 + 8541.80).toFixed(2));
-    }
+    } else if (income > bracket_5[0] && income <= bracket_5[1]) {
+      incomeTax = parseFloat(((income - 166667) * 0.30 + 33541.80).toFixed(2));
+  } 
 
       tax.push(incomeTax);
   }

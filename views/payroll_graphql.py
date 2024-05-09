@@ -172,6 +172,7 @@ class AllowanceDetails:
     user: str | None = None
     date_updated: Optional[datetime] | None = None
     date_created: datetime | None = None
+    payroll_date: Optional[date] = None
     first_name: Optional[str] = None  # Add this attribute
     last_name: Optional[str] = None   # Add this attribute
     net_allow: Optional[float] = None   # Add this attribute
@@ -183,6 +184,7 @@ class PayrollReportMonthly:
     employee_id: int | None = None
     first_name: Optional[str] = None
     book: Optional[str] = None
+    basic_monthly_pay: Optional[float] = None
     total_gross_pay: Optional[float] = None
     net_pay: Optional[float] = None
     allowance: Optional[float] = None
@@ -197,6 +199,12 @@ class PayrollReportMonthly:
     totalMandatory: Optional[float] = None
     total_non_taxable_income:  Optional[float] = None
     net_pay_after_non_tax:  Optional[float] = None
+    sss_employer_share:Optional[float] = None
+    ss_provident_empr2: Optional[float] = None
+    ecc: Optional[float] = None
+    phic_employer: Optional[float] = None
+    hdmf_employe: Optional[float] = None
+    TaxWithheld: Optional[float] = None
 
     
 
@@ -638,6 +646,7 @@ class Query:
                                              allowance.holiday_rdot_pay - 
                                               allowance.allowance_deduction)),
                 user=allowance.user,
+                payroll_date=allowance.payroll_date,
                 date_updated=allowance.date_updated,
                 date_created=allowance.date_created
             )
@@ -674,6 +683,7 @@ class Query:
             employee_with_deductions = PayrollReportMonthly(
                 
                 name=f"{emp.last_name}, {emp.first_name}",
+                basic_monthly_pay = emp.basic_monthly_pay,
                 book=bok.project,
                 total_gross_pay=totalgross if totalgross else 0,
                 net_pay=netPay if netPay else 0,
@@ -693,7 +703,86 @@ class Query:
         
 
         return employees_with_deductions
+    
+    
+    @strawberry.field
+    async def sss_table_list(self) -> Optional[List[SssTableObject]]:
+
+        results = mydb.sss_table.find()
+
+        sssTableData = []
+        for result in results:
+            sssTableData.append(
+                SssTableObject(
+                    rate_from=result['rate_from'],
+                    rate_to=result['rate_to'],
+                    employee_shares=result['employee_share'],
+                    ss_provident_emp=result['ss_provident_emp'],
+                    employer_Share=result['employer_Share'],
+                    ss_provident_empr=result['ss_provident_empr'],
+                    ecc=result['ecc']
+                )
+            )
+
+        return sssTableData
+
+    @strawberry.field
+    async def get_monthly_payroll_report_with_sss(self,datefrom: str, dateto: str) -> List[PayrollReportMonthly]:
+        data = PayrollTransaction.payroll_report_monthly_testing(datefrom=datefrom, dateto=dateto)
         
+        
+        # Retrieve SSS table data
+        schema_instance = Query()
+        sss_table_data = await schema_instance.sss_table_list()
+
+       
+        employees_with_deductions = []
+        for (emp, bok, totalgross, netPay, sss, sss_provident_emp,
+            Phic, Hdmf, TaxWithheld, totalAllowance, AllowanceMeals,
+            developmental, allowance_deduction) in data:
+            
+            # Find the appropriate SSS table entry for the basic monthly pay
+            for sss_entry in sss_table_data:
+                if sss_entry.rate_from <= emp.basic_monthly_pay <= sss_entry.rate_to:
+                    # Calculate employer share, ss_provident_empr, and ecc
+                    sss_employer_share = sss_entry.employer_Share
+                    ss_provident_empr2 = sss_entry.ss_provident_empr
+                    ecc = sss_entry.ecc
+                    break
+            else:
+                # If no matching entry found, set defaults
+                sss_employer_share = 0
+                ss_provident_empr2 = 0
+                ecc = 0
+            
+            # Create PayrollReportMonthly object
+            employee_with_deductions = PayrollReportMonthly(
+                name=f"{emp.last_name}, {emp.first_name}",
+                basic_monthly_pay=emp.basic_monthly_pay,
+                book=bok.project,
+                total_gross_pay=totalgross if totalgross else 0,
+                net_pay=netPay if netPay else 0,
+                total_sss=float(sss + sss_provident_emp),
+                phic=Phic,
+                hdmf=Hdmf,
+                allowance=totalAllowance if totalAllowance else 0,
+                AllowanceMeals=AllowanceMeals if totalAllowance else 0,
+                developmental=developmental if developmental else 0,
+                allowance_deduction=allowance_deduction if allowance_deduction else 0,
+                total_non_taxable_income=float(totalAllowance + AllowanceMeals + developmental - allowance_deduction),
+                net_pay_after_non_tax=netPay + float(totalAllowance + AllowanceMeals + developmental - allowance_deduction),
+                sss_employer_share=float(sss_employer_share + ss_provident_empr2),
+                ecc=ecc,
+                phic_employer= Phic ,
+                hdmf_employe= Hdmf,
+                TaxWithheld = TaxWithheld
+
+            )
+            employees_with_deductions.append(employee_with_deductions)
+
+        return employees_with_deductions
+
+ 
 
 
             
@@ -744,10 +833,10 @@ class Mutation:
     @strawberry.mutation
     async def insert_allowance(employee_id_id: int, allowance: float, meal_allowance: float, 
                                developmental: float, holiday_rdot_pay: float, allowance_deduction: float, 
-                               allowance_adjustment: float, user: str) -> str:
+                               allowance_adjustment: float, payroll_date: date, user: str) -> str:
         PayrollTransaction.insert_allowance(employee_id_id=employee_id_id, allowance=allowance, meal_allowance=meal_allowance,
                                 developmental=developmental, holiday_rdot_pay=holiday_rdot_pay,
                                 allowance_deduction=allowance_deduction, allowance_adjustment=allowance_adjustment,
-                                user=user)
+                                payroll_date=payroll_date,user=user)
         return "Data has been updated successfully."
         

@@ -108,7 +108,7 @@ function payrollListExcel(type){
     var data = document.getElementById('table_payroll_report');
     var file = XLSX.utils.table_to_book(data,{sheet: "sheet1"});
     XLSX.write(file,{ booktype: type, bookSST: true, type: 'base64'});
-    XLSX.writeFile(file, 'payroll_list.' + type);
+    XLSX.writeFile(file, 'payroll_activity.' + type);
 
 }
 
