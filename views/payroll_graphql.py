@@ -205,7 +205,8 @@ class PayrollReportMonthly:
     phic_employer: Optional[float] = None
     hdmf_employe: Optional[float] = None
     TaxWithheld: Optional[float] = None
-
+    totalPhic: Optional[float] = None
+    totalPhic2: Optional[float] = None
     
 
 @strawberry.type
@@ -756,6 +757,9 @@ class Query:
                 ecc = 0
             
             # Create PayrollReportMonthly object
+
+            totalPhic = emp.basic_monthly_pay * 0.05
+            totalPhic2 = "{:.2f}".format(totalPhic)
             employee_with_deductions = PayrollReportMonthly(
                 name=f"{emp.last_name}, {emp.first_name}",
                 basic_monthly_pay=emp.basic_monthly_pay,
@@ -773,7 +777,8 @@ class Query:
                 net_pay_after_non_tax=netPay + float(totalAllowance + AllowanceMeals + developmental - allowance_deduction),
                 sss_employer_share=float(sss_employer_share + ss_provident_empr2),
                 ecc=ecc,
-                phic_employer= Phic ,
+                totalPhic2 = totalPhic2,
+                phic_employer= float(totalPhic2) - float(Phic),
                 hdmf_employe= Hdmf,
                 TaxWithheld = TaxWithheld
 
