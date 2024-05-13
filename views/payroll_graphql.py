@@ -176,6 +176,7 @@ class AllowanceDetails:
     first_name: Optional[str] = None  # Add this attribute
     last_name: Optional[str] = None   # Add this attribute
     net_allow: Optional[float] = None   # Add this attribute
+    name: Optional[str] = None
 
 
 @strawberry.type
@@ -647,6 +648,7 @@ class Query:
                                              allowance.holiday_rdot_pay - 
                                               allowance.allowance_deduction)),
                 user=allowance.user,
+                name=f"{employee.last_name}, {employee.first_name}",
                 payroll_date=allowance.payroll_date,
                 date_updated=allowance.date_updated,
                 date_created=allowance.date_created
@@ -843,5 +845,5 @@ class Mutation:
                                 developmental=developmental, holiday_rdot_pay=holiday_rdot_pay,
                                 allowance_deduction=allowance_deduction, allowance_adjustment=allowance_adjustment,
                                 payroll_date=payroll_date,user=user)
-        return "Data has been updated successfully."
+        return "Data has been Save."
         

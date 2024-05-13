@@ -67,6 +67,12 @@ font-size: 19px; /* Adjust the font size as needed */
 .card {
     height: auto; /* Allow card to expand based on content */
     overflow: auto; /* Add scrollbars if content overflows */
+    border: 2px solid #000; /* Add a 2px solid black border */
+    transition: border-color 0.3s ease; /* Add smooth transition for border color change */
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
 }
 
 /* Custom scrollbar styling */
