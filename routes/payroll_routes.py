@@ -729,7 +729,7 @@ async def payroll_computation_2nd(request: Request,username: str = Depends(get_c
 
         try:
             
-
+           
             return templates.TemplateResponse("payroll/payroll_computation_2nd_cut_off.html", {"request": request})
         
         except Exception as e:
@@ -744,14 +744,37 @@ async def payroll_computation_2nd(request: Request,username: str = Depends(get_c
 
 
 # =====================================ALLOWANCE FRAME =======================================
-@payroll_router.get("/frame-allowance-report/", response_class=HTMLResponse)
-async def hdmf_frame(request: Request,username: str = Depends(get_current_user)):
+@payroll_router.get("/frame-allowance/", response_class=HTMLResponse)
+async def allowance(request: Request,username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
+    if username in ['joeysabusido', 'eliza', 'drdc-admin']:
 
         try:
             
+            return templates.TemplateResponse("payroll/allowance.html", {"request": request,'username': username})
+        
+        except Exception as e:
+            error_message = str(e)  # Use the actual error message from the exception
+        
+            return {"error": error_message}
 
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not Authorized",
+        # headers={"WWW-Authenticate": "Basic"},
+    )
+
+
+@payroll_router.get("/frame-allowance-report/", response_class=HTMLResponse)
+async def get_allowance_api(request: Request,username: str = Depends(get_current_user)):
+    
+
+    if username in ['joeysabusido', 'eliza', 'drdc-admin']:
+
+        try:
+            
+            
             return templates.TemplateResponse("reports/allowance_report.html", {"request": request})
         
         except Exception as e:
@@ -810,26 +833,7 @@ async def get_payroll_report(datefrom: Optional[str] = None,dateto: Optional[str
 
 
 # ===========================================ALLOWANCE===========================================
-@payroll_router.get("/frame-allowance/", response_class=HTMLResponse)
-async def allowance(request: Request,username: str = Depends(get_current_user)):
 
-    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
-
-        try:
-            
-            return templates.TemplateResponse("payroll/allowance.html", {"request": request})
-        
-        except Exception as e:
-            error_message = str(e)  # Use the actual error message from the exception
-        
-            return {"error": error_message}
-
-
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Not Authorized",
-        # headers={"WWW-Authenticate": "Basic"},
-    )
 
 
 

@@ -33,33 +33,33 @@ $(document).ready(function() {
 const insert_allowance = () => {
     // Get form values
     const payroll_date = $("#payroll_date").val();
-    const name = $("#name").val();
-    const allowance = $("#allowance").val();
-    const meal_allowance = $("#meal_allowance").val();
-    const developmental = $("#developmental").val();
-    const holiday_rdot_pay = $("#holiday_rdot_pay").val();
-    const allowance_deduction = $("#allowance_deduction").val();
-    const allowance_adjustment = $("#allowance_adjustment").val();
+    const user = $("#user").val();
+    const allowance = $("#allowance").val() || 0;
+    const meal_allowance = $("#meal_allowance").val() || 0;
+    const developmental = $("#developmental").val() || 0;
+    const holiday_rdot_pay = $("#holiday_rdot_pay").val() || 0;
+    const allowance_deduction = $("#allowance_deduction").val() || 0;
+    const allowance_adjustment = $("#allowance_adjustment").val() || 0;
     const employee_id_id = $("#employee_id_id").val();
 
     // Send data to GraphQL endpoint using AJAX
     $.ajax({
-      url: '/your-graphql-endpoint',
+      url: '/graphql',
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify({
         query: `
           mutation {
-            insert_allowance(
-              employee_id_id: ${employee_id_id},
+            insertAllowance(
+              employeeIdId: ${employee_id_id},
               allowance: ${allowance},
-              meal_allowance: ${meal_allowance},
+              mealAllowance: ${meal_allowance},
               developmental: ${developmental},
-              holiday_rdot_pay: ${holiday_rdot_pay},
-              allowance_deduction: ${allowance_deduction},
-              allowance_adjustment: ${allowance_adjustment},
-              payroll_date: "${payroll_date}",
-              user: "${name}"
+              holidayRdotPay: ${holiday_rdot_pay},
+              allowanceDeduction: ${allowance_deduction},
+              allowanceAdjustment: ${allowance_adjustment},
+              payrollDate: "${payroll_date}",
+              user: "${user}"
             )
           }
         `
@@ -68,6 +68,8 @@ const insert_allowance = () => {
         // Handle success response
         console.log(response);
         // Optionally, display a success message to the user
+        window.alert("Data Has Been Save");
+        window.location.href = '/frame-allowance/';
       },
       error: (error) => {
         // Handle error response
@@ -118,11 +120,16 @@ $(document).ready(function() {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                 });
+
+                var formatedmealAllowance = parseFloat(item.mealAllowance).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+              });
                 var row = '<tr>' +
                     '<td>' + item.payrollDate + '</td>' +
                     '<td>' + item.name + '</td>' +
                     '<td>' + formattedAllowance + '</td>' +
-                    '<td>' + item.mealAllowance + '</td>' +
+                    '<td>' + formatedmealAllowance + '</td>' +
                     '<td>' + item.developmental + '</td>' +
                     '<td>' + item.holidayRdotPay + '</td>' +
                     '<td>' + item.allowanceDeduction + '</td>' +
@@ -142,3 +149,25 @@ $(document).ready(function() {
 const initializeDataTable = () => {
     $('#my_table_allowance2').DataTable();
 };
+
+
+
+function formatNumber(number) {
+  // Check if the number is valid
+  if (isNaN(number)) {
+      return number; // Return as is if not a valid numbergit add 
+  }
+  
+  // Format number with thousand separator and 2 decimal places
+  return parseFloat(number).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+
+function payrollListExcel(type){
+    var data = document.getElementById('my_table_allowance2');
+    var file = XLSX.utils.table_to_book(data,{sheet: "sheet1"});
+    XLSX.write(file,{ booktype: type, bookSST: true, type: 'base64'});
+    XLSX.writeFile(file, 'allowanceList.' + type);
+
+  }
+
