@@ -138,7 +138,7 @@ class PayrollActivityDetails(BaseModel):
 
     employee_id_id: Optional[int] 
 
-
+    adjustment_not_taxable: Optional[float] = None
     user: str | None = None
     date_updated: datetime | None = None
     date_created: datetime | None = None
@@ -686,7 +686,8 @@ async def api_insert_payroll_activity(items:PayrollActivityDetails, username: st
                 employee_specs=items.employee_specs,
                 employee_id_id=items.employee_id_id,
                 user=username,
-                sss_provident_emp=items.sss_provident_emp
+                sss_provident_emp=items.sss_provident_emp,
+                adjustment_not_taxable=items.adjustment_not_taxable
             )
 
             return {"message": "Data has been saved"}

@@ -268,7 +268,8 @@ const savePayrollComputation = () => {
       other_adjustment: document.getElementById("other_adjustment").value || 0,
       total_deduction: document.getElementById("total_deduction2").value || 0,
       net_pay: document.getElementById("net_pay2").value || 0,
-      employee_id_id: document.getElementById("employee_id_id").value 
+      employee_id_id: document.getElementById("employee_id_id").value ,
+      adjustment_not_taxable: document.getElementById("adjustment_non_tax").value || 0
      
       
   };

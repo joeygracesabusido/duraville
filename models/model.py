@@ -245,6 +245,7 @@ class PayrollActivity(SQLModel, table=True):
     tax_withheld: float = Field(default= 0)
     books: str
     employee_specs: str
+    adjustment_not_taxable: float = Field(default= 0)
 
     employee_id_id: Optional[int] = Field(index=True,default=None, foreign_key="employee_list.id")
 

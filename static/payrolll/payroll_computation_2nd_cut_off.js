@@ -444,6 +444,7 @@ const savePayrollComputation = () => {
       employee_id_id: document.getElementById("employee_id_id").value,
       general_loan: document.getElementById("general_loan").value || 0,
       company_loan: document.getElementById("company_loan").value || 0,
+      adjustment_not_taxable: document.getElementById("adjustment_non_tax").value || 0
      
       
   };

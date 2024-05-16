@@ -496,7 +496,8 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                                 normal_working_day_ot, spl_30, legal, holiday_ot, basic_pay_adjustment, 
                                 gross_pay, housing_loan, sss_loan, hdmf_loan, general_loan, 
                                 company_loan, other_adjustment, total_deduction, net_pay, sss, 
-                                phic, hdmf, tax_withheld, books, employee_specs, employee_id_id, user,sss_provident_emp
+                                phic, hdmf, tax_withheld, books, employee_specs, employee_id_id, user,sss_provident_emp,
+                                adjustment_not_taxable
                             ): # this function is for inserting payroll acitivity
 
         insertData = PayrollActivity(date_from=date_from,
@@ -528,7 +529,8 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 employee_specs=employee_specs,
                 employee_id_id=employee_id_id,
                 user=user,
-                sss_provident_emp=sss_provident_emp)
+                sss_provident_emp=sss_provident_emp,
+                adjustment_not_taxable=adjustment_not_taxable)
             
 
         session = Session(engine)
