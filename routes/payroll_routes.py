@@ -50,7 +50,7 @@ class CashAdvanceDetails(BaseModel):
         from_attributes = True
 
 class CashAdvanceDetails2(BaseModel):
-     
+    
     amount_deduction: float
     
     class Config:
@@ -68,7 +68,7 @@ class SssLoanDetails(BaseModel):
         from_attributes = True
 
 class SssLoanDetails2(BaseModel):
-    
+    id: int
     amount_deduction: float
   
 
@@ -506,23 +506,24 @@ async def insert_sss_loan(items:SssLoanDetails,username: str = Depends(get_curre
         return  {'Messeges':'Data has been Updated'}
     
 
-@payroll_router.put("/api-update-sss-loan/{id}")
-async def update_sss_laon(id,items:SssLoanDetails2,username: str = Depends(get_current_user)):
-    
-    if username == 'joeysabusido' or username == 'eliza' or username == 'drdc-admin':
-
+@payroll_router.put("/api-update-sss-loan/")
+async def update_sss_loan(items: SssLoanDetails2, username: str = Depends(get_current_user)):
+    if username in ['joeysabusido', 'eliza', 'drdc-admin']:
         today = datetime.now()
         try:
-            PayrollTransaction.update_sss_loan(amount_deduction=items.amount_deduction,
-                                                date_updated=today,user=username,item_id=id)
-
+            result = PayrollTransaction.update_sss_loan(
+                amount_deduction=items.amount_deduction,
+                date_updated=today,
+                user=username,
+                item_id=items.id
+            )
+            if "error" in result:
+                raise HTTPException(status_code=400, detail=result["error"])
+            return result
         except Exception as e:
-            error_message = str(e)  # Use the actual error message from the exception
-        
-            return {"error": error_message}
-
-
-        return  {'Messeges':'Data has been Updated'}
+            raise HTTPException(status_code=500, detail=str(e))
+    else:
+        raise HTTPException(status_code=403, detail="Unauthorized user")
 
 # =====================================HDMF loan Frame =======================================
 @payroll_router.get("/insert-hdmf-loan/", response_class=HTMLResponse)

@@ -220,10 +220,11 @@ $(document).ready(function() {
 
         // Make an AJAX request to update the cash advance
         $.ajax({
-            url: '/api-update-sss-loan/' + id,
+            url: '/api-update-sss-loan/',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify({
+                id: id,
                 amount_deduction: amountDeduction
             }),
             success: function(response) {
@@ -241,3 +242,40 @@ $(document).ready(function() {
     }
 });
 
+// document.addEventListener('DOMContentLoaded', () => {
+//     document.getElementById('btn_save_changes').addEventListener('click', () => {
+//         updateSSSDeduction();
+//     });
+
+//     const updateSSSDeduction = () => {
+//         const id = document.getElementById('update_id').value;
+//         const amountDeduction = document.getElementById('update_amount_deduction').value;
+
+//         fetch('/api-update-sss-loan/', {
+//             method: 'PUT',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({
+//                 id: id,  // Include the ID in the request body
+//                 amount_deduction: amountDeduction
+//             })
+//         })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.error) {
+//                 console.error('Error updating cash advance:', data.error);
+//                 // Display error message to user if needed
+//             } else {
+//                 console.log('Cash advance updated successfully:', data);
+//                 // Close the modal or redirect if needed
+//                 document.getElementById('update_cash_advance_modal').style.display = 'none';
+//                 window.location.href = '/insert-sss-loan/';
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error updating cash advance:', error);
+//             // Display error message to user if needed
+//         });
+//     }
+// });

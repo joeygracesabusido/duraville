@@ -1,4 +1,4 @@
-from sqlmodel import Field, Session, SQLModel, create_engine,select,func,funcfilter,within_group,Relationship,Index
+from sqlmodel import Field, Session,  create_engine,select,func,funcfilter,within_group,Relationship,Index
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import select, and_
 
@@ -283,24 +283,50 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                 return None
             
     @staticmethod   
-    def update_sss_loan(amount_deduction,
-                        user,date_updated, item_id):
+    def update_sss_loan(amount_deduction: float, user: str, date_updated: datetime, item_id: int):
         """This function is for updating SSS Loan"""
+        
+        session = Session(engine)
+        try:
+            result = session.query(SSSLoanDeduction).filter(SSSLoanDeduction.id == item_id).one_or_none()
+            
+            if result is None:
+                return {"error": f"No record found with id {item_id}"}
 
-        with Session(engine) as session:
-            statement = select(SSSLoanDeduction).where(SSSLoanDeduction.id == item_id)
-            results = session.exec(statement)
-
-            result = results.one()
             result.amount_deduction = amount_deduction
-          
             result.user = user
             result.date_updated = date_updated
 
-            session.add(result)
             session.commit()
             session.refresh(result)
+            
+            return {"message": "Data has been updated", "result": result}
+        except Exception as e:
+            session.rollback()
+            return {"error": str(e)}
+        finally:
             session.close()
+
+
+    # def update_sss_loan(amount_deduction,
+    #                     user,date_updated, item_id):
+    #     """This function is for updating SSS Loan"""
+
+    #     with Session(engine) as session:
+    #         statement = select(SSSLoanDeduction).where(SSSLoanDeduction.id == item_id)
+    #         results = session.exec(statement)
+
+    #         result = results.one()
+    #         result.amount_deduction = amount_deduction
+          
+    #         result.user = user
+    #         result.date_updated = date_updated
+
+    #         session.add(result)
+    #         session.commit()
+    #         session.refresh(result)
+    #         session.close()
+    
 
 
 #======================================HDMF Loan Deduction   ==========================================
@@ -363,20 +389,62 @@ class PayrollTransaction(): # this class is for payroll  Transaction
                         user,date_updated, item_id):
         """This function is for updating SSS Loan"""
 
-        with Session(engine) as session:
-            statement = select(HDMFLoanDeduction).where(HDMFLoanDeduction.id == item_id)
-            results = session.exec(statement)
+        # with Session(engine) as session:
+        #     try:
+        #         result = session.exec(select(HDMFLoanDeduction).filter(HDMFLoanDeduction.id == item_id)).one_or_none()
 
-            result = results.one()
+        #         if result is None:
+        #             return {"error": f"No record found with id {item_id}"}
+
+        #         result.amount_deduction = amount_deduction
+        #         result.user = user
+        #         result.date_updated = date_updated
+
+        #         session.add(result)
+        #         session.commit()
+        #         session.refresh(result)
+
+        #         return {"message": "Data has been updated", "result": result}
+        #     except Exception as e:
+        #         session.rollback()
+        #         return {"error": str(e)}
+
+
+        session = Session(engine)
+        try:
+            result = session.query(HDMFLoanDeduction).filter(HDMFLoanDeduction.id == item_id).one_or_none()
+            
+            if result is None:
+                return {"error": f"No record found with id {item_id}"}
+
             result.amount_deduction = amount_deduction
-          
             result.user = user
             result.date_updated = date_updated
 
-            session.add(result)
             session.commit()
             session.refresh(result)
+            
+            return {"message": "Data has been updated", "result": result}
+        except Exception as e:
+            session.rollback()
+            return {"error": str(e)}
+        finally:
             session.close()
+
+        # with Session(engine) as session:
+        #     statement = select(HDMFLoanDeduction).where(HDMFLoanDeduction.id == item_id)
+        #     results = session.query(statement)
+
+        #     result = results.one()
+        #     result.amount_deduction = amount_deduction
+          
+        #     result.user = user
+        #     result.date_updated = date_updated
+
+        #     session.add(result)
+        #     session.commit()
+        #     session.refresh(result)
+        #     session.close()
 # ==================================this is for joint ==========================================
     # @staticmethod
     # def testJoinTable():
