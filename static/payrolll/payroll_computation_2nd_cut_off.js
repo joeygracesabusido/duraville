@@ -111,10 +111,12 @@ $( function() {
             phic_com =  500 / 2
             // phic_come = phic_com.toFixed(2)
             $("#phic").val(phic_com);
-          } else{
+          } else if ((basicPayValue * 2) > 10000 && (basicPayValue * 2)<=100000) {
             phic_com =  (basicPayValue * 2) * 0.05 / 2
             // phic_come = phic_com.toFixed(2)
             $("#phic").val(phic_com);
+          } else {
+            phic_com = 5000 / 2
           }
           
           $("#hdmf").val(hdmf_comp);
